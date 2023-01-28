@@ -4,13 +4,14 @@ import { useState } from "react";
 
 // #023047
 
-export default function FormTextInput({placeholder, value, onChangeText, icon, containerStyle, secureEntry, updateState}) {
+export default function FormTextInput({placeholder, value, onChangeText, icon, containerStyle, secureEntry, updateState, padding}) {
     const activeTextColor = active ? "#FB8500" : "black";
     const [active, setActive] = useState(false);
     
     return (
         <View style={[
-            styles.container, containerStyle && containerStyle, 
+            styles.container, !padding && {paddingHorizontal: 20},
+            containerStyle && containerStyle, 
             active && styles.active,
             {borderBottomColor: value ? activeTextColor: "#ccc"}
         ]}>
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 2,
         paddingVertical: 15,
-        paddingHorizontal: 20
     },
 
     active: {

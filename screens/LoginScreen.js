@@ -1,5 +1,6 @@
-import { SafeAreaView, StyleSheet, View, Text, Pressable } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, Modal, Pressable, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import { useUserAuth } from "../UserAuthContext";
 import LoginButton from '../components/ui/Login/LoginButton';
 import RegisterButton from '../components/ui/Login/RegisterButton';
@@ -10,8 +11,10 @@ const LoginScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const { signUp, logIn } = useUserAuth();
+    const { signUp, logIn, resetPassword } = useUserAuth();
+    const [resetEmail, setResetEmail] = useState("");
     const [passwordHidden, setPasswordHidden] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
     async function signUpHandler(e) {
         e.preventDefault();
@@ -39,7 +42,7 @@ const LoginScreen = () => {
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>Welcome to,</Text>
-                    <Text style={styles.subTitle}>insert name</Text>
+                    <Text style={styles.subTitle}>FitTrack</Text>
                 </View>
                 <View style={styles.inputContainer}>
                     <FormTextInput 
@@ -64,7 +67,39 @@ const LoginScreen = () => {
                     <RegisterButton onPress={signUpHandler} />
                 </View>
                 {error && <Text>{error}</Text>}
-                <ForgotPassword onPress={()=>{}} containerStyle={styles.forgot}>Forgot Password?</ForgotPassword>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {setModalVisible(!modalVisible);}}
+                >
+                    <View style={styles.modalView}>
+                        <Pressable
+                            style={styles.modalButtonClose}
+                            onPress={() => setModalVisible(!modalVisible)}>
+                            <AntDesign name="closecircleo" size={40} color="#FB8500" />
+                        </Pressable>
+                        <View style={styles.modalForm}>
+                            <Text style={styles.modalText}>Forgot password?</Text>
+                            <FormTextInput
+                                placeholder={"Email address"}
+                                value={resetEmail}
+                                onChangeText={(text) => setResetEmail(text)}
+                                containerStyle={{marginTop: 10, marginBottom: 30}}
+                                padding // to remove padding
+                            />
+                            <LoginButton 
+                                text={"Reset"} 
+                                onPress={() => {
+                                    resetPassword(resetEmail);
+                                    setModalVisible(false);
+                                    Alert.alert("Reset Email Sent", "Password reset email was sent to " + resetEmail);
+                                }} 
+                            />
+                        </View>
+                    </View>
+                </Modal>
+                <ForgotPassword onPress={() => setModalVisible(true)} containerStyle={styles.forgot}>Forgot Password?</ForgotPassword>
             </View>
         </SafeAreaView>
     );
@@ -75,6 +110,29 @@ export default LoginScreen;
 const styles = StyleSheet.create({
     root: {
         flex: 1,
+    },
+
+    modalView: {
+        backgroundColor: 'white',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    modalButtonClose: {
+        position: 'absolute',
+        top: 80,
+        right: 40,
+    }, 
+
+    modalForm: {
+        justifyContent: 'center',
+        maxWidth: '80%',
+    },
+
+    modalText: {
+        fontSize: 28,
+        fontWeight: '300'
     },
 
     container: {
