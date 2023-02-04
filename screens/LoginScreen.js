@@ -86,7 +86,7 @@ const LoginScreen = () => {
                                 value={resetEmail}
                                 onChangeText={(text) => setResetEmail(text)}
                                 containerStyle={{marginTop: 10, marginBottom: 30}}
-                                padding // to remove padding
+
                             />
                             <LoginButton 
                                 text={"Reset"} 
