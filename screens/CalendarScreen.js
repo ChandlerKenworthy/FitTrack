@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import DayItem from '../components/calendar/DayItem';
 import DayPadItem from '../components/calendar/DayPadItem';
+import { colors } from '../constants/Globalstyles';
 
 const CalendarScreen = ({navigation}) => {
   const today = new Date();
@@ -51,13 +52,13 @@ const CalendarScreen = ({navigation}) => {
       <ScrollView>
         <View style={styles.titleContainer}>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(false)}>
-            <AntDesign name="caretleft" size={16} color="black" />
+            <AntDesign name="caretleft" size={16} color={colors.charcoal} />
           </Pressable>
           <Pressable onPress={() => setDate(new Date(today.getFullYear(), today.getMonth()+1, 0))}>
             <Text style={styles.titleText}>{date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}</Text>
           </Pressable>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(true)}>
-            <AntDesign name="caretright" size={16} color="black" />
+            <AntDesign name="caretright" size={16} color={colors.charcoal} />
           </Pressable>
         </View>
         <View style={styles.monthKey}>
@@ -101,7 +102,8 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    color: colors.charcoal
   },
 
   dateCaret: {
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '300',
-    color: 'gray'
+    color: colors.gray
   },
 
   monthContainer: {

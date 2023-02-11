@@ -3,6 +3,7 @@ import { useUserAuth } from '../UserAuthContext';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { colors } from '../constants/Globalstyles';
 
 const ProfileScreen = () => {
     const { user, logOut } = useUserAuth();
@@ -18,22 +19,22 @@ const ProfileScreen = () => {
                     <Text style={styles.profileName}>Arnold</Text>
                     <View style={styles.profileStats}>
                         <View style={styles.profileStatBox}>
-                            <FontAwesome5 name="weight-hanging" size={35} color="#FB8500" />
+                            <FontAwesome5 name="weight-hanging" size={35} color={colors.lightorange} />
                             <Text style={styles.profileStatText}>13,770 kg</Text>
                         </View>
                         <View style={styles.profileStatBox}>
-                            <FontAwesome5 name="fire-alt" size={35} color="#FB8500" />
+                            <FontAwesome5 name="fire-alt" size={35} color={colors.lightorange} />
                             <Text style={styles.profileStatText}>187</Text>
                         </View>
                         <View style={styles.profileStatBox}>
-                            <MaterialCommunityIcons name="scale-bathroom" size={35} color="#FB8500" />
+                            <MaterialCommunityIcons name="scale-bathroom" size={35} color={colors.lightorange} />
                             <Text style={styles.profileStatText}>83.4 kg</Text>
                         </View>
                     </View>
                 </View>
                 <View style={styles.signOutContainer}>
                     <Pressable style={styles.signOutBtn} onPress={logOut}>
-                        <AntDesign name="arrowright" size={24} color="#FB8500" />
+                        <AntDesign name="arrowright" size={24} color={colors.lightorange} />
                         <Text style={styles.signOutText}>Sign Out</Text>
                     </Pressable>
                 </View>

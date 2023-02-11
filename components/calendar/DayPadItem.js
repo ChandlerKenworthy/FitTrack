@@ -1,4 +1,6 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { color } from 'react-native-reanimated';
+import { colors } from '../../constants/Globalstyles';
 
 const DayPadItem = ({dayNumber, isToday}) => {
   const deviceWidth = Dimensions.get('window').width;
@@ -9,6 +11,7 @@ const DayPadItem = ({dayNumber, isToday}) => {
     width: adjustedWidth,
     height: adjustedWidth,
     borderRadius: adjustedWidth / 2,
+    backgroundColor: isToday ? colors.lightorange : 'transparent'
   };
 
   return (
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 20,
       fontWeight: '300',
-      color: '#ccc'
+      color: colors.lightgray
     },
 
     exerciseDotWrapper: {
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
     },
 
     dot: {
-      backgroundColor: 'orange',
+      backgroundColor: colors.lightorange,
       height: 6,
       width: 6,
       borderRadius: 3,

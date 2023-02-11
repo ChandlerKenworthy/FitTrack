@@ -6,12 +6,16 @@ import { useEffect, useState } from 'react';
 import { auth } from "./firebase";
 import { onAuthStateChanged } from 'firebase/auth';
 import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/CalendarScreen';
 import AnalysisScreen from './screens/AnalysisScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
+import AddExerciseScreen from './screens/AddExerciseScreen';
+import { colors } from './constants/Globalstyles';
+import { color } from 'react-native-reanimated';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,9 +44,9 @@ export default function App() {
   function authenticatedStack() {
     return (
       <Drawer.Navigator screenOptions={{
-        drawerActiveTintColor: "#FB8500",
-        drawerActiveBackgroundColor: "#ededed",
-        headerTintColor: "#FB8500"
+        drawerActiveTintColor: colors.lightorange,
+        drawerActiveBackgroundColor: colors.extralightgray,
+        headerTintColor: colors.lightorange
       }}>
         <Drawer.Screen 
           name="Home" 
@@ -58,6 +62,14 @@ export default function App() {
           options={{
             title: "Add Workout",
             drawerIcon: ({color}) => <AntDesign name="pluscircleo" size={24} color={color} />
+          }}
+        />
+        <Drawer.Screen 
+          name="AddExercise" 
+          component={AddExerciseScreen} 
+          options={{
+            title: "Add Exercise",
+            drawerIcon: ({color}) => <FontAwesome5 name="dumbbell" size={24} color={color} />
           }}
         />
         <Drawer.Screen 

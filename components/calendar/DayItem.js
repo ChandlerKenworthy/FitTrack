@@ -1,4 +1,6 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { color } from 'react-native-reanimated';
+import { colors } from '../../constants/Globalstyles';
 
 const DayItem = ({dayNumber, nworkouts, isToday}) => {
   const deviceWidth = Dimensions.get('window').width;
@@ -10,12 +12,12 @@ const DayItem = ({dayNumber, nworkouts, isToday}) => {
     width: adjustedWidth,
     height: adjustedWidth,
     borderRadius: adjustedWidth / 2,
-    backgroundColor: isToday ? '#FB8500' : 'transparent'
+    backgroundColor: isToday ? colors.lightorange : 'transparent'
   };
 
   return (
     <View style={[styles.container, containerStyles]}>
-      <Text style={[styles.text, isToday && {color: 'white'}]}>{dayNumber}</Text>
+      <Text style={[styles.text, isToday && {color: colors.white}]}>{dayNumber}</Text>
       {/*<View style={styles.exerciseDotWrapper}>
         {
         Array.apply(null, Array(nworkouts)).map(function (x, i) { return i; }).map((i) => {
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     },
 
     dot: {
-      backgroundColor: 'orange',
+      backgroundColor: colors.lightorange,
       height: 6,
       width: 6,
       borderRadius: 3,

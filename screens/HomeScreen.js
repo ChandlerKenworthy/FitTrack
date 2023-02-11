@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CircleIconButton from '../components/ui/CircleIconButton';
 import { useUserAuth } from '../UserAuthContext';
+import { colors } from '../constants/Globalstyles';
 
 const HomeScreen = ({navigation}) => {
   const { user, logOut } = useUserAuth();
@@ -11,10 +11,10 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.root}>
         <Text style={styles.noWorkoutText}>Workout log empty</Text>
         <View style={styles.addWorkoutBtnContainer}>
-          <CircleIconButton onPress={() => console.log("I add workout")} icon="plus" size={46} scale={0.8} color={"#FB8500"} />
+          <CircleIconButton onPress={() => console.log("I add workout")} icon="plus" size={46} scale={0.8} color={colors.lightorange} />
         </View>
         <View style={styles.switchViewBtnContainer}>
-          <CircleIconButton onPress={() => console.log("switch between list and calender view")} icon="calendar" size={46} scale={0.8} color={"#FB8500"} />
+          <CircleIconButton onPress={() => console.log("switch between list and calender view")} icon="calendar" size={46} scale={0.8} color={colors.lightorange} />
         </View>
       </View>
     </SafeAreaView>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   noWorkoutText: {
     fontSize: 32,
     fontWeight: '300',
-    color: "#ccc"
+    color: colors.lightgray
   },
 
   addWorkoutBtnContainer: {

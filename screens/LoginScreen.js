@@ -6,6 +6,7 @@ import LoginButton from '../components/ui/Login/LoginButton';
 import RegisterButton from '../components/ui/Login/RegisterButton';
 import FormTextInput from '../components/form/FormTextInput';
 import ForgotPassword from '../components/ui/Login/ForgotPassword';
+import { colors } from '../constants/Globalstyles';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState("");
@@ -77,7 +78,7 @@ const LoginScreen = () => {
                         <Pressable
                             style={styles.modalButtonClose}
                             onPress={() => setModalVisible(!modalVisible)}>
-                            <AntDesign name="closecircleo" size={40} color="#FB8500" />
+                            <AntDesign name="closecircleo" size={40} color={colors.lightorange} />
                         </Pressable>
                         <View style={styles.modalForm}>
                             <Text style={styles.modalText}>Forgot password?</Text>
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     },
 
     modalView: {
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
