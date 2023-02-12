@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { colors } from '../../constants/Globalstyles';
 import BasicTextInput from '../form/BasicTextInput';
+import PickerInput from '../form/PickerInput';
 import RadioInput from '../form/RadioInput';
-import CircleIconButton from '../ui/CircleIconButton';
 
 const AddExerciseForm = ({exercise, setExercise}) => {
     function exerciseNameHandler(text) {
@@ -20,7 +19,16 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                 ...prevExercise,
                 record: option
             }
-        })
+        });
+    }
+
+    function updateCategoryHandler(category) {
+        setExercise((prevExercise) => {
+            return {
+                ...prevExercise,
+                category: category
+            }
+        });
     }
 
     const exerciseRecordingOptions = [
@@ -28,6 +36,10 @@ const AddExerciseForm = ({exercise, setExercise}) => {
         'Time',
         'Distance'
     ];
+
+    const muscleGroupOptions = [
+        'Chest', 'Back', 'Legs', 'Shoulders', 'Tricep', 'Bicep'
+    ]; // category = 0, 1, 2, 3, 4, 5
 
     return (
         <View style={styles.root}>
@@ -42,10 +54,10 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputPromptText}>Category</Text>
-                    <BasicTextInput 
-                        placeholder="chest"
-                        value={""}
-                        onChangeText={() => {}}
+                    <PickerInput 
+                        options={muscleGroupOptions}
+                        selectedOption={exercise.category}
+                        setSelectedOption={updateCategoryHandler}
                     />
                 </View>
                 <View style={styles.inputContainer}>
@@ -56,9 +68,6 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                         setSelectedOption={exerciseRecordingModeHandler} 
                     />
                 </View>
-            </View>
-            <View style={styles.submitContainer}>
-                <CircleIconButton icon={"check"} onPress={()=>{}} size={40} color={colors.lightorange} scale={0.8} />
             </View>
         </View>
   )
@@ -81,11 +90,5 @@ const styles = StyleSheet.create({
 
     inputContainer: {
         marginTop: 30
-    },
-
-    submitContainer: {
-        alignItems: 'flex-end',
-        width: '100%',
-        marginBottom: 20,
     }
 })
