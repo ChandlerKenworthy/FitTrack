@@ -4,13 +4,13 @@ import { colors } from '../../constants/Globalstyles'
 const RadioInput = ({options, selectedOption, setSelectedOption}) => {
   return (
     <View>
-      {options.map((optionName, index) => {
-        const isSelected = index == selectedOption;
+      {Object.entries(options).map(([id, optionName]) => {
+        const isSelected = id == selectedOption;
         return (
           <Pressable 
             style={styles.radioOptionContainer} 
             key={optionName}
-            onPress={setSelectedOption.bind(this, index)} 
+            onPress={setSelectedOption.bind(this, id)} 
           >
             <View style={[styles.radioIcon, isSelected && styles.radioIconSelected]}>
               {isSelected && <View style={styles.radioIconSelectedInnerCircle}></View>}

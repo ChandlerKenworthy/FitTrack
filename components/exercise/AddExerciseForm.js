@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { muscleGroupIDtoString, scoreTypeIDtoString } from '../../assets/DummyData';
 import BasicTextInput from '../form/BasicTextInput';
 import PickerInput from '../form/PickerInput';
 import RadioInput from '../form/RadioInput';
@@ -13,33 +14,23 @@ const AddExerciseForm = ({exercise, setExercise}) => {
         });
     }
 
-    function exerciseRecordingModeHandler(option) {
+    function changeScoreTypeHandler(id) {
         setExercise((prevExercise) => {
             return {
                 ...prevExercise,
-                record: option
+                scoreTypeID: parseInt(id)
             }
         });
     }
 
-    function updateCategoryHandler(category) {
+    function changeMuscleGroupHandler(id) {
         setExercise((prevExercise) => {
             return {
                 ...prevExercise,
-                category: category
+                muscleGroupID: parseInt(id)
             }
         });
     }
-
-    const exerciseRecordingOptions = [
-        'Weight & Reps',
-        'Time',
-        'Distance'
-    ];
-
-    const muscleGroupOptions = [
-        'Chest', 'Back', 'Legs', 'Shoulders', 'Tricep', 'Bicep'
-    ]; // category = 0, 1, 2, 3, 4, 5
 
     return (
         <View style={styles.root}>
@@ -55,17 +46,17 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputPromptText}>Category</Text>
                     <PickerInput 
-                        options={muscleGroupOptions}
-                        selectedOption={exercise.category}
-                        setSelectedOption={updateCategoryHandler}
+                        options={muscleGroupIDtoString}
+                        selectedOption={exercise.muscleGroupID}
+                        setSelectedOption={changeMuscleGroupHandler}
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputPromptText}>Mode</Text>
                     <RadioInput 
-                        options={exerciseRecordingOptions} 
-                        selectedOption={exercise.record} 
-                        setSelectedOption={exerciseRecordingModeHandler} 
+                        options={scoreTypeIDtoString} 
+                        selectedOption={exercise.scoreTypeID} 
+                        setSelectedOption={changeScoreTypeHandler} 
                     />
                 </View>
             </View>

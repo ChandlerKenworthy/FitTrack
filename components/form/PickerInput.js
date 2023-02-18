@@ -15,10 +15,8 @@ import { AntDesign } from '@expo/vector-icons';
 
 const PickerInput = ({options, selectedOption, setSelectedOption}) => {
   const [optionsOpen, setOptionsOpen] = useState(false);
-  const nOptions = options.length;
 
   function selectOptionHandler(optionIndex) {
-    // Close the open picker and update the state
     setOptionsOpen(!optionsOpen);
     setSelectedOption(optionIndex);
   }
@@ -31,14 +29,17 @@ const PickerInput = ({options, selectedOption, setSelectedOption}) => {
       </Pressable>
       {optionsOpen && (
         <View style={styles.otherOptionsContainer}>
-        {options.map((optionName, index) => {
+        {Object.entries(options).map(([id, name], iterationIndex) => {
+          if(id == selectedOption) {
+            return;
+          }
           return (
               <TouchableOpacity 
-                key={optionName} 
-                onPress={selectOptionHandler.bind(this, index)} 
-                style={[styles.optionContainer, index == (nOptions-1) && styles.lastOption]}
+                key={id} 
+                onPress={selectOptionHandler.bind(this, id)} 
+                style={[styles.optionContainer, iterationIndex == Object.keys(options).length-1 && styles.lastOption]}
               >
-                <Text style={styles.optionText}>{optionName}</Text>
+                <Text style={styles.optionText}>{name}</Text>
               </TouchableOpacity>
           );
         })}
