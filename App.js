@@ -14,8 +14,8 @@ import AnalysisScreen from './screens/AnalysisScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
 import AddExerciseScreen from './screens/AddExerciseScreen';
+import ExerciseListScreen from './screens/ExerciseListScreen';
 import { colors } from './constants/Globalstyles';
-import { color } from 'react-native-reanimated';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -62,6 +62,14 @@ export default function App() {
           options={{
             title: "Add Workout",
             drawerIcon: ({color}) => <AntDesign name="pluscircleo" size={24} color={color} />
+          }}
+        />
+        <Drawer.Screen 
+          name="ViewExercises" 
+          component={ExerciseListScreen} 
+          options={{
+            title: "View Exercises",
+            drawerIcon: ({color}) => <AntDesign name="search1" size={24} color={color} />
           }}
         />
         <Drawer.Screen 
