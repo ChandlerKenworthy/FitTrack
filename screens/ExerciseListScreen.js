@@ -1,22 +1,27 @@
-import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable, Text } from 'react-native'
 import { useEffect, useState } from 'react';
 import { colors } from '../constants/Globalstyles';
 import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
 import { AntDesign } from '@expo/vector-icons';
 import { exerciseDB } from '../database/localDB';
 import { useIsFocused } from '@react-navigation/native';
+import PillFilter from '../components/form/PillFilter';
+import { muscleGroupIDtoString } from '../assets/lookup';
 
 const ExerciseListScreen = () => {
     const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState([]);
     const isFocused = useIsFocused();
 
     useEffect(() => {
         setSearchTerm("");
+        setFilter([]);
     }, [isFocused]);
 
     useEffect(() => {
-        if(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2) {
+        const searchTermExists = !(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2);
+        if(!searchTermExists && filter.length === 0) { // No search, no filters - get everything
             exerciseDB.transaction(tx => {
                 tx.executeSql(
                     "SELECT * FROM exercises ORDER BY name ASC",
@@ -27,19 +32,47 @@ const ExerciseListScreen = () => {
                     (txObj, error) => { console.log(error); }
                 );
             });
-        } else {
+        } else { // At least a search or a filter is active
+            let sqlString = "SELECT * FROM exercises WHERE ";
+            if(filter.length !== 0) {
+                sqlString += "("
+                for(let i = 0; i < filter.length; i++) {
+                    sqlString += "muscleGroup_id = " + filter[i];
+                    if(i !== filter.length - 1) {
+                        sqlString += " OR ";
+                    }
+                }
+                sqlString += ")"
+            }
+            if(searchTermExists) {
+                if(filter.length !== 0) {
+                    sqlString += " AND" 
+                }
+                sqlString += " instr(UPPER(name), \"" + searchTerm.toUpperCase() + "\") > 0";
+            }
+            sqlString += " ORDER BY name ASC";
+
             exerciseDB.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM exercises WHERE instr(UPPER(name), ?) > 0 ORDER BY name ASC",
-                    [searchTerm.toUpperCase()],
-                    (txObj, resultSet) => {
-                        setExercises(resultSet.rows._array);
-                    },
+                    sqlString,
+                    null,
+                    (txObj, resultSet) => { setExercises(resultSet.rows._array); },
                     (txObj, error) => { console.log(error); }
                 );
             });
         }
-    }, [searchTerm, isFocused]);
+    }, [searchTerm, filter]);
+
+    function updateFilterHandler(filterId) {
+        const filterCurrentlyActive = filter.includes(filterId);
+        if(filterCurrentlyActive) {
+            setFilter(prevFilter => {
+                return prevFilter.filter(el => el !== filterId);
+            });   
+        } else {
+            setFilter(prevFilter => [...prevFilter, filterId]);
+        }
+    }
 
     return (
         <SafeAreaView style={styles.root}>
@@ -58,6 +91,18 @@ const ExerciseListScreen = () => {
                 }}>
                     <AntDesign name={searchTerm && searchTerm.length > 0 ? "reload1" : "search1"} size={22} color={colors.lightgray} />
                 </Pressable>
+            </View>
+            <View style={styles.filtersContainer}>
+                {Object.entries(muscleGroupIDtoString).map(([id, name]) => {
+                    return (
+                        <PillFilter 
+                            id={parseInt(id)} 
+                            name={name} 
+                            isSelected={filter.includes(parseInt(id))} 
+                            setIsSelected={updateFilterHandler}
+                        />
+                    );
+                })}
             </View>
             <FlatList 
                 data={exercises}
@@ -82,16 +127,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
 
-    loadingContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-
-    loadingText: {
-        fontSize: 24,
-        fontWeight: '300',
-        color: colors.gray
+    filtersContainer: {
+        marginHorizontal: 15,
+        marginBottom: 10,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     },
 
     root: {
