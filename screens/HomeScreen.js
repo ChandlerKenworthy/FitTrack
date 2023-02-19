@@ -20,7 +20,7 @@ const HomeScreen = ({navigation}) => {
           <CircleIconButton onPress={() => console.log("I add workout")} icon="plus" size={46} scale={0.8} color={colors.lightorange} />
         </View>
         <View style={styles.switchViewBtnContainer}>
-          <CircleIconButton onPress={() => console.log("switch between list and calender view")} icon="calendar" size={46} scale={0.8} color={colors.lightorange} />
+          <CircleIconButton onPress={() => navigation.navigate('Calendar')} icon="calendar" size={46} scale={0.8} color={colors.lightorange} />
         </View>
       </View>
     </SafeAreaView>
