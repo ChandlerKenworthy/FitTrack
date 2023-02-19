@@ -2,9 +2,15 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CircleIconButton from '../components/ui/CircleIconButton';
 import { useUserAuth } from '../UserAuthContext';
 import { colors } from '../constants/Globalstyles';
+import { useEffect } from 'react';
+import { loadDatabases } from '../database/localDB';
 
 const HomeScreen = ({navigation}) => {
   const { user, logOut } = useUserAuth();
+
+  useEffect(() => {
+    loadDatabases();
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
