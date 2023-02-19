@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { colors } from '../../constants/Globalstyles';
+import { muscleGroupIDtoString, scoreTypeIDtoString } from '../../assets/DummyData';
 import BasicTextInput from '../form/BasicTextInput';
+import PickerInput from '../form/PickerInput';
 import RadioInput from '../form/RadioInput';
-import CircleIconButton from '../ui/CircleIconButton';
 
 const AddExerciseForm = ({exercise, setExercise}) => {
     function exerciseNameHandler(text) {
@@ -14,20 +14,23 @@ const AddExerciseForm = ({exercise, setExercise}) => {
         });
     }
 
-    function exerciseRecordingModeHandler(option) {
+    function changeScoreTypeHandler(id) {
         setExercise((prevExercise) => {
             return {
                 ...prevExercise,
-                record: option
+                scoreTypeID: parseInt(id)
             }
-        })
+        });
     }
 
-    const exerciseRecordingOptions = [
-        'Weight & Reps',
-        'Time',
-        'Distance'
-    ];
+    function changeMuscleGroupHandler(id) {
+        setExercise((prevExercise) => {
+            return {
+                ...prevExercise,
+                muscleGroupID: parseInt(id)
+            }
+        });
+    }
 
     return (
         <View style={styles.root}>
@@ -42,23 +45,20 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputPromptText}>Category</Text>
-                    <BasicTextInput 
-                        placeholder="chest"
-                        value={""}
-                        onChangeText={() => {}}
+                    <PickerInput 
+                        options={muscleGroupIDtoString}
+                        selectedOption={exercise.muscleGroupID}
+                        setSelectedOption={changeMuscleGroupHandler}
                     />
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.inputPromptText}>Mode</Text>
                     <RadioInput 
-                        options={exerciseRecordingOptions} 
-                        selectedOption={exercise.record} 
-                        setSelectedOption={exerciseRecordingModeHandler} 
+                        options={scoreTypeIDtoString} 
+                        selectedOption={exercise.scoreTypeID} 
+                        setSelectedOption={changeScoreTypeHandler} 
                     />
                 </View>
-            </View>
-            <View style={styles.submitContainer}>
-                <CircleIconButton icon={"check"} onPress={()=>{}} size={40} color={colors.lightorange} scale={0.8} />
             </View>
         </View>
   )
@@ -81,11 +81,5 @@ const styles = StyleSheet.create({
 
     inputContainer: {
         marginTop: 30
-    },
-
-    submitContainer: {
-        alignItems: 'flex-end',
-        width: '100%',
-        marginBottom: 20,
     }
 })
