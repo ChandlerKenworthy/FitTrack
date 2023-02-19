@@ -4,11 +4,12 @@ import { AntDesign } from '@expo/vector-icons';
 import { muscleGroupIDtoString } from '../../assets/lookup';
 
 const ShortExerciseInfo = ({item, searchTerm}) => {
-  const nameArr = item.name.split(""); // Split name into array of single chars
+  // Split name into array of single chars
+  const nameArr = item.name.split("");
+  // Find the index of the first occurence of the search term in the exercise's name
   const searchIndex = item.name.toLowerCase().indexOf(searchTerm.toLowerCase());
+  // Check if a search term is active
   const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
-
-  console.log(item);
 
   return (
     <View style={styles.container}>
