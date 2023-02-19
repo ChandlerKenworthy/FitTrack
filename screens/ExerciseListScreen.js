@@ -2,26 +2,40 @@ import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable } from '
 import { useEffect, useState } from 'react';
 import { colors } from '../constants/Globalstyles';
 import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
-import { exerciseList } from '../assets/DummyData';
 import { AntDesign } from '@expo/vector-icons';
+import { exerciseDB } from '../database/localDB';
+import { useIsFocused } from '@react-navigation/native';
 
 const ExerciseListScreen = () => {
-    const [exercises, setExercises] = useState(exerciseList);
-    // TODO: Make state actually get exercises from database
+    const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
-    // TODO: Add a search icon to the text input component
+    const isFocused = useIsFocused();
 
     useEffect(() => {
-        if(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 3) {
-            setExercises(exerciseList);
-        } else {
-            const newExs = exerciseList.filter(ex => {
-                const thisName = ex.name.toLocaleLowerCase();
-                return thisName.includes(searchTerm.toLowerCase()) ? true : false;
+        if(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2) {
+            exerciseDB.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM exercises ORDER BY name ASC",
+                    null,
+                    (txObj, resultSet) => {
+                        setExercises(resultSet.rows._array);
+                    },
+                    (txObj, error) => { console.log(error); }
+                );
             });
-            setExercises(newExs);
+        } else {
+            exerciseDB.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM exercises WHERE instr(UPPER(name), ?) > 0 ORDER BY name ASC",
+                    [searchTerm.toUpperCase()],
+                    (txObj, resultSet) => {
+                        setExercises(resultSet.rows._array);
+                    },
+                    (txObj, error) => { console.log(error); }
+                );
+            });
         }
-    }, [searchTerm]);
+    }, [searchTerm, isFocused]);
 
     return (
         <SafeAreaView style={styles.root}>
@@ -38,12 +52,12 @@ const ExerciseListScreen = () => {
                         setSearchTerm("");
                     }
                 }}>
-                    <AntDesign name={searchTerm && searchTerm.length > 0 ? "reload1" : "search1"} size={24} color={colors.lightgray} />
+                    <AntDesign name={searchTerm && searchTerm.length > 0 ? "reload1" : "search1"} size={22} color={colors.lightgray} />
                 </Pressable>
             </View>
             <FlatList 
                 data={exercises}
-                renderItem={ShortExerciseInfo}
+                renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} />}
                 keyExtractor={(item) => item.name}
             />
         </SafeAreaView>

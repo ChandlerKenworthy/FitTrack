@@ -1,11 +1,27 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
 
-const ShortExerciseInfo = ({item}) => {
+const ShortExerciseInfo = ({item, searchTerm}) => {
+  const nameArr = item.name.split(""); // Split name into array of single chars
+  const searchIndex = item.name.toLowerCase().indexOf(searchTerm.toLowerCase());
+  const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
+
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.nameText}>{item.name}</Text>
+        <View style={styles.textArrayContainer}>
+          {searchTermExists && searchIndex !== -1 ? nameArr.map((name, index) => {
+            const highlight = index >= searchIndex && index < (searchIndex + searchTerm.length);
+            return (
+              <Text 
+                key={index} 
+                style={[styles.nameText, highlight && styles.highlightText]}
+              >
+                {name}
+              </Text>
+            );
+          }) : <Text style={styles.nameText}>{item.name}</Text>}
+        </View>
         <View style={styles.extraInfo}>
             <Text style={styles.muscleGroupText}>Chest</Text>
             <Text style={styles.pbText}>PB: 92 kg</Text>
@@ -53,5 +69,14 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginLeft: 10,
         color: colors.gray
+    },
+
+    textArrayContainer: {
+      flexDirection: 'row',
+      alignItems: 'baseline'
+    },
+
+    highlightText: {
+      fontWeight: '700'
     }
 })

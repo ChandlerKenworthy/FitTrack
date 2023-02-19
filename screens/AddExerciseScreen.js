@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, View, Text } from 'react-native'
 import AddExerciseForm from '../components/exercise/AddExerciseForm'
 import CircleIconButton from '../components/ui/CircleIconButton';
@@ -6,11 +6,19 @@ import { colors } from '../constants/Globalstyles';
 import { EmptyExercise } from '../state/EmptyState';
 import { exerciseDB } from '../database/localDB';
 import { muscleGroupIDtoString, scoreTypeIDtoString } from '../assets/DummyData';
+import { useIsFocused } from '@react-navigation/native';
 
 const AddExerciseScreen = () => {
   const [exercise, setExercise] = useState(EmptyExercise);
   const [submitError, setSubmitError] = useState();
   const [submitSuccess, setSubmitSuccess] = useState();
+  const isFocused = useIsFocused();
+
+  useEffect(() => { // When page is navigated to clear all prior state
+    setExercise(EmptyExercise);
+    setSubmitError();
+    setSubmitSuccess();
+  }, [isFocused]);
 
   function addExerciseHandler() {
     if(!Object.keys(muscleGroupIDtoString).map(i => parseInt(i)).includes(exercise.muscleGroupID)) {
@@ -42,6 +50,12 @@ const AddExerciseScreen = () => {
               (txObj2, resultSet2) => {
                 setSubmitSuccess(true);
                 setSubmitError();
+                setExercise((prevEx) => {
+                  return {
+                    ...prevEx,
+                    name: ""
+                  };
+                });
               },
               (txObj2, error2) => { setSubmitError(error2); }
             );
