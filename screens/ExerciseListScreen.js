@@ -12,6 +12,10 @@ const ExerciseListScreen = () => {
     const isFocused = useIsFocused();
 
     useEffect(() => {
+        setSearchTerm("");
+    }, [isFocused]);
+
+    useEffect(() => {
         if(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2) {
             exerciseDB.transaction(tx => {
                 tx.executeSql(

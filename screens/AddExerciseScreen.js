@@ -5,7 +5,7 @@ import CircleIconButton from '../components/ui/CircleIconButton';
 import { colors } from '../constants/Globalstyles';
 import { EmptyExercise } from '../state/EmptyState';
 import { exerciseDB } from '../database/localDB';
-import { muscleGroupIDtoString, scoreTypeIDtoString } from '../assets/DummyData';
+import { muscleGroupIDtoString, scoreTypeIDtoString } from '../assets/lookup';
 import { useIsFocused } from '@react-navigation/native';
 
 const AddExerciseScreen = () => {

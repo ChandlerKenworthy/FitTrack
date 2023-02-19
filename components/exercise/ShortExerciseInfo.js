@@ -1,10 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
+import { AntDesign } from '@expo/vector-icons';
+import { muscleGroupIDtoString } from '../../assets/lookup';
 
 const ShortExerciseInfo = ({item, searchTerm}) => {
   const nameArr = item.name.split(""); // Split name into array of single chars
   const searchIndex = item.name.toLowerCase().indexOf(searchTerm.toLowerCase());
   const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
+
+  console.log(item);
 
   return (
     <View style={styles.container}>
@@ -23,11 +27,13 @@ const ShortExerciseInfo = ({item, searchTerm}) => {
           }) : <Text style={styles.nameText}>{item.name}</Text>}
         </View>
         <View style={styles.extraInfo}>
-            <Text style={styles.muscleGroupText}>Chest</Text>
+            <Text style={styles.muscleGroupText}>{muscleGroupIDtoString[item.muscleGroup_id]}</Text>
             <Text style={styles.pbText}>PB: 92 kg</Text>
         </View>
       </View>
-      <Text>Add ex. to wrkout btn</Text>
+      <Pressable onPress={() => { console.log("TODO: Add this exercise to new/current workout"); }}>
+        <AntDesign name="pluscircleo" size={32} color={colors.charcoal} />
+      </Pressable>
     </View>
   )
 }
