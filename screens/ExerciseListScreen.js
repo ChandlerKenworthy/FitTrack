@@ -97,6 +97,7 @@ const ExerciseListScreen = () => {
                     return (
                         <PillFilter 
                             id={parseInt(id)} 
+                            key={id}
                             name={name} 
                             isSelected={filter.includes(parseInt(id))} 
                             setIsSelected={updateFilterHandler}
