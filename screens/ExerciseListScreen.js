@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { exerciseDB } from '../database/localDB';
 import { useIsFocused } from '@react-navigation/native';
 import PillFilter from '../components/form/PillFilter';
-import { muscleGroupIDtoString } from '../assets/lookup';
+import { muscleGroupIDtoString } from '../constants/lookup';
 
 const ExerciseListScreen = () => {
     const [exercises, setExercises] = useState();

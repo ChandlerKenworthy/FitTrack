@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
 import { AntDesign } from '@expo/vector-icons';
-import { muscleGroupIDtoString } from '../../assets/lookup';
+import { muscleGroupIDtoString } from '../../constants/lookup';
 
 const ShortExerciseInfo = ({item, searchTerm}) => {
   // Split name into array of single chars

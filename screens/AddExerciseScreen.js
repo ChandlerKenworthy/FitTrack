@@ -5,8 +5,9 @@ import CircleIconButton from '../components/ui/CircleIconButton';
 import { colors } from '../constants/Globalstyles';
 import { EmptyExercise } from '../state/EmptyState';
 import { exerciseDB } from '../database/localDB';
-import { muscleGroupIDtoString, scoreTypeIDtoString } from '../assets/lookup';
+import { muscleGroupIDtoString, scoreTypeIDtoString } from '../constants/lookup';
 import { useIsFocused } from '@react-navigation/native';
+import PopupInfo from '../components/PopupInfo';
 
 const AddExerciseScreen = () => {
   const [exercise, setExercise] = useState(EmptyExercise);
@@ -48,7 +49,7 @@ const AddExerciseScreen = () => {
               'INSERT INTO exercises (name, muscleGroup_id, scoreType_id) VALUES (?, ?, ?)',
               [exercise.name, exercise.muscleGroupID, exercise.scoreTypeID],
               (txObj2, resultSet2) => {
-                setSubmitSuccess(true);
+                setSubmitSuccess(exercise.name);
                 setSubmitError();
                 setExercise((prevEx) => {
                   return {
@@ -68,8 +69,8 @@ const AddExerciseScreen = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {submitError && <Text>Submit result: {submitError}</Text>}
-      {submitSuccess && <Text>Exercise saved successfully!</Text>}
+      {submitError && <PopupInfo setDismissed={() => setSubmitError()} highlightColor={colors.failure}>Error adding exercise</PopupInfo>}
+      {submitSuccess && <PopupInfo setDismissed={() => setSubmitSuccess()} highlightColor={colors.success}>Exercise saved successfully</PopupInfo>}
       <AddExerciseForm exercise={exercise} setExercise={setExercise} />
       <View style={styles.submitContainer}>
         <CircleIconButton icon={"check"} onPress={addExerciseHandler} size={40} color={colors.lightorange} scale={0.8} />

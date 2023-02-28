@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { muscleGroupIDtoString, scoreTypeIDtoString } from '../../assets/lookup';
+import { muscleGroupIDtoString, scoreTypeIDtoString } from '../../constants/lookup';
 import BasicTextInput from '../form/BasicTextInput';
 import PickerInput from '../form/PickerInput';
 import RadioInput from '../form/RadioInput';
