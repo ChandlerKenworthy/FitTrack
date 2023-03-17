@@ -1,43 +1,84 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import DatePicker from '../components/form/DatePicker'
 import { EmptyWorkout } from '../state/EmptyState';
+import { colors } from '../constants/Globalstyles';
+import { MaterialIcons } from '@expo/vector-icons';
+import AddEmptyWorkoutForm from '../components/form/AddEmptyWorkoutForm';
 
 const AddWorkoutItemScreen = () => {
   const [workout, setWorkout] = useState(EmptyWorkout);
+  const [isFromTemplate, setIsFromTemplate] = useState(null);
 
-  function updateDateHandler() {
-
+  if(isFromTemplate === null) {
+    return (
+      <View style={styles.root}>
+        <TouchableOpacity 
+          style={styles.optionBtn} 
+          onPress={() => console.log('go to select template...')}
+        >
+          <Text style={styles.btnText}>New workout from template</Text>
+        </TouchableOpacity>
+        <Text style={styles.spacerText}>or</Text>
+        <TouchableOpacity 
+          style={styles.optionBtn} 
+          onPress={() => setIsFromTemplate(false)}
+        >
+          <Text style={styles.btnText}>New empty workout</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
-  return (
-    <ScrollView style={{flex: 1}}>
-      <Text>User should be able to pick:</Text>
-      <Text>- When workout occurred (date picker)</Text>
-      <Text>- Exercises performed and for how many sets/weights/reps</Text>
-      <Text>- Rest time between sets etc</Text>
-
-      <View style={styles.datePickerContainer}>
-        <Text style={styles.inputPromptText}>Date:</Text>
-        <DatePicker date={workout.date} setDate={updateDateHandler} allowFuture={false} />
-      </View>
-    </ScrollView>
-  )
+  if(isFromTemplate !== null) { 
+    return (
+      <ScrollView style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Pressable style={styles.deleteBtn} onPress={() => {
+            setIsFromTemplate(null);
+            setWorkout(EmptyWorkout);
+          }}>
+            <MaterialIcons name="delete-forever" size={30} color={colors.failure} />
+          </Pressable>
+        </View>
+        <AddEmptyWorkoutForm workout={workout} setWorkout={setWorkout} />
+      </ScrollView>
+    );
+  }
 }
 
 export default AddWorkoutItemScreen
 
 const styles = StyleSheet.create({
-  datePickerContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-    marginHorizontal: 20,
+  root: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center'
   },
 
-  inputPromptText: {
-    fontWeight: '700',
-    fontSize: 22,
-    marginRight: 10
-  }
+  optionBtn: {
+    backgroundColor: colors.white,
+    paddingVertical: 20,
+    paddingHorizontal: 25,
+    borderRadius: 35
+  },
+
+  spacerText: {
+    marginVertical: 15,
+    fontSize: 16,
+    fontWeight: '300',
+    color: colors.gray
+  },
+
+  btnText: {
+    fontSize: 18,
+    fontWeight: '300',
+    color: colors.charcoal
+  },
+
+  headerContainer: {
+    marginHorizontal: 15,
+    marginVertical: 10,
+    alignItems: 'flex-end',
+    justifyContent: 'center'
+  },
 })
