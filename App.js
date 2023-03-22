@@ -12,10 +12,13 @@ import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/CalendarScreen';
 import AnalysisScreen from './screens/AnalysisScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import ReportBugScreen from './screens/ReportBugScreen';
 import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
 import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
 import { colors } from './constants/Globalstyles';
+import CustomDrawer from './components/ui/CustomDrawer';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,11 +46,16 @@ export default function App() {
 
   function authenticatedStack() {
     return (
-      <Drawer.Navigator screenOptions={{
-        drawerActiveTintColor: colors.lightorange,
-        drawerActiveBackgroundColor: colors.extralightgray,
-        headerTintColor: colors.lightorange
-      }}>
+      <Drawer.Navigator 
+        screenOptions={{
+          drawerActiveTintColor: colors.white,
+          drawerActiveBackgroundColor: colors.lightorange,
+          drawerInactiveTintColor: colors.gray,
+          drawerLabelStyle: {marginLeft: -20, fontSize: 16},
+          headerTintColor: colors.lightorange
+        }}
+        drawerContent={props => <CustomDrawer {...props} />}
+      >
         <Drawer.Screen 
           name="Home" 
           component={HomeScreen} 
@@ -98,7 +106,23 @@ export default function App() {
           name="Profile" 
           component={ProfileScreen} 
           options={{
-            drawerIcon: ({color}) => <AntDesign name="user" size={24} color={color} />
+            drawerIcon: ({color}) => <AntDesign name="user" size={24} color={color} />,
+            drawerItemStyle: { display: 'none'}
+          }}
+        />
+        <Drawer.Screen 
+          name="Settings" 
+          component={SettingsScreen} 
+          options={{
+            drawerItemStyle: { display: 'none'}
+          }}
+        />
+        <Drawer.Screen 
+          name="ReportBug" 
+          component={ReportBugScreen} 
+          options={{
+            title: "Report Bug",
+            drawerItemStyle: { display: 'none'}
           }}
         />
       </Drawer.Navigator>
