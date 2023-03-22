@@ -104,7 +104,8 @@ export default function App() {
           name="Profile" 
           component={ProfileScreen} 
           options={{
-            drawerIcon: ({color}) => <AntDesign name="user" size={24} color={color} />
+            drawerIcon: ({color}) => <AntDesign name="user" size={24} color={color} />,
+            drawerItemStyle: { display: 'none'}
           }}
         />
       </Drawer.Navigator>
