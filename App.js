@@ -12,6 +12,8 @@ import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/CalendarScreen';
 import AnalysisScreen from './screens/AnalysisScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import ReportBugScreen from './screens/ReportBugScreen';
 import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
 import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
@@ -105,6 +107,21 @@ export default function App() {
           component={ProfileScreen} 
           options={{
             drawerIcon: ({color}) => <AntDesign name="user" size={24} color={color} />,
+            drawerItemStyle: { display: 'none'}
+          }}
+        />
+        <Drawer.Screen 
+          name="Settings" 
+          component={SettingsScreen} 
+          options={{
+            drawerItemStyle: { display: 'none'}
+          }}
+        />
+        <Drawer.Screen 
+          name="ReportBug" 
+          component={ReportBugScreen} 
+          options={{
+            title: "Report Bug",
             drawerItemStyle: { display: 'none'}
           }}
         />

@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { 
     DrawerContentScrollView,
@@ -6,10 +6,12 @@ import {
 } from '@react-navigation/drawer'
 import { colors } from '../../constants/Globalstyles'
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
+    const state = useNavigationState(state => state);
+    const routeName = state.routeNames[state.index];
 
     return (
         <View style={styles.root}>
@@ -38,13 +40,13 @@ const CustomDrawer = (props) => {
                 </View>
             </DrawerContentScrollView>
             <View style={styles.extraItemsContainer}>
-                <TouchableOpacity onPress={() => console.log('navgiate to correct screen')} style={styles.rowPressable}>
-                    <Ionicons name="settings-outline" color={colors.gray} size={26} />
-                    <Text style={styles.pressableText}>Settings</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.rowPressable}>
+                    <Ionicons name="settings-outline" color={routeName === "Settings" ? colors.lightorange : colors.gray} size={26} />
+                    <Text style={[styles.pressableText, routeName === "Settings" && {color: colors.lightorange}]}>Settings</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => console.log('navgiate to correct screen')} style={styles.rowPressable}>
-                    <FontAwesome5 name="bug" color={colors.gray} size={26} />
-                    <Text style={styles.pressableText}>Report Bug</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('ReportBug')} style={styles.rowPressable}>
+                    <FontAwesome5 name="bug" color={routeName === "ReportBug" ? colors.lightorange : colors.gray} size={26} />
+                    <Text style={[styles.pressableText, routeName === "ReportBug" && {color: colors.lightorange}]}>Report Bug</Text>
                 </TouchableOpacity>
             </View>
         </View>
