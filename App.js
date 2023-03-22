@@ -16,6 +16,7 @@ import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
 import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
 import { colors } from './constants/Globalstyles';
+import CustomDrawer from './components/ui/CustomDrawer';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,11 +44,16 @@ export default function App() {
 
   function authenticatedStack() {
     return (
-      <Drawer.Navigator screenOptions={{
-        drawerActiveTintColor: colors.lightorange,
-        drawerActiveBackgroundColor: colors.extralightgray,
-        headerTintColor: colors.lightorange
-      }}>
+      <Drawer.Navigator 
+        screenOptions={{
+          drawerActiveTintColor: colors.white,
+          drawerActiveBackgroundColor: colors.lightorange,
+          drawerInactiveTintColor: colors.gray,
+          drawerLabelStyle: {marginLeft: -20, fontSize: 16},
+          headerTintColor: colors.lightorange
+        }}
+        drawerContent={props => <CustomDrawer {...props} />}
+      >
         <Drawer.Screen 
           name="Home" 
           component={HomeScreen} 
