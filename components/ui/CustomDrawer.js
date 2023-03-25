@@ -6,12 +6,10 @@ import {
 } from '@react-navigation/drawer'
 import { colors } from '../../constants/Globalstyles'
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation, useNavigationState } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
-    const state = useNavigationState(state => state);
-    const routeName = state.routeNames[state.index];
 
     return (
         <View style={styles.root}>
@@ -41,12 +39,12 @@ const CustomDrawer = (props) => {
             </DrawerContentScrollView>
             <View style={styles.extraItemsContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.rowPressable}>
-                    <Ionicons name="settings-outline" color={routeName === "Settings" ? colors.lightorange : colors.gray} size={26} />
-                    <Text style={[styles.pressableText, routeName === "Settings" && {color: colors.lightorange}]}>Settings</Text>
+                    <Ionicons name="settings-outline" color={colors.gray} size={26} />
+                    <Text style={styles.pressableText}>Settings</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('ReportBug')} style={styles.rowPressable}>
-                    <FontAwesome5 name="bug" color={routeName === "ReportBug" ? colors.lightorange : colors.gray} size={26} />
-                    <Text style={[styles.pressableText, routeName === "ReportBug" && {color: colors.lightorange}]}>Report Bug</Text>
+                    <FontAwesome5 name="bug" color={colors.gray} size={26} />
+                    <Text style={styles.pressableText}>Report Bug</Text>
                 </TouchableOpacity>
             </View>
         </View>
