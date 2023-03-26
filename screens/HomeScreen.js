@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CircleIconButton from '../components/ui/CircleIconButton';
-import { useUserAuth } from '../UserAuthContext';
+import { useUserAuth } from '../store/UserAuthContext';
 import { colors } from '../constants/Globalstyles';
 import { useEffect } from 'react';
 import { loadDatabases } from '../database/localDB';

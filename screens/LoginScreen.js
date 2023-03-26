@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, View, Text, Modal, Pressable, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-import { useUserAuth } from "../UserAuthContext";
+import { useUserAuth } from "../store/UserAuthContext";
 import LoginButton from '../components/ui/Login/LoginButton';
 import RegisterButton from '../components/ui/Login/RegisterButton';
 import FormTextInput from '../components/form/FormTextInput';
