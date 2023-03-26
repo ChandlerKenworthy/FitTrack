@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { UserAuthContextProvider } from './store/UserAuthContext';
@@ -22,13 +22,14 @@ import CustomDrawer from './components/ui/CustomDrawer';
 import { SettingsContextProvider } from './store/settings-context';
 import { Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EmptySettings } from './state/EmptyState';
+import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [user, setUser] = useState();
-  const [settings, setSettings] = useState();
 
   useEffect(() => {
     onAuthStateChanged(auth, (newUser) => {
@@ -40,19 +41,17 @@ export default function App() {
     });
   }, [auth]);
 
-  useEffect(() => {
-    async function setSettingsFromStorage() {
-        try {
-            let prefs = await AsyncStorage.getItem('settings');
-            prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
-            setSettings(prefs);
-        }
-        catch(e) {
-            console.log(e);
-        }
-    }
-    setSettingsFromStorage();
-  }, []);
+  async function getSettingsFromStorage() {
+      try {
+          let prefs = await AsyncStorage.getItem('settings');
+          prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
+          return prefs;
+      }
+      catch(e) {
+          console.log(e);
+          return EmptySettings;
+      }
+  }
 
   function authStack() {
     return (
@@ -147,14 +146,6 @@ export default function App() {
     );
   }
 
-  if(!settings) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Loading Your Preferences...</Text>
-      </View>
-    );
-  }
-
   if(!user) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -164,11 +155,9 @@ export default function App() {
   }
 
   return (
-    <SettingsContextProvider value={settings}>
+    <SettingsContextProvider value={getSettingsFromStorage()}>
       <UserAuthContextProvider value={user}>
-        <NavigationContainer>
-          {user ? authenticatedStack() : authStack()}
-        </NavigationContainer>
+        <CustomNavigationContainer authStack={authStack} authenticatedStack={authenticatedStack} />
       </UserAuthContextProvider>
     </SettingsContextProvider>
   );

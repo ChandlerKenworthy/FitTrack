@@ -1,5 +1,5 @@
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../constants/Globalstyles'
 import { SettingsContext } from '../store/settings-context';
