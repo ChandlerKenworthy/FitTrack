@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useContext } from 'react'
+import { Button, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../constants/Globalstyles'
 import { SettingsContext } from '../store/settings-context';
@@ -12,23 +12,29 @@ const SettingsScreen = () => {
       <View style={styles.root}>
         <View style={styles.settingGroupContainer}>
           <View style={styles.groupIcon}>
-            <MaterialIcons name="visibility" size={34} color="black" />
+            <MaterialIcons name="visibility" size={30} color="black" />
             <Text style={styles.settingsGroupText}>Visibility</Text>
           </View>
           <View style={[styles.settingContainer, styles.firstSettingContainer]}>
             <Text style={styles.settingNameText}>Dark Mode</Text>
-            <Text>toggle goes here</Text>
-            <Text>{JSON.stringify(settingsCtx.darkMode)}</Text>
+            <Button 
+              title={settingsCtx.darkMode ? "On" : "Off"}  
+              onPress={() => settingsCtx.toggleDarkMode(!settingsCtx.darkMode)}  
+            />
           </View>
           <View style={styles.settingContainer}>
             <Text style={styles.settingNameText}>GUI Scale</Text>
-            <Text>Slider goes here</Text>
-            <Text>{JSON.stringify(settingsCtx.guiScale)}</Text>
+            <Button 
+              title={`${settingsCtx.guiScale}`}  
+              onPress={() => settingsCtx.updateGUIScale(2.0)}  
+            />
           </View>
           <View style={[styles.settingContainer, styles.lastSettingContainer]}>
             <Text style={styles.settingNameText}>Units</Text>
-            <Text>kg / lbs</Text>
-            <Text>{JSON.stringify(settingsCtx.metricUnits)}</Text>
+            <Button 
+              title={settingsCtx.metricUnits ? "Metric" : "Imperial"}  
+              onPress={() => settingsCtx.toggleUnitSystem(!settingsCtx.metricUnits)}  
+            />
           </View>
         </View>
       </View>

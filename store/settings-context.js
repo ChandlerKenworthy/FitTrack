@@ -1,4 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EmptySettings } from "../state/EmptyState";
 
 export const SettingsContext = createContext({
     darkMode: false,
@@ -9,36 +11,71 @@ export const SettingsContext = createContext({
     updateGUIScale: (guiscale) => {},
 });
 
-export default function SettingsContextProvider({children}) {
-    const [darkMode, setDarkMode] = useState(false);
-    const [metricUnits, setMetricUnits] = useState(true);
-    const [guiScale, setGUIScale] = useState(1.0);
+export function SettingsContextProvider({children}) {
+    const [settings, setSettings] = useState(setSettingsFromStorage());
 
-    function toggleDarkMode(darkMode) {
-        setDarkMode(darkMode); // Update state
-        // Write to JSON file as well
+    async function setSettingsFromStorage() {
+        try {
+            let prefs = await AsyncStorage.getItem('settings');
+            prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
+            setSettings(prefs);
+        }
+        catch(e) {
+            console.log(e);
+        }
     }
 
-    function toggleUnitSystem(useMetricUnits) {
-        setMetricUnits(useMetricUnits);
+    async function toggleDarkMode(darkMode) {
+        const newSettings = {
+            ...settings,
+            darkMode: darkMode
+        }
+        try {
+            const result = await AsyncStorage.setItem('settings', JSON.stringify(newSettings));
+        } catch (e) {
+            console.log(e);
+        }
+        setSettings(newSettings);
+    }
+
+    async function toggleUnitSystem(useMetricUnits) {
+        const newSettings = {
+            ...settings,
+            useMetricUnits: useMetricUnits
+        }
+        try {
+            const result = await AsyncStorage.setItem('settings', JSON.stringify(newSettings));
+        } catch (e) {
+            console.log(e);
+        }
+        setSettings(newSettings);
     }
     
-    function updateGUIScale(guiscale) {
-        setGUIScale(guiscale);
+    async function updateGUIScale(guiscale) {
+        const newSettings = {
+            ...settings,
+            guiScale: guiscale
+        }
+        try {
+            const result = await AsyncStorage.setItem('settings', JSON.stringify(newSettings));
+        } catch (e) {
+            console.log(e);
+        }
+        setSettings(newSettings);
     }
 
     const value = {
-        darkMode: darkMode,
-        metricUnits: metricUnits,
-        guiScale: guiScale,
+        darkMode: settings.darkMode,
+        metricUnits: settings.useMetricUnits,
+        guiScale: settings.guiScale,
         toggleDarkMode: toggleDarkMode,
         toggleUnitSystem: toggleUnitSystem,
         updateGUIScale: updateGUIScale,
     };
 
     return (
-        <AuthContext.Provider value={value}>
+        <SettingsContext.Provider value={value}>
             {children}
-        </AuthContext.Provider>
+        </SettingsContext.Provider>
     );
 };

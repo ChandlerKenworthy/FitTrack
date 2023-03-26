@@ -1,5 +1,5 @@
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
-import { useUserAuth } from '../UserAuthContext';
+import { useUserAuth } from '../store/UserAuthContext';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';

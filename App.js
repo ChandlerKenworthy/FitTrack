@@ -19,12 +19,16 @@ import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
 import { colors } from './constants/Globalstyles';
 import CustomDrawer from './components/ui/CustomDrawer';
+import { SettingsContextProvider } from './store/settings-context';
+import { Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [user, setUser] = useState();
+  const [settings, setSettings] = useState();
 
   useEffect(() => {
     onAuthStateChanged(auth, (newUser) => {
@@ -35,6 +39,20 @@ export default function App() {
       }
     });
   }, [auth]);
+
+  useEffect(() => {
+    async function setSettingsFromStorage() {
+        try {
+            let prefs = await AsyncStorage.getItem('settings');
+            prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
+            setSettings(prefs);
+        }
+        catch(e) {
+            console.log(e);
+        }
+    }
+    setSettingsFromStorage();
+  }, []);
 
   function authStack() {
     return (
@@ -129,11 +147,29 @@ export default function App() {
     );
   }
 
+  if(!settings) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Loading Your Preferences...</Text>
+      </View>
+    );
+  }
+
+  if(!user) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Loading User Profile...</Text>
+      </View>
+    );
+  }
+
   return (
-    <UserAuthContextProvider value={user}>
-      <NavigationContainer>
-        {user ? authenticatedStack() : authStack()}
-      </NavigationContainer>
-    </UserAuthContextProvider>
+    <SettingsContextProvider value={settings}>
+      <UserAuthContextProvider value={user}>
+        <NavigationContainer>
+          {user ? authenticatedStack() : authStack()}
+        </NavigationContainer>
+      </UserAuthContextProvider>
+    </SettingsContextProvider>
   );
 }
