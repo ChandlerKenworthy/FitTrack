@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { UserAuthContextProvider } from './UserAuthContext';
+import { UserAuthContextProvider } from './store/UserAuthContext';
 import { useEffect, useState } from 'react';
 import { auth } from "./firebase";
 import { onAuthStateChanged } from 'firebase/auth';
