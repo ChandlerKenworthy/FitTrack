@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 
-const CircleIconButton = ({icon, onPress, size, color, scale}) => {
+const CircleIconButton = ({icon, onPress, size, color, scale, bgColor}) => {
     const width = 100 * scale;
     const height = width;
     const borderRadius = width / 2;
@@ -12,7 +12,7 @@ const CircleIconButton = ({icon, onPress, size, color, scale}) => {
     };
 
     return (
-        <Pressable onPress={onPress} style={[styles.container, sizeStyles]}>
+        <Pressable onPress={onPress} style={[styles.container, sizeStyles, bgColor && {backgroundColor: bgColor}]}>
             <AntDesign name={icon} size={size ? size : 24} color={color ? color : "black"} />
         </Pressable>
     )

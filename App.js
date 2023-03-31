@@ -69,7 +69,7 @@ export default function App() {
           drawerActiveBackgroundColor: colors.lightorange,
           drawerInactiveTintColor: colors.gray,
           drawerLabelStyle: {marginLeft: -20, fontSize: 16},
-          headerTintColor: colors.lightorange
+          headerTintColor: colors.lightorange,
         }}
         drawerContent={props => <CustomDrawer {...props} />}
       >
