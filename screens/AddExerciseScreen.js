@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, View, Text } from 'react-native'
 import AddExerciseForm from '../components/exercise/AddExerciseForm'
 import CircleIconButton from '../components/ui/CircleIconButton';
@@ -8,12 +8,14 @@ import { exerciseDB } from '../database/localDB';
 import { muscleGroupIDtoString, scoreTypeIDtoString } from '../constants/lookup';
 import { useIsFocused } from '@react-navigation/native';
 import PopupInfo from '../components/PopupInfo';
+import { SettingsContext } from '../store/settings-context';
 
 const AddExerciseScreen = () => {
   const [exercise, setExercise] = useState(EmptyExercise);
   const [submitError, setSubmitError] = useState();
   const [submitSuccess, setSubmitSuccess] = useState();
   const isFocused = useIsFocused();
+  const settingsCtx = useContext(SettingsContext);
 
   useEffect(() => { // When page is navigated to clear all prior state
     setExercise(EmptyExercise);
@@ -73,7 +75,14 @@ const AddExerciseScreen = () => {
       {submitSuccess && <PopupInfo setDismissed={() => setSubmitSuccess()} highlightColor={colors.success}>Exercise saved successfully</PopupInfo>}
       <AddExerciseForm exercise={exercise} setExercise={setExercise} />
       <View style={styles.submitContainer}>
-        <CircleIconButton icon={"check"} onPress={addExerciseHandler} size={40} color={colors.lightorange} scale={0.8} />
+        <CircleIconButton 
+          icon={"check"} 
+          onPress={addExerciseHandler} 
+          size={40} 
+          color={colors.lightorange}
+          bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
+          scale={0.8} 
+        />
       </View>
     </SafeAreaView>
   )

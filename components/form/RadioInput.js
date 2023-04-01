@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
+import { useContext } from 'react'
+import { SettingsContext } from '../../store/settings-context'
 
 const RadioInput = ({options, selectedOption, setSelectedOption}) => {
+  const settingsCtx = useContext(SettingsContext);
+
   return (
     <View>
       {Object.entries(options).map(([id, optionName]) => {
@@ -15,7 +19,7 @@ const RadioInput = ({options, selectedOption, setSelectedOption}) => {
             <View style={[styles.radioIcon, isSelected && styles.radioIconSelected]}>
               {isSelected && <View style={styles.radioIconSelectedInnerCircle}></View>}
             </View>
-            <Text style={styles.radioText}>{optionName}</Text>  
+            <Text style={[styles.radioText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>{optionName}</Text>  
           </Pressable>
         );
       })}

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
 import { AntDesign } from '@expo/vector-icons';
+import { SettingsContext } from '../../store/settings-context';
 
 /*
  * Picker component where the user is able to select one option
@@ -15,6 +16,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 const PickerInput = ({options, selectedOption, setSelectedOption}) => {
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const settingsCtx = useContext(SettingsContext);
 
   function selectOptionHandler(optionIndex) {
     setOptionsOpen(!optionsOpen);
@@ -24,11 +26,11 @@ const PickerInput = ({options, selectedOption, setSelectedOption}) => {
   return (
     <View>
       <Pressable onPress={() => setOptionsOpen(!optionsOpen)} style={styles.selectedOptionContainer}>
-        <Text style={styles.optionText}>{options[selectedOption]}</Text>
+        <Text style={[styles.optionText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>{options[selectedOption]}</Text>
         <AntDesign name={optionsOpen ? "caretdown" : "caretleft"} size={22} color={colors.charcoal} />
       </Pressable>
       {optionsOpen && (
-        <View style={styles.otherOptionsContainer}>
+        <View style={[styles.otherOptionsContainer, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.extralightgray}]}>
         {Object.entries(options).map(([id, name], iterationIndex) => {
           if(id == selectedOption) {
             return;
@@ -39,7 +41,7 @@ const PickerInput = ({options, selectedOption, setSelectedOption}) => {
                 onPress={selectOptionHandler.bind(this, id)} 
                 style={[styles.optionContainer, iterationIndex == Object.keys(options).length-1 && styles.lastOption]}
               >
-                <Text style={styles.optionText}>{name}</Text>
+                <Text style={[styles.optionText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>{name}</Text>
               </TouchableOpacity>
           );
         })}
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
   },
 
   otherOptionsContainer: {
-    backgroundColor: colors.extralightgray,
     paddingVertical: 5,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
@@ -82,6 +83,5 @@ const styles = StyleSheet.create({
 
   optionText: {
     fontSize: 18,
-    color: colors.charcoal
   }
 })
