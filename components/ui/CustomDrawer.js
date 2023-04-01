@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { 
     DrawerContentScrollView,
     DrawerItemList 
@@ -7,21 +7,23 @@ import {
 import { colors } from '../../constants/Globalstyles'
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { SettingsContext } from '../../store/settings-context';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
+    const settingsCtx = useContext(SettingsContext);
 
     return (
-        <View style={styles.root}>
+        <View style={[styles.root, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
             <DrawerContentScrollView 
                 {...props}
-                contentContainerStyle={styles.drawerContentContainer}   
+                contentContainerStyle={{backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}}   
             >
-                <View style={styles.imageBackground}>
+                <View style={[styles.imageBackground, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
                     <Pressable style={styles.profileImageContainer} onPress={() => navigation.navigate('Profile')}>
                         <Image source={require('../../assets/images/profileStockPhoto.png')} style={styles.profileImage} />
                     </Pressable>
-                    <Text style={styles.nameText}>Chandler Kenworthy</Text>
+                    <Text style={[styles.nameText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Chandler Kenworthy</Text>
                     <View style={styles.nWorkoutContainer}>
                         <View style={styles.profileInfoContainer}>
                             <Text style={styles.nWorkoutText}>96</Text>
@@ -33,7 +35,7 @@ const CustomDrawer = (props) => {
                         </View>
                     </View>
                 </View>
-                <View style={styles.drawerItemListContainer}>
+                <View style={[styles.drawerItemListContainer, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
                     <DrawerItemList {...props} />
                 </View>
             </DrawerContentScrollView>
@@ -56,16 +58,10 @@ export default CustomDrawer
 const styles = StyleSheet.create({
     root: {
         flex: 1,
-        backgroundColor: colors.white
-    },
-
-    drawerContentContainer: {
-        backgroundColor: colors.white
     },
 
     imageBackground: {
         padding: 20,
-        backgroundColor: colors.white,
         borderBottomWidth: 1,
         borderBottomColor: colors.lightgray
     },
@@ -99,7 +95,6 @@ const styles = StyleSheet.create({
     },
 
     drawerItemListContainer: {
-        backgroundColor: colors.white,
         paddingVertical: 20
     },
 
