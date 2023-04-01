@@ -8,5 +8,7 @@ export const colors = {
     lightgray: "#c0c0c2",
     extralightgray: "#e5e5e5",
     success: "#5cb85c",
-    failure: "#f44336"
+    failure: "#f44336",
+    extralightblack: "#242526",
+    lightblack: "#1b1b1d"
 }

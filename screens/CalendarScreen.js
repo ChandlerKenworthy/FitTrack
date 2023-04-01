@@ -1,14 +1,16 @@
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import DayItem from '../components/calendar/DayItem';
 import DayPadItem from '../components/calendar/DayPadItem';
 import { colors } from '../constants/Globalstyles';
+import { SettingsContext } from '../store/settings-context';
 
 const CalendarScreen = ({navigation}) => {
   const today = new Date();
   const [date, setDate] = useState(new Date(today.getFullYear(), today.getMonth()+1, 0)); // Get today's date 
   const padDays = new Date(date.getFullYear(), date.getMonth()).getDay() - 1; // Number of days to pad by to make days line up
+  const settingsCtx = useContext(SettingsContext);
 
   function changeDate(forward) {
     setDate(prevDate => {
@@ -52,23 +54,23 @@ const CalendarScreen = ({navigation}) => {
       <ScrollView>
         <View style={styles.titleContainer}>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(false)}>
-            <AntDesign name="caretleft" size={16} color={colors.charcoal} />
+            <AntDesign name="caretleft" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
           </Pressable>
           <Pressable onPress={() => setDate(new Date(today.getFullYear(), today.getMonth()+1, 0))}>
-            <Text style={styles.titleText}>{date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}</Text>
+            <Text style={[styles.titleText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>{date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}</Text>
           </Pressable>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(true)}>
-            <AntDesign name="caretright" size={16} color={colors.charcoal} />
+            <AntDesign name="caretright" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
           </Pressable>
         </View>
         <View style={styles.monthKey}>
-          <Text style={styles.monthKeyText}>M</Text>
-          <Text style={styles.monthKeyText}>T</Text>
-          <Text style={styles.monthKeyText}>W</Text>
-          <Text style={styles.monthKeyText}>T</Text>
-          <Text style={styles.monthKeyText}>F</Text>
-          <Text style={styles.monthKeyText}>S</Text>
-          <Text style={styles.monthKeyText}>S</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>M</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>W</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>F</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
+          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
         </View>
         <View style={styles.monthContainer}>
         {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
@@ -103,7 +105,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginHorizontal: 20,
-    color: colors.charcoal
   },
 
   dateCaret: {
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '300',
-    color: colors.gray
   },
 
   monthContainer: {

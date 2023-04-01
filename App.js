@@ -1,7 +1,7 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { UserAuthContextProvider } from './UserAuthContext';
+import { UserAuthContextProvider } from './store/UserAuthContext';
 import { useEffect, useState } from 'react';
 import { auth } from "./firebase";
 import { onAuthStateChanged } from 'firebase/auth';
@@ -19,6 +19,11 @@ import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
 import { colors } from './constants/Globalstyles';
 import CustomDrawer from './components/ui/CustomDrawer';
+import { SettingsContextProvider } from './store/settings-context';
+import { Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EmptySettings } from './state/EmptyState';
+import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -36,6 +41,18 @@ export default function App() {
     });
   }, [auth]);
 
+  async function getSettingsFromStorage() {
+      try {
+          let prefs = await AsyncStorage.getItem('settings');
+          prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
+          return prefs;
+      }
+      catch(e) {
+          console.log(e);
+          return EmptySettings;
+      }
+  }
+
   function authStack() {
     return (
       <Stack.Navigator>
@@ -52,7 +69,7 @@ export default function App() {
           drawerActiveBackgroundColor: colors.lightorange,
           drawerInactiveTintColor: colors.gray,
           drawerLabelStyle: {marginLeft: -20, fontSize: 16},
-          headerTintColor: colors.lightorange
+          headerTintColor: colors.lightorange,
         }}
         drawerContent={props => <CustomDrawer {...props} />}
       >
@@ -129,11 +146,19 @@ export default function App() {
     );
   }
 
+  if(!user) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Loading User Profile...</Text>
+      </View>
+    );
+  }
+
   return (
-    <UserAuthContextProvider value={user}>
-      <NavigationContainer>
-        {user ? authenticatedStack() : authStack()}
-      </NavigationContainer>
-    </UserAuthContextProvider>
+    <SettingsContextProvider value={getSettingsFromStorage()}>
+      <UserAuthContextProvider value={user}>
+        <CustomNavigationContainer authStack={authStack} authenticatedStack={authenticatedStack} />
+      </UserAuthContextProvider>
+    </SettingsContextProvider>
   );
 }

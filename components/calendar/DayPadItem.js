@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 20,
       fontWeight: '300',
-      color: colors.lightgray
+      color: colors.gray
     },
 
     exerciseDotWrapper: {

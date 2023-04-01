@@ -3,8 +3,13 @@ import { muscleGroupIDtoString, scoreTypeIDtoString } from '../../constants/look
 import BasicTextInput from '../form/BasicTextInput';
 import PickerInput from '../form/PickerInput';
 import RadioInput from '../form/RadioInput';
+import { colors } from '../../constants/Globalstyles';
+import { useContext } from 'react';
+import { SettingsContext } from '../../store/settings-context';
 
 const AddExerciseForm = ({exercise, setExercise}) => {
+    const settingsCtx = useContext(SettingsContext);
+
     function exerciseNameHandler(text) {
         setExercise((prevExercise) => {
             return {
@@ -36,7 +41,7 @@ const AddExerciseForm = ({exercise, setExercise}) => {
         <View style={styles.root}>
             <View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputPromptText}>Exercise Name</Text>
+                    <Text style={[styles.inputPromptText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Exercise Name</Text>
                     <BasicTextInput 
                         placeholder="Name"
                         value={exercise.name}
@@ -44,7 +49,7 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputPromptText}>Category</Text>
+                    <Text style={[styles.inputPromptText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Category</Text>
                     <PickerInput 
                         options={muscleGroupIDtoString}
                         selectedOption={exercise.muscleGroupID}
@@ -52,7 +57,7 @@ const AddExerciseForm = ({exercise, setExercise}) => {
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputPromptText}>Mode</Text>
+                    <Text style={[styles.inputPromptText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Mode</Text>
                     <RadioInput 
                         options={scoreTypeIDtoString} 
                         selectedOption={exercise.scoreTypeID} 

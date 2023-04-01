@@ -1,12 +1,14 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CircleIconButton from '../components/ui/CircleIconButton';
-import { useUserAuth } from '../UserAuthContext';
+import { useUserAuth } from '../store/UserAuthContext';
 import { colors } from '../constants/Globalstyles';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { loadDatabases } from '../database/localDB';
+import { SettingsContext } from '../store/settings-context';
 
 const HomeScreen = ({navigation}) => {
   const { user, logOut } = useUserAuth();
+  const settingsCtx = useContext(SettingsContext);
 
   useEffect(() => {
     loadDatabases();
@@ -17,10 +19,21 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.root}>
         <Text style={styles.noWorkoutText}>Workout log empty</Text>
         <View style={styles.addWorkoutBtnContainer}>
-          <CircleIconButton onPress={() => console.log("I add workout")} icon="plus" size={46} scale={0.8} color={colors.lightorange} />
+          <CircleIconButton 
+            onPress={() => console.log("I add workout")} 
+            icon="plus" size={46} scale={0.8} 
+            color={colors.lightorange} 
+            bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
+          />
         </View>
         <View style={styles.switchViewBtnContainer}>
-          <CircleIconButton onPress={() => navigation.navigate('Calendar')} icon="calendar" size={46} scale={0.8} color={colors.lightorange} />
+          <CircleIconButton 
+            onPress={() => navigation.navigate('Calendar')} 
+            icon="calendar" size={46} 
+            scale={0.8} 
+            color={colors.lightorange} 
+            bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
+          />
         </View>
       </View>
     </SafeAreaView>

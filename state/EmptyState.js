@@ -17,3 +17,9 @@ export const EmptyWorkoutTemplate = {
     sets: [], // how many sets each exercise should be peformed for
     reps: [], // how many reps to perform in each set (arr of arr)
 };
+
+export const EmptySettings = {
+    darkMode: false, // Is the app in dark-mode UI
+    guiScale: 1.0, // increase/decrease scale of buttons and text default = 1.0
+    useMetricUnits: true,
+};
