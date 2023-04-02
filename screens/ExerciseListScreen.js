@@ -12,7 +12,10 @@ const ExerciseListScreen = () => {
     const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
+    const [forceRefresh, setForceRefresh] = useState(true);
     const isFocused = useIsFocused();
+
+
 
     useEffect(() => {
         setSearchTerm("");
@@ -61,7 +64,7 @@ const ExerciseListScreen = () => {
                 );
             });
         }
-    }, [searchTerm, filter]);
+    }, [searchTerm, filter, forceRefresh]);
 
     function updateFilterHandler(filterId) {
         const filterCurrentlyActive = filter.includes(filterId);
@@ -105,11 +108,13 @@ const ExerciseListScreen = () => {
                     );
                 })}
             </View>
-            <FlatList 
-                data={exercises}
-                renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} />}
-                keyExtractor={(item) => item.name}
-            />
+            <View style={styles.listContainer}>
+                <FlatList 
+                    data={exercises}
+                    renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} />}
+                    keyExtractor={(item) => item.name}
+                />
+            </View>
         </SafeAreaView>
     )
 }
@@ -143,5 +148,9 @@ const styles = StyleSheet.create({
         color: colors.charcoal,
         paddingBottom: 10,
         fontSize: 20,
+    },
+
+    listContainer: {
+        marginHorizontal: 10
     }
 })
