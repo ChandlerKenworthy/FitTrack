@@ -24,6 +24,8 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
   const searchIndex = item.name.toLowerCase().indexOf(searchTerm.toLowerCase());
   // Check if a search term is active
   const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
+  // Reference to swipeable component
+  const swipeRef = useRef(null);
 
   function toggleIsFavorite() {
     exerciseDB.transaction(tx => {
@@ -34,6 +36,8 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
         (tx, error) => { console.log(`[Error in ShortExerciseInfo.js] (toggleIsFavorite) ${error}`) }
       );
     });
+    // Close the current swipeable object
+    swipeRef.current.close();
     // Force update state to re-fetch updated data from DB
     forceRefresh(prevRefresh => !prevRefresh);
   }
@@ -49,6 +53,8 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
     });
     forceRefresh(prevRefresh => !prevRefresh);
   }
+
+
 
   function renderRightActionButtons() {
     return (
@@ -97,6 +103,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
 
   return (
     <Swipeable
+      ref={swipeRef}
       renderRightActions={renderRightActionButtons}
       friction={2}
       onSwipeableWillOpen={() => shrinkBorderRadius()}
