@@ -1,6 +1,5 @@
 import { createContext, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { EmptySettings } from "../state/EmptyState";
 
 export const SettingsContext = createContext({
     darkMode: false,

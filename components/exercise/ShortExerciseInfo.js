@@ -30,11 +30,23 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
       tx.executeSql(
         "UPDATE exercises SET isFavorite = (?) WHERE id = (?)",
         [item.isFavorite == 1 ? 0 : 1, item.id],
-        (tx, resultSet) => { console.log(resultSet) },
-        (tx, error) => { console.log(`[Error in ShortExerciseInfo.js] ${error}`) }
+        (tx, resultSet) => { },
+        (tx, error) => { console.log(`[Error in ShortExerciseInfo.js] (toggleIsFavorite) ${error}`) }
       );
     });
     // Force update state to re-fetch updated data from DB
+    forceRefresh(prevRefresh => !prevRefresh);
+  }
+
+  function deleteExercise() {
+    exerciseDB.transaction(tx => {
+      tx.executeSql(
+        "DELETE FROM exercises WHERE id = (?)",
+        [item.id],
+        (tx, resultSet) => { },
+        (tx, error) => { console.log(`[Error in ShortExerciseInfo.js] (deleteExercise) ${error}`) }
+      );
+    });
     forceRefresh(prevRefresh => !prevRefresh);
   }
 
@@ -55,7 +67,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
         </Pressable>
         <Pressable 
           style={[styles.swipedButtonContainer, {backgroundColor: colors.failure, borderTopRightRadius: 20, borderBottomRightRadius: 20}]}
-          onPress={() => console.log("TODO: Delete this exercise")}
+          onPress={deleteExercise}
         >
           <AntDesign name="delete" size={24} color={colors.white} />
         </Pressable>
