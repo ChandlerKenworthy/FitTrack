@@ -60,11 +60,11 @@ const AddExerciseScreen = () => {
                   };
                 });
               },
-              (txObj2, error2) => { setSubmitError(error2); }
+              (txObj2, error2) => { console.log(error2); setSubmitError(error2); }
             );
           }
         },
-        (txObj, error) => { setSubmitError(error); }
+        (txObj, error) => { console.log(error); setSubmitError(error); }
       );
     });
   }

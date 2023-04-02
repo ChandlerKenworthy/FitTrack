@@ -3,16 +3,11 @@ import CircleIconButton from '../components/ui/CircleIconButton';
 import { useUserAuth } from '../store/UserAuthContext';
 import { colors } from '../constants/Globalstyles';
 import { useContext, useEffect } from 'react';
-import { loadDatabases } from '../database/localDB';
 import { SettingsContext } from '../store/settings-context';
 
 const HomeScreen = ({navigation}) => {
   const { user, logOut } = useUserAuth();
   const settingsCtx = useContext(SettingsContext);
-
-  useEffect(() => {
-    loadDatabases();
-  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>

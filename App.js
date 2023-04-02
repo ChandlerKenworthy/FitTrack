@@ -1,4 +1,3 @@
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { UserAuthContextProvider } from './store/UserAuthContext';
@@ -20,16 +19,20 @@ import ExerciseListScreen from './screens/ExerciseListScreen';
 import { colors } from './constants/Globalstyles';
 import CustomDrawer from './components/ui/CustomDrawer';
 import { SettingsContextProvider } from './store/settings-context';
-import { Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EmptySettings } from './state/EmptyState';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
+import { createDatabse } from './database/localDB';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [user, setUser] = useState();
+
+  useEffect(() => {
+    createDatabse();
+  }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, (newUser) => {
