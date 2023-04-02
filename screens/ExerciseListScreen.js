@@ -8,14 +8,18 @@ import { useIsFocused } from '@react-navigation/native';
 import PillFilter from '../components/form/PillFilter';
 import { muscleGroupIDtoString } from '../constants/lookup';
 
+/* ExerciseListScreen
+ * Render exercises from exercises table in exercises database according to user's search term and any active
+ * filters. Exercise's rendered using swipeable components.
+ * Author: Chandler Kenworthy (04/02/2023)
+*/
+
 const ExerciseListScreen = () => {
     const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
     const [forceRefresh, setForceRefresh] = useState(true);
     const isFocused = useIsFocused();
-
-
 
     useEffect(() => {
         setSearchTerm("");

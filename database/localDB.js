@@ -1,5 +1,9 @@
 import * as SQLite from 'expo-sqlite';
 
+/* createDatabase
+ * Opens the exercises database and makes the exercises table if it does not already exist
+*/
+
 export const exerciseDB = SQLite.openDatabase("exercises.db");
 
 export function createDatabse() {
