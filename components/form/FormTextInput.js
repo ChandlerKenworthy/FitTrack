@@ -23,7 +23,7 @@ export default function FormTextInput({placeholder, value, onChangeText, icon, c
                 value={value}
                 onChangeText={onChangeText}
                 style={[styles.input, {color: activeTextColor}]}
-                autoCapitalize={false}
+                autoCapitalize={"none"}
                 autoCorrect={false}
                 secureTextEntry={secureEntry}
                 onFocus={() => setActive(true)}

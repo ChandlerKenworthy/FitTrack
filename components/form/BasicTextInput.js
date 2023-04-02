@@ -12,7 +12,7 @@ const BasicTextInput = ({value, onChangeText, placeholder}) => {
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
-        autoCapitalize={false}
+        autoCapitalize={"none"}
         style={[styles.input, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}
       />
     </View>
