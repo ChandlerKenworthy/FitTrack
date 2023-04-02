@@ -45,15 +45,15 @@ export default function App() {
   }, [auth]);
 
   async function getSettingsFromStorage() {
-      try {
-          let prefs = await AsyncStorage.getItem('settings');
-          prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
-          return prefs;
-      }
-      catch(e) {
-          console.log(e);
-          return EmptySettings;
-      }
+    try {
+        let prefs = await AsyncStorage.getItem('settings');
+        prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
+        return prefs;
+    }
+    catch(e) {
+        console.log(e);
+        return EmptySettings;
+    }
   }
 
   function authStack() {
