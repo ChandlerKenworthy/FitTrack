@@ -1,12 +1,10 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CircleIconButton from '../components/ui/CircleIconButton';
-import { useUserAuth } from '../store/UserAuthContext';
 import { colors } from '../constants/Globalstyles';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { SettingsContext } from '../store/settings-context';
 
 const HomeScreen = ({navigation}) => {
-  const { user, logOut } = useUserAuth();
   const settingsCtx = useContext(SettingsContext);
 
   return (

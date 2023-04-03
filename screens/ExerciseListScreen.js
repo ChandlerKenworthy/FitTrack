@@ -1,17 +1,26 @@
-import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable, Text } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable } from 'react-native'
 import { useEffect, useState } from 'react';
 import { colors } from '../constants/Globalstyles';
 import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
 import { AntDesign } from '@expo/vector-icons';
 import { exerciseDB } from '../database/localDB';
 import { useIsFocused } from '@react-navigation/native';
+import EditExerciseModal from '../components/form/EditExerciseModal';
 import PillFilter from '../components/form/PillFilter';
 import { muscleGroupIDtoString } from '../constants/lookup';
+
+/* ExerciseListScreen
+ * Render exercises from exercises table in exercises database according to user's search term and any active
+ * filters. Exercise's rendered using swipeable components.
+ * Author: Chandler Kenworthy (04/02/2023)
+*/
 
 const ExerciseListScreen = () => {
     const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
+    const [forceRefresh, setForceRefresh] = useState(true);
+    const [editModal, setEditModal] = useState({isOpen: false, data: null});
     const isFocused = useIsFocused();
 
     useEffect(() => {
@@ -61,7 +70,7 @@ const ExerciseListScreen = () => {
                 );
             });
         }
-    }, [searchTerm, filter]);
+    }, [searchTerm, filter, forceRefresh]);
 
     function updateFilterHandler(filterId) {
         const filterCurrentlyActive = filter.includes(filterId);
@@ -105,11 +114,19 @@ const ExerciseListScreen = () => {
                     );
                 })}
             </View>
-            <FlatList 
-                data={exercises}
-                renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} />}
-                keyExtractor={(item) => item.name}
-            />
+            <View style={styles.listContainer}>
+                <EditExerciseModal 
+                    visible={editModal.isOpen} 
+                    onRequestClose={() => setEditModal({isOpen: false, data: null})} 
+                    exercise={editModal.data} 
+                    setForceRefresh={setForceRefresh}
+                />
+                <FlatList 
+                    data={exercises}
+                    renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} toggleModal={setEditModal} />}
+                    keyExtractor={(item) => item.name}
+                />
+            </View>
         </SafeAreaView>
     )
 }
@@ -143,5 +160,9 @@ const styles = StyleSheet.create({
         color: colors.charcoal,
         paddingBottom: 10,
         fontSize: 20,
+    },
+
+    listContainer: {
+        marginHorizontal: 10
     }
 })

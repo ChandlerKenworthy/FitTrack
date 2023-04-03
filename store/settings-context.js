@@ -1,6 +1,5 @@
 import { createContext, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { EmptySettings } from "../state/EmptyState";
 
 export const SettingsContext = createContext({
     darkMode: false,
@@ -12,18 +11,7 @@ export const SettingsContext = createContext({
 });
 
 export function SettingsContextProvider({children}) {
-    const [settings, setSettings] = useState(setSettingsFromStorage());
-
-    async function setSettingsFromStorage() {
-        try {
-            let prefs = await AsyncStorage.getItem('settings');
-            prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
-            setSettings(prefs);
-        }
-        catch(e) {
-            console.log(e);
-        }
-    }
+    const [settings, setSettings] = useState({});
 
     async function toggleDarkMode(darkMode) {
         const newSettings = {

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import AddExerciseForm from '../components/exercise/AddExerciseForm'
 import CircleIconButton from '../components/ui/CircleIconButton';
 import { colors } from '../constants/Globalstyles';
 import { EmptyExercise } from '../state/EmptyState';
 import { exerciseDB } from '../database/localDB';
-import { muscleGroupIDtoString, scoreTypeIDtoString } from '../constants/lookup';
+import { ValidateExercise } from '../util/ValidateExercise';
 import { useIsFocused } from '@react-navigation/native';
 import PopupInfo from '../components/PopupInfo';
 import { SettingsContext } from '../store/settings-context';
@@ -24,17 +24,10 @@ const AddExerciseScreen = () => {
   }, [isFocused]);
 
   function addExerciseHandler() {
-    if(!Object.keys(muscleGroupIDtoString).map(i => parseInt(i)).includes(exercise.muscleGroupID)) {
-      setSubmitError("Invalid muscle group selected (somehow)!");
-      return 1;
-    }
-    if(!Object.keys(scoreTypeIDtoString).map(i => parseInt(i)).includes(exercise.scoreTypeID)) {
-      setSubmitError("Invalid score type selected (somehow)!");
-      return 1;
-    }
-    if(exercise.name.length < 3) {
-      setSubmitError("Exercise names must be at least 3 characters long");
-      return 1;
+    const result = ValidateExercise(exercise.name, exercise.muscleGroupID, exercise.scoreTypeID);
+    if(result.length > 0) {
+      setSubmitError(result);
+      return;
     }
     
     exerciseDB.transaction(tx => {
