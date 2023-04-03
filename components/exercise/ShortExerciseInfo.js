@@ -17,7 +17,7 @@ const deviceWidth = Dimensions.get('window').width;
  * Author: Chandler Kenworthy (02/04/2023)
 */
 
-const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
+const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
   // Split name into array of single chars
   const nameArr = item.name.split("");
   // Find the index of the first occurence of the search term in the exercise's name
@@ -54,7 +54,12 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
     forceRefresh(prevRefresh => !prevRefresh);
   }
 
-
+  function editExerciseHandler() {
+    // Close the current swipeable object
+    swipeRef.current.close();
+    // Open modal
+    toggleModal({isOpen: true, data: item});
+  }
 
   function renderRightActionButtons() {
     return (
@@ -67,7 +72,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
         </Pressable>
         <Pressable 
           style={[styles.swipedButtonContainer, {backgroundColor: 'orange'}]}
-          onPress={() => console.log("TODO: Edit this exercise e.g. name")}
+          onPress={editExerciseHandler}
         >
           <AntDesign name="edit" size={24} color={colors.white} />
         </Pressable>
@@ -108,7 +113,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh}) => {
       friction={2}
       onSwipeableWillOpen={() => shrinkBorderRadius()}
       onSwipeableWillClose={() => increaseBorderRadius()}
-      rightThreshold={0.2 * deviceWidth}
+      rightThreshold={0.1 * deviceWidth}
       overshootRight={false}
     >
       <Animated.View style={[styles.container, {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim, borderBottomLeftRadius: 20, borderTopLeftRadius: 20}]}>

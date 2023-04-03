@@ -1,10 +1,11 @@
-import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable, Text } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable } from 'react-native'
 import { useEffect, useState } from 'react';
 import { colors } from '../constants/Globalstyles';
 import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
 import { AntDesign } from '@expo/vector-icons';
 import { exerciseDB } from '../database/localDB';
 import { useIsFocused } from '@react-navigation/native';
+import EditExerciseModal from '../components/form/EditExerciseModal';
 import PillFilter from '../components/form/PillFilter';
 import { muscleGroupIDtoString } from '../constants/lookup';
 
@@ -19,6 +20,7 @@ const ExerciseListScreen = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
     const [forceRefresh, setForceRefresh] = useState(true);
+    const [editModal, setEditModal] = useState({isOpen: false, data: null});
     const isFocused = useIsFocused();
 
     useEffect(() => {
@@ -113,9 +115,15 @@ const ExerciseListScreen = () => {
                 })}
             </View>
             <View style={styles.listContainer}>
+                <EditExerciseModal 
+                    visible={editModal.isOpen} 
+                    onRequestClose={() => setEditModal({isOpen: false, data: null})} 
+                    exercise={editModal.data} 
+                    setForceRefresh={setForceRefresh}
+                />
                 <FlatList 
                     data={exercises}
-                    renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} />}
+                    renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} toggleModal={setEditModal} />}
                     keyExtractor={(item) => item.name}
                 />
             </View>
