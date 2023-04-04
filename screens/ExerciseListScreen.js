@@ -31,14 +31,19 @@ const ExerciseListScreen = () => {
     useEffect(() => {
         const searchTermExists = !(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2);
         if(!searchTermExists && filter.length === 0) { // No search, no filters - get everything
+            console.log("Something weird here");
             exerciseDB.transaction(tx => {
                 tx.executeSql(
                     "SELECT * FROM exercises ORDER BY name ASC",
                     null,
                     (txObj, resultSet) => {
+                        console.log("Okay it fetched something");
                         setExercises(resultSet.rows._array);
                     },
-                    (txObj, error) => { console.log(error); }
+                    (txObj, error) => { 
+                        console.log("something went wrong");
+                        console.log(error); 
+                    }
                 );
             });
         } else { // At least a search or a filter is active

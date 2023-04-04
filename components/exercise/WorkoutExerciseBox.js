@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { exerciseDB } from '../../database/localDB'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../../constants/Globalstyles';
 import HorizontalRule from '../ui/HorizontalRule';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 
-const WorkoutExerciseBox = ({exerciseid, reps, weights, updateReps, updateWeights}) => {
+const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise}) => {
     const [name, setName] = useState();
 
     useEffect(() => {
@@ -29,7 +29,12 @@ const WorkoutExerciseBox = ({exerciseid, reps, weights, updateReps, updateWeight
 
     return (
         <View style={styles.container}>
-            <Text style={styles.nameText}>{name}</Text>
+            <View style={styles.row}>
+                <Text style={styles.nameText}>{name}</Text>
+                <TouchableOpacity onPress={onDeleteExercise.bind(this, index)}>
+                    <MaterialIcons name="delete-forever" size={28} color={colors.failure} />
+                </TouchableOpacity>
+            </View>
             <HorizontalRule style={{marginVertical: 12, backgroundColor: colors.lightgray}} />
             {reps.map((nReps, index) => {
                 return (
@@ -41,7 +46,7 @@ const WorkoutExerciseBox = ({exerciseid, reps, weights, updateReps, updateWeight
                     </View>
                 );
             })}
-            <Pressable style={styles.addSetBtn} onPress={() => console.log("add another set")}>
+            <Pressable style={styles.addSetBtn} onPress={addSet.bind(this, index)}>
                 <AntDesign name="pluscircleo" size={30} color={colors.charcoal} />
             </Pressable>
         </View>
@@ -58,6 +63,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 30,
         marginBottom: 20
+    },
+
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
 
     nameText: {
