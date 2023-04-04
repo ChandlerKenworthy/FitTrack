@@ -34,13 +34,18 @@ const AddWorkoutItemScreen = () => {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.headerContainer}>
+         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Workout 1</Text>
-          <Pressable style={styles.deleteBtn} onPress={() => {
-            setIsFromTemplate(null);
-            setWorkout(EmptyWorkout);
-          }}>
-            <MaterialIcons name="delete-forever" size={30} color={colors.failure} />
-          </Pressable>
+            <Pressable style={styles.deleteBtn} onPress={() => {
+              setIsFromTemplate(null);
+              setWorkout(EmptyWorkout);
+            }}>
+              <MaterialIcons name="delete-forever" size={30} color={colors.failure} />
+            </Pressable>
+         </View>
+         <View style={styles.dateContainer}>
+            <Text style={styles.dateText}>{`${workout.date.getDate()}/${workout.date.getMonth()+1}/${workout.date.getFullYear()}`}</Text>
+         </View>
         </View>
         <AddEmptyWorkoutForm workout={workout} setWorkout={setWorkout} />
       </ScrollView>
@@ -78,12 +83,24 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    flexDirection: 'row',
     marginHorizontal: 15,
-    marginBottom: 10,
     marginTop: 15,
+  },
+
+  titleContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+
+  dateContainer: {
+    marginTop: 5,
+    marginBottom: 15,
+  },
+
+  dateText: {
+    color: colors.gray,
+    fontSize: 16,
   },
 
   titleText: {

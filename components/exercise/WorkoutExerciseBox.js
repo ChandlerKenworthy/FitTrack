@@ -19,7 +19,12 @@ const WorkoutExerciseBox = ({exerciseid, reps, weights, updateReps, updateWeight
                 );
             });
         }
-        setExerciseName();
+        if(exerciseid == null) {
+            // Hasn't been supplied yet
+            setName("Specify Exercise...");
+        } else {
+            setExerciseName();
+        }
     }, [exerciseid]);
 
     return (
@@ -29,7 +34,7 @@ const WorkoutExerciseBox = ({exerciseid, reps, weights, updateReps, updateWeight
             {reps.map((nReps, index) => {
                 return (
                     <View key={index} style={styles.infoContainer}>
-                        <Text style={styles.infoText}>Set {index+1}: {nReps} x {weights[index]} kg ({nReps*weights[index]} kg)</Text>
+                        <Text style={styles.infoText}>Set {index+1}: {nReps ? nReps : "?"} x {weights[index] ? weights[index] : "?"} kg ({nReps*weights[index]} kg)</Text>
                         <Pressable style={styles.editIconContainer} onPress={() => console.log('edit menu')}>
                             <MaterialIcons name="edit" size={24} color={colors.charcoal} />
                         </Pressable>
@@ -52,6 +57,7 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         paddingHorizontal: 20,
         borderRadius: 30,
+        marginBottom: 20
     },
 
     nameText: {

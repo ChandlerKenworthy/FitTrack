@@ -12,22 +12,31 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
 
     }
 
+    function addExercise() {
+        const newWorkout = {
+            ...workout,
+            exercises: [...workout.exercises, null], // unknown exercise 
+            reps: [...workout.reps, [null]], // don't know how many reps are in the sets yet
+            weights: [...workout.weights, [null]], // defautl to previous value from history?
+        };
+        setWorkout(newWorkout);
+    }
+
     return (
         <View style={{marginHorizontal: 15}}>
-            {Array(workout.exercises.length).map(idx => {
+            {[...Array(workout.exercises.length).keys()].map(idx => {
                 return (
                     <WorkoutExerciseBox 
-                        exerciseid={3} 
-                        reps={[12, 11, 6]} 
-                        weights={[145, 160, 180]}
+                        key={idx}
+                        exerciseid={workout.exercises[idx]} 
+                        reps={workout.reps[idx]} // e.g. [3, 6, 6] default is [null] workout.reps[idx-1]
+                        weights={workout.weights[idx]} // workout.weights[idx-1]
                         updateReps={updateRepsHandler}
                         updateWeights={updateWeightsHandler}
                     />
                 );
             })}
-            <View style={styles.addExerciseBtnContainer}>
-                <LoginButton text={"Add Exercise"} onPress={() => { console.log("TODO: Add next exercise") }} iconName={"pluscircleo"} />
-            </View>
+            <LoginButton text={"Add Exercise"} onPress={addExercise} iconName={"pluscircleo"} />
         </View>
     )
 }
@@ -35,7 +44,5 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
 export default AddEmptyWorkoutForm
 
 const styles = StyleSheet.create({
-    addExerciseBtnContainer: {
-        marginTop: 15
-    }
+
 })
