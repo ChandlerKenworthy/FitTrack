@@ -1,18 +1,51 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { View } from 'react-native'
+import React, { useEffect } from 'react'
 import WorkoutExerciseBox from '../exercise/WorkoutExerciseBox'
 import LoginButton from '../ui/Login/LoginButton'
 
 const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
-    function updateRepsHandler(exerciseid, reps) {
+    useEffect(() => {
+        console.log(workout);
+    }, [workout]);
 
+    function updateRepsHandler(exerciseIndex, setIndex, repsText) {
+        if(repsText === null || repsText === "" || repsText === undefined || isNaN(parseInt(repsText))) {
+            return;
+        }
+        setWorkout({
+            ...workout,
+            reps: workout.reps.map((prevReps, i) => {
+                if(i === exerciseIndex) {
+                    let thisNewReps = prevReps;
+                    thisNewReps[setIndex] = parseInt(repsText);
+                    return thisNewReps;
+                } else {
+                    return prevReps;
+                }
+            })
+        });
     }
 
-    function updateWeightsHandler(exerciseid, weights) {
-
+    function updateWeightsHandler(exerciseIndex, setIndex, weightsText) {
+        if(weightsText === null || weightsText === "" || weightsText === undefined || isNaN(parseInt(weightsText))) {
+            return;
+        }
+        setWorkout({
+            ...workout,
+            weights: workout.weights.map((prevWeights, i) => {
+                if(i === exerciseIndex) {
+                    let thisNewWeights = prevWeights;
+                    thisNewWeights[setIndex] = parseInt(weightsText);
+                    return thisNewWeights;
+                } else {
+                    return prevWeights;
+                }
+            })
+        });
     }
 
     function addExercise() {
+        console.log("Adding exercise")
         const newWorkout = {
             ...workout,
             exercises: [...workout.exercises, null], // unknown exercise 
@@ -25,14 +58,18 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
     function addSetHandler(index) {
         let newReps = workout.reps.map((item, idx) => {
             if(idx == index) {
-                return [...item, null];
+                let prevSets = item;
+                prevSets = [...prevSets, null];
+                return prevSets;
             } else {
                 return item;
             }
         });
         let newWeights = workout.weights.map((item, idx) => {
             if(idx == index) {
-                return [...item, null];
+                let prevWeights = item;
+                prevWeights = [...prevWeights, null];
+                return prevWeights;
             } else {
                 return item;
             }
@@ -56,6 +93,7 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
     return (
         <View style={{marginHorizontal: 15}}>
             {[...Array(workout.exercises.length).keys()].map(idx => {
+                console.log(workout.reps);
                 return (
                     <WorkoutExerciseBox 
                         key={idx}

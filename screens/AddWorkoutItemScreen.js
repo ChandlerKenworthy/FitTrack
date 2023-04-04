@@ -4,10 +4,18 @@ import { EmptyWorkout } from '../state/EmptyState';
 import { colors } from '../constants/Globalstyles';
 import { MaterialIcons } from '@expo/vector-icons';
 import AddEmptyWorkoutForm from '../components/form/AddEmptyWorkoutForm';
+import BasicTextInput from '../components/form/BasicTextInput';
 
 const AddWorkoutItemScreen = () => {
   const [workout, setWorkout] = useState(EmptyWorkout);
   const [isFromTemplate, setIsFromTemplate] = useState(null);
+
+  function updateNameHandler(text) {
+    setWorkout({
+      ...workout,
+      name: text
+    });
+  }
 
   if(isFromTemplate === null) {
     return (
@@ -35,8 +43,14 @@ const AddWorkoutItemScreen = () => {
       <ScrollView style={styles.container}>
         <View style={styles.headerContainer}>
          <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Workout 1</Text>
-            <Pressable style={styles.deleteBtn} onPress={() => {
+          <BasicTextInput 
+            value={workout.name}
+            onChangeText={updateNameHandler}
+            placeholder={"Workout Name"}
+            showBorder={false}
+            style={{fontSize: 24, fontWeight: '700'}}
+          />
+            <Pressable onPress={() => {
               setIsFromTemplate(null);
               setWorkout(EmptyWorkout);
             }}>
