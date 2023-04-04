@@ -29,10 +29,12 @@ const AddWorkoutItemScreen = () => {
     );
   }
 
+  // TODO: Workout name should be dynamic and part of the database?
   if(isFromTemplate !== null) { 
     return (
       <ScrollView style={styles.container}>
         <View style={styles.headerContainer}>
+          <Text style={styles.titleText}>Workout 1</Text>
           <Pressable style={styles.deleteBtn} onPress={() => {
             setIsFromTemplate(null);
             setWorkout(EmptyWorkout);
@@ -76,9 +78,17 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
+    flexDirection: 'row',
     marginHorizontal: 15,
-    marginVertical: 10,
-    alignItems: 'flex-end',
-    justifyContent: 'center'
+    marginBottom: 10,
+    marginTop: 15,
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
+
+  titleText: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginRight: 20
+  }
 })

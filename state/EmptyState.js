@@ -5,6 +5,7 @@ export const EmptyExercise = {
 };
 
 export const EmptyWorkout = {
+    name: "Workout 1",
     date: new Date(), // default's to today
     exercises: [], // array of id's
     sets: [], // how many sets each exercise was performed for
