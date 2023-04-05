@@ -5,7 +5,7 @@ export const EmptyExercise = {
 };
 
 export const EmptyWorkout = {
-    name: "Workout 1",
+    name: "Workout 1", // TODO: Should get number of workouts and add 1 
     date: new Date(), // default's to today
     exercises: [], // array of id's
     // sets can be drawn from reps i.e. n(sets) exercise n is reps[n].length

@@ -37,7 +37,6 @@ const AddWorkoutItemScreen = () => {
     );
   }
 
-  // TODO: Workout name should be dynamic and part of the database?
   if(isFromTemplate !== null) { 
     return (
       <ScrollView style={styles.container}>

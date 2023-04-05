@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Dimensions, Animated } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity } from 'react-native'
 import { exerciseDB } from '../../database/localDB'
 import React, { useEffect, useRef, useState } from 'react'
 import { colors } from '../../constants/Globalstyles';
@@ -9,7 +9,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { shrinkBorderRadius, increaseBorderRadius } from '../../util/Animations';
 const deviceWidth = Dimensions.get('window').width;
 
-const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise}) => {
+const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise, onDeleteSet}) => {
     const [name, setName] = useState();
     const swipeRef = useRef(null);
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
@@ -66,26 +66,33 @@ const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updat
         >
             <Animated.View style={[styles.container, animatedStyles]}>
                 <View style={styles.row}>
-                    <Text style={styles.nameText}>{name}</Text>
+                    <TouchableOpacity style={{backgroundColor: 'green'}}>
+                        <Text style={styles.nameText}>{name}</Text>
+                    </TouchableOpacity>
                 </View>
                 <HorizontalRule style={{marginVertical: 12, backgroundColor: colors.lightgray}} />
                 {reps.map((nReps, i) => {
                     return (
-                        <View key={i} style={styles.infoContainer}>
-                            <NumberInput 
-                                placeholder={"reps"}
-                                value={nReps}
-                                onChangeText={(text) => updateReps(index, i, text)} // TODO: Implement
-                                style={{fontWeight: '700'}}
-                            />
-                            <Text style={styles.infoText}> x </Text>
-                            <NumberInput 
-                                placeholder={"weight"}
-                                value={weights[i]}
-                                onChangeText={(text) => updateWeights(index, i, text)}  // TODO: Implement
-                                style={{fontWeight: '700'}}
-                            />
-                            <Text style={styles.infoText}> kg</Text>
+                        <View key={i} style={styles.infoContainerWrapper}>
+                            <View style={styles.infoContainer}>
+                                <NumberInput 
+                                    placeholder={"reps"}
+                                    value={nReps}
+                                    onChangeText={(text) => updateReps(index, i, text)} // TODO: Implement
+                                    style={{fontWeight: '700'}}
+                                />
+                                <Text style={styles.infoText}> x </Text>
+                                <NumberInput 
+                                    placeholder={"weight"}
+                                    value={weights[i]}
+                                    onChangeText={(text) => updateWeights(index, i, text)}  // TODO: Implement
+                                    style={{fontWeight: '700'}}
+                                />
+                                <Text style={styles.infoText}> kg</Text>
+                            </View>
+                            <Pressable onPress={() => onDeleteSet(index, i)}>
+                                <AntDesign name="minuscircleo" size={18} color={colors.charcoal} />
+                            </Pressable>
                         </View>
                     );
                 })}
@@ -127,15 +134,21 @@ const styles = StyleSheet.create({
         fontSize: 22
     },
 
-    infoContainer: {
+    infoContainerWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         marginBottom: 5,
     },
 
+    infoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
     addSetBtn: {
-        marginTop: 10,
+        marginTop: 15,
         marginBottom: 5,
         alignItems: 'center'
     },

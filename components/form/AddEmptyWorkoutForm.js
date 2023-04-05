@@ -84,6 +84,30 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
             weights: workout.weights.filter((item, idx) => idx !== index)
         });
     }
+    
+    function onDeleteSetHandler(exerciseIndex, setIndex) {
+        const newReps = workout.reps.map((item, idx) => {
+            if(idx === exerciseIndex) {
+                return item.filter((i, j) => j !== setIndex);
+            } else {
+                return item;
+            }
+        });
+        const newWeights = workout.weights.map((item, idx) => {
+            if(idx === exerciseIndex) {
+                return item.filter((i, j) => j !== setIndex);
+            } else {
+                return item;
+            }
+        });
+
+        setWorkout({
+            ...workout,
+            exercises: newReps[exerciseIndex].length === 0 ? workout.exercises.filter((item, idx) => idx !== exerciseIndex) : workout.exercises,
+            reps: newReps,
+            weights: newWeights
+        });
+    }
 
     return (
         <View style={{marginHorizontal: 15}}>
@@ -99,6 +123,7 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
                         updateWeights={updateWeightsHandler}
                         addSet={addSetHandler}
                         onDeleteExercise={onDeleteExerciseHandler}
+                        onDeleteSet={onDeleteSetHandler}
                     />
                 );
             })}
