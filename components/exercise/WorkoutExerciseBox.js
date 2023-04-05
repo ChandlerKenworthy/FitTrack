@@ -6,30 +6,13 @@ import HorizontalRule from '../ui/HorizontalRule';
 import { AntDesign } from '@expo/vector-icons';
 import NumberInput from '../form/NumberInput';
 import { Swipeable } from 'react-native-gesture-handler';
+import { shrinkBorderRadius, increaseBorderRadius } from '../../util/Animations';
 const deviceWidth = Dimensions.get('window').width;
 
 const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise}) => {
     const [name, setName] = useState();
     const swipeRef = useRef(null);
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
-
-    const shrinkBorderRadius = () => {
-        // Will change borderRadiusAnim value to 1 in 2 seconds
-        Animated.timing(borderRadiusAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-        }).start();
-    };
-
-    const increaseBorderRadius = () => {
-        // Will change fadeAnim value to 0 in 3 seconds
-        Animated.timing(borderRadiusAnim, {
-        toValue: 20,
-        duration: 200,
-        useNativeDriver: true,
-        }).start();
-    };
 
     useEffect(() => {
         async function setExerciseName() {
@@ -76,8 +59,8 @@ const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updat
             ref={swipeRef}
             renderRightActions={renderRightActionButtons}
             friction={2}
-            onSwipeableWillOpen={() => shrinkBorderRadius()}
-            onSwipeableWillClose={() => increaseBorderRadius()}
+            onSwipeableWillOpen={() => shrinkBorderRadius(borderRadiusAnim, 200)}
+            onSwipeableWillClose={() => increaseBorderRadius(borderRadiusAnim, 200)}
             rightThreshold={0.1 * deviceWidth}
             overshootRight={false}
         >

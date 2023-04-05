@@ -26,6 +26,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
   const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
   // Reference to swipeable component
   const swipeRef = useRef(null);
+  const borderRadiusAnim = useRef(new Animated.Value(20)).current;
 
   function toggleIsFavorite() {
     exerciseDB.transaction(tx => {
@@ -86,33 +87,13 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
     );
   }
 
-  const borderRadiusAnim = useRef(new Animated.Value(20)).current;
-
-  const shrinkBorderRadius = () => {
-    // Will change borderRadiusAnim value to 1 in 2 seconds
-    Animated.timing(borderRadiusAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const increaseBorderRadius = () => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(borderRadiusAnim, {
-      toValue: 20,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  };
-
   return (
     <Swipeable
       ref={swipeRef}
       renderRightActions={renderRightActionButtons}
       friction={2}
-      onSwipeableWillOpen={() => shrinkBorderRadius()}
-      onSwipeableWillClose={() => increaseBorderRadius()}
+      onSwipeableWillOpen={() => shrinkBorderRadius(borderRadiusAnim, 200)}
+      onSwipeableWillClose={() => increaseBorderRadius(borderRadiusAnim, 200)}
       rightThreshold={0.1 * deviceWidth}
       overshootRight={false}
     >
