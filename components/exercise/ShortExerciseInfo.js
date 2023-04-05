@@ -92,7 +92,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
     // Will change borderRadiusAnim value to 1 in 2 seconds
     Animated.timing(borderRadiusAnim, {
       toValue: 0,
-      duration: 300,
+      duration: 200,
       useNativeDriver: true,
     }).start();
   };
@@ -101,7 +101,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(borderRadiusAnim, {
       toValue: 20,
-      duration: 300,
+      duration: 200,
       useNativeDriver: true,
     }).start();
   };

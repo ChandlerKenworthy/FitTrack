@@ -1,13 +1,9 @@
 import { View } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import WorkoutExerciseBox from '../exercise/WorkoutExerciseBox'
 import LoginButton from '../ui/Login/LoginButton'
 
 const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
-    useEffect(() => {
-        console.log(workout);
-    }, [workout]);
-
     function updateRepsHandler(exerciseIndex, setIndex, repsText) {
         if(repsText === null || repsText === "" || repsText === undefined || isNaN(parseInt(repsText))) {
             return;
@@ -45,7 +41,6 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
     }
 
     function addExercise() {
-        console.log("Adding exercise")
         const newWorkout = {
             ...workout,
             exercises: [...workout.exercises, null], // unknown exercise 
@@ -93,7 +88,6 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
     return (
         <View style={{marginHorizontal: 15}}>
             {[...Array(workout.exercises.length).keys()].map(idx => {
-                console.log(workout.reps);
                 return (
                     <WorkoutExerciseBox 
                         key={idx}
