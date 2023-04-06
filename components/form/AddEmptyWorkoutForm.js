@@ -1,9 +1,13 @@
 import { View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import WorkoutExerciseBox from '../exercise/WorkoutExerciseBox'
 import LoginButton from '../ui/Login/LoginButton'
+import PickExerciseModal from './PickExerciseModal'
 
 const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const [editingIdx, setEditingIdx] = useState(null);
+
     function updateRepsHandler(exerciseIndex, setIndex, repsText) {
         if(repsText === null || repsText === "" || repsText === undefined || isNaN(parseInt(repsText))) {
             return;
@@ -109,14 +113,24 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
         });
     }
 
+    function selectExerciseHandler(exerciseId) {
+        setWorkout({
+            ...workout,
+            exercises: workout.exercises.map((item, j) => j === editingIdx ? exerciseId : item)
+        });
+        setModalOpen(false);
+    }
+
     return (
         <View style={{marginHorizontal: 15}}>
+            <PickExerciseModal open={modalOpen} setOpen={setModalOpen} selectExerciseHandler={selectExerciseHandler} />
             {[...Array(workout.exercises.length).keys()].map(idx => {
                 return (
                     <WorkoutExerciseBox 
                         key={idx}
                         index={idx}
                         exerciseid={workout.exercises[idx]} 
+                        setExerciseid={() => {setEditingIdx(idx); setModalOpen(true);}}
                         reps={workout.reps[idx]} // e.g. [3, 6, 6] default is [null] workout.reps[idx-1]
                         weights={workout.weights[idx]} // workout.weights[idx-1]
                         updateReps={updateRepsHandler}

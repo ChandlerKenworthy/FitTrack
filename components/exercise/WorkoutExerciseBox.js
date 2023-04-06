@@ -9,7 +9,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { shrinkBorderRadius, increaseBorderRadius } from '../../util/Animations';
 const deviceWidth = Dimensions.get('window').width;
 
-const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise, onDeleteSet}) => {
+const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise, onDeleteSet}) => {
     const [name, setName] = useState();
     const swipeRef = useRef(null);
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
@@ -27,7 +27,7 @@ const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updat
         }
         if(exerciseid == null) {
             // Hasn't been supplied yet
-            setName("Pick Exercise");
+            setName("Select Exercise");
         } else {
             setExerciseName();
         }
@@ -66,7 +66,7 @@ const WorkoutExerciseBox = ({index, exerciseid, reps, weights, updateReps, updat
         >
             <Animated.View style={[styles.container, animatedStyles]}>
                 <View style={styles.row}>
-                    <TouchableOpacity style={{backgroundColor: 'green'}}>
+                    <TouchableOpacity onPress={setExerciseid.bind(this, index)}>
                         <Text style={styles.nameText}>{name}</Text>
                     </TouchableOpacity>
                 </View>

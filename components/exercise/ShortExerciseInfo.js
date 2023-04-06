@@ -5,6 +5,7 @@ import { muscleGroupIDtoString } from '../../constants/lookup';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useRef } from 'react';
 import { exerciseDB } from '../../database/localDB';
+import { increaseBorderRadius, shrinkBorderRadius } from '../../util/Animations';
 const deviceWidth = Dimensions.get('window').width;
 
 /* ShortExerciseInfo 
@@ -17,7 +18,7 @@ const deviceWidth = Dimensions.get('window').width;
  * Author: Chandler Kenworthy (02/04/2023)
 */
 
-const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
+const ShortExerciseInfo = ({item, onPress, showBorder, searchTerm, forceRefresh, toggleModal}) => {
   // Split name into array of single chars
   const nameArr = item.name.split("");
   // Find the index of the first occurence of the search term in the exercise's name
@@ -97,7 +98,12 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
       rightThreshold={0.1 * deviceWidth}
       overshootRight={false}
     >
-      <Animated.View style={[styles.container, {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim, borderBottomLeftRadius: 20, borderTopLeftRadius: 20}]}>
+      <Animated.View 
+        style={[
+          styles.container, 
+          {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim, borderBottomLeftRadius: 20, borderTopLeftRadius: 20},
+          showBorder && {borderWidth: 1, borderColor: 'red'}
+        ]}>
         <View>
           <View style={styles.textArrayContainer}>
             {searchTermExists && searchIndex !== -1 ? nameArr.map((name, index) => {
@@ -117,9 +123,6 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
               <Text style={styles.pbText}>PB: 92 kg</Text>
           </View>
         </View>
-        <Pressable onPress={() => { console.log("TODO: Add this exercise to new/current workout"); }}>
-          <AntDesign name="pluscircleo" size={32} color={colors.charcoal} />
-        </Pressable>
       </Animated.View>
     </Swipeable>
   )

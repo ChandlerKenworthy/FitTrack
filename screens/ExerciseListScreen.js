@@ -15,7 +15,7 @@ import { muscleGroupIDtoString } from '../constants/lookup';
  * Author: Chandler Kenworthy (04/02/2023)
 */
 
-const ExerciseListScreen = () => {
+const ExerciseListScreen = ({route, navigation}) => {
     const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
@@ -31,17 +31,17 @@ const ExerciseListScreen = () => {
     useEffect(() => {
         const searchTermExists = !(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2);
         if(!searchTermExists && filter.length === 0) { // No search, no filters - get everything
-            console.log("Something weird here");
+            //console.log("Something weird here");
             exerciseDB.transaction(tx => {
                 tx.executeSql(
                     "SELECT * FROM exercises ORDER BY name ASC",
                     null,
                     (txObj, resultSet) => {
-                        console.log("Okay it fetched something");
+                        //console.log("Okay it fetched something");
                         setExercises(resultSet.rows._array);
                     },
                     (txObj, error) => { 
-                        console.log("something went wrong");
+                        //console.log("something went wrong");
                         console.log(error); 
                     }
                 );
@@ -128,7 +128,7 @@ const ExerciseListScreen = () => {
                 />
                 <FlatList 
                     data={exercises}
-                    renderItem={({item}) => <ShortExerciseInfo item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} toggleModal={setEditModal} />}
+                    renderItem={({item}) => <ShortExerciseInfo onPress={() => console.log("I am ....")} item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} toggleModal={setEditModal} />}
                     keyExtractor={(item) => item.name}
                 />
             </View>
