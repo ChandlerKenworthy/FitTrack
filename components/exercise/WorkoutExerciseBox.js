@@ -11,7 +11,6 @@ const deviceWidth = Dimensions.get('window').width;
 
 const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise, onDeleteSet}) => {
     const [name, setName] = useState();
-    const swipeRef = useRef(null);
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
 
     useEffect(() => {
@@ -56,7 +55,6 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
 
     return (
         <Swipeable
-            ref={swipeRef}
             renderRightActions={renderRightActionButtons}
             friction={2}
             onSwipeableWillOpen={() => shrinkBorderRadius(borderRadiusAnim, 200)}
