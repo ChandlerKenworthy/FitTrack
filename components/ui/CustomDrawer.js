@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { 
     DrawerContentScrollView,
     DrawerItemList 
@@ -8,10 +8,32 @@ import { colors } from '../../constants/Globalstyles'
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { SettingsContext } from '../../store/settings-context';
+import { workoutDB } from '../../database/localDB';
+import { useDrawerStatus } from '@react-navigation/drawer';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
     const settingsCtx = useContext(SettingsContext);
+    const [nWorkouts, setNWorkouts] = useState(null);
+    const [totalVolume, setTotalVolume] = useState(null);
+    const drawerStatus = useDrawerStatus();
+
+    useEffect(() => {
+        workoutDB.transaction(tx => {
+            tx.executeSql(
+                "SELECT COUNT(*) FROM workouts",
+                null,
+                (tx, result) => setNWorkouts(result.rows._array[0]["COUNT(*)"]),
+                (tx, error) => console.warn(`[Error in CustomDrawer] ${error}`)
+            );
+            tx.executeSql(
+                "SELECT SUM(totalVolume) FROM workouts",
+                null,
+                (tx, result) => setTotalVolume(Object.values(result.rows._array[0])[0]),
+                (tx, error) => console.warn(`[Error in CustomDrawer] ${error}`)
+            );
+        });
+    }, [drawerStatus]);
 
     return (
         <View style={[styles.root, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
@@ -26,11 +48,11 @@ const CustomDrawer = (props) => {
                     <Text style={[styles.nameText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Chandler Kenworthy</Text>
                     <View style={styles.nWorkoutContainer}>
                         <View style={styles.profileInfoContainer}>
-                            <Text style={styles.nWorkoutText}>96</Text>
+                            <Text style={styles.nWorkoutText}>{nWorkouts}</Text>
                             <MaterialCommunityIcons name="weight-lifter" size={26} color={colors.lightorange} />
                         </View>
                         <View style={[styles.profileInfoContainer, {marginLeft: 15}]}>
-                            <Text style={styles.nWorkoutText}>732,461</Text>
+                            <Text style={styles.nWorkoutText}>{totalVolume}</Text>
                             <MaterialCommunityIcons name="weight-kilogram" size={26} color={colors.lightorange} />
                         </View>
                     </View>
