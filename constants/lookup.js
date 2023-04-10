@@ -13,6 +13,15 @@ export const muscleGroupIDtoString = {
     5: "Shoulders"
 };
 
+export const muscleGroupIDtoColor = {
+    0: "#2e86ab",
+    1: "#99e1d9",
+    2: "#623b5a",
+    3: "#f0ec57",
+    4: "#ff0035",
+    5: "#c97d60"
+};
+
 export const monthIndextoString = {
     0: "January",
     1: "February",
