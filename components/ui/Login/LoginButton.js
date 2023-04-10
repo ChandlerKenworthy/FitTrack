@@ -22,8 +22,6 @@ export default LoginButton;
 
 const styles = StyleSheet.create({
     gradientContainer: {
-        paddingVertical: 15,
-        paddingHorizontal: 30,
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
@@ -32,7 +30,11 @@ const styles = StyleSheet.create({
 
     container: {
         flexDirection: 'row',
-        borderRadius: 30
+        justifyContent: 'center',
+        borderRadius: 30,
+        paddingVertical: 15,
+        paddingHorizontal: 30,
+        minWidth: '45%',
     },
 
     text: {

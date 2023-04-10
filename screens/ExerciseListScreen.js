@@ -1,13 +1,13 @@
 import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable } from 'react-native'
 import { useEffect, useState } from 'react';
 import { colors } from '../constants/Globalstyles';
-import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
+import { muscleGroupIDtoString } from '../constants/lookup';
 import { AntDesign } from '@expo/vector-icons';
 import { exerciseDB } from '../database/localDB';
 import { useIsFocused } from '@react-navigation/native';
+import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
 import EditExerciseModal from '../components/form/EditExerciseModal';
 import PillFilter from '../components/form/PillFilter';
-import { muscleGroupIDtoString } from '../constants/lookup';
 
 /* ExerciseListScreen
  * Render exercises from exercises table in exercises database according to user's search term and any active
@@ -15,7 +15,7 @@ import { muscleGroupIDtoString } from '../constants/lookup';
  * Author: Chandler Kenworthy (04/02/2023)
 */
 
-const ExerciseListScreen = ({route, navigation}) => {
+const ExerciseListScreen = () => {
     const [exercises, setExercises] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
