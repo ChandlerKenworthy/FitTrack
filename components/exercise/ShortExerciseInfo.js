@@ -18,7 +18,7 @@ const deviceWidth = Dimensions.get('window').width;
  * Author: Chandler Kenworthy (02/04/2023)
 */
 
-const ShortExerciseInfo = ({item, onPress, showBorder, searchTerm, forceRefresh, toggleModal}) => {
+const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
   // Split name into array of single chars
   const nameArr = item.name.split("");
   // Find the index of the first occurence of the search term in the exercise's name
@@ -101,8 +101,7 @@ const ShortExerciseInfo = ({item, onPress, showBorder, searchTerm, forceRefresh,
       <Animated.View 
         style={[
           styles.container, 
-          {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim, borderBottomLeftRadius: 20, borderTopLeftRadius: 20},
-          showBorder && {borderWidth: 1, borderColor: 'red'}
+          {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim}
         ]}>
         <View>
           <View style={styles.textArrayContainer}>
@@ -138,7 +137,9 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderBottomLeftRadius: 20, 
+        borderTopLeftRadius: 20
     },
 
     extraInfo: {

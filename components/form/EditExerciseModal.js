@@ -1,15 +1,16 @@
 import { Modal, StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { colors } from '../../constants/Globalstyles';
 import { AntDesign } from '@expo/vector-icons';
-import BasicTextInput from './BasicTextInput';
 import { SettingsContext } from '../../store/settings-context';
-import RadioInput from './RadioInput';
 import { muscleGroupIDtoString, scoreTypeIDtoString } from '../../constants/lookup';
-import PickerInput from './PickerInput';
-import LoginButton from '../ui/Login/LoginButton';
 import { ValidateExercise } from '../../util/ValidateExercise';
 import { exerciseDB } from '../../database/localDB';
+import GestureRecognizer from 'react-native-swipe-gestures';
+import PickerInput from './PickerInput';
+import LoginButton from '../ui/Login/LoginButton';
+import RadioInput from './RadioInput';
+import BasicTextInput from './BasicTextInput';
 
 const EditExerciseModal = ({visible, onRequestClose, exercise, setForceRefresh}) => {
     if(!exercise) {
@@ -43,6 +44,9 @@ const EditExerciseModal = ({visible, onRequestClose, exercise, setForceRefresh})
     }
 
     return (
+        <GestureRecognizer style={{flex: 1}}
+            onSwipeDown={onRequestClose}
+        >
         <Modal
             transparent={true}
             visible={visible}
@@ -90,6 +94,7 @@ const EditExerciseModal = ({visible, onRequestClose, exercise, setForceRefresh})
                 </View>
             </SafeAreaView>
         </Modal>
+        </GestureRecognizer>
     )
 }
 
