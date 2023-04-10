@@ -52,7 +52,7 @@ const CustomDrawer = (props) => {
                             <MaterialCommunityIcons name="weight-lifter" size={26} color={colors.lightorange} />
                         </View>
                         <View style={[styles.profileInfoContainer, {marginLeft: 15}]}>
-                            <Text style={styles.nWorkoutText}>{totalVolume}</Text>
+                            <Text style={styles.nWorkoutText}>{totalVolume ? totalVolume : "0"}</Text>
                             <MaterialCommunityIcons name="weight-kilogram" size={26} color={colors.lightorange} />
                         </View>
                     </View>
