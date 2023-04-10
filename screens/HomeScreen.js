@@ -13,12 +13,11 @@ const HomeScreen = ({navigation}) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log("Running")
     workoutDB.transaction(tx => {
       tx.executeSql(
         "SELECT * FROM workouts ORDER BY date(date) DESC",
         null,
-        (tx, result) => { console.log(result.rows._array); setWorkouts(result.rows._array)},
+        (tx, result) => setWorkouts(result.rows._array),
         (tx, error) => console.warn(error)
       );
     });
@@ -34,6 +33,7 @@ const HomeScreen = ({navigation}) => {
             renderItem={({item}) =>  <WorkoutListItem workout={item} />}
             keyExtractor={(item) => item.id}
             style={styles.workoutsList}
+            ItemSeparatorComponent={() => <View style={styles.buffer}></View>}
           />
         )}
         <View style={styles.addWorkoutBtnContainer}>
@@ -88,5 +88,9 @@ const styles = StyleSheet.create({
   workoutsList: {
     width: '100%',
     marginTop: 15,
-  }
+  },
+
+  buffer: {
+    marginVertical: 10
+  },
 });

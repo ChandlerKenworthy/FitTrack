@@ -10,19 +10,27 @@ const WorkoutListItem = ({workout}) => {
     const workoutDate = new Date(workout.date);
 
     useEffect(() => {
-        // Empty state first
-        setMuscleGroups([]);
-        exerciseDB.transaction(tx => {
-            JSON.parse(workout.exercises).map(exId => {
-                tx.executeSql(
-                    "SELECT muscleGroup_id FROM exercises WHERE id = (?)",
-                    [exId],
-                    (tx, result) => setMuscleGroups(prevGroups => [...prevGroups, Object.values(result.rows._array[0])[0]]),
-                    (tx, error) => console.warn(`[Error in WorkoutListItem.js] ${error}`)
-                );
-            });
+        let queryString = "SELECT muscleGroup_id FROM exercises WHERE id IN (";
+        [...new Set(JSON.parse(workout.exercises))].map((exId) => { // remove duplicate exercises
+            queryString += exId;
+            queryString += ",";
         });
-        setMuscleGroups(prevGroups => [...new Set(prevGroups)]); // Remove duplicates
+        queryString = queryString.slice(0, -1);
+        queryString += ")";
+        exerciseDB.transaction(tx => {
+            tx.executeSql(
+                queryString,
+                null,
+                (tx, result) => {
+                    let muscleGroupIds = [];
+                    for(let i = 0; i < result.rows._array.length; i++) {
+                        muscleGroupIds.push(Object.values(result.rows._array[i])[0]);
+                    }
+                    setMuscleGroups([...new Set(muscleGroupIds)]); // remove duplicates
+                },
+                (tx, error) => console.warn(`[Error in WorkoutListItem.js] ${error}`)
+            );
+        });
     }, []);
 
     return (
@@ -34,11 +42,11 @@ const WorkoutListItem = ({workout}) => {
             <View style={[styles.row, {marginTop: 10, justifyContent: 'space-between'}]}>
                 <Text style={styles.volumeText}>{workout.totalVolume} kg</Text>
                 <View style={styles.muscleGroupsWrapper}>
-                    {muscleGroups.map(muscleGroupId => {
+                    {muscleGroups.map((muscleGroupId, index) => {
                         return (
                             <View 
                                 key={uuid.v4()} 
-                                style={[styles.muscleGroupIndicator, {backgroundColor: muscleGroupIDtoColor[muscleGroupId]}]}
+                                style={[styles.muscleGroupIndicator, {backgroundColor: muscleGroupIDtoColor[muscleGroupId]}, index > 0 && {marginLeft: 5}]}
                             ></View>
                         );
                     })}
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
 
     titleText: {
         fontSize: 18,
-        fontWeight: '500',
+        fontWeight: '700',
         color: colors.charcoal
     },
 
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
 
     volumeText: {
         fontSize: 16,
-        fontWeight: '700'
+        fontWeight: '300'
     },
 
     muscleGroupsWrapper: {

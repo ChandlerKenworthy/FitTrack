@@ -1,5 +1,5 @@
 import { Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { EmptyWorkout } from '../state/EmptyState';
 import { colors } from '../constants/Globalstyles';
 import { MaterialIcons } from '@expo/vector-icons';
