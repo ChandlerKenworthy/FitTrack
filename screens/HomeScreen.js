@@ -1,19 +1,44 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import CircleIconButton from '../components/ui/CircleIconButton';
 import { colors } from '../constants/Globalstyles';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../store/settings-context';
+import { useIsFocused } from '@react-navigation/native';
+import { workoutDB } from '../database/localDB';
+import WorkoutListItem from '../components/workout/WorkoutListItem';
 
 const HomeScreen = ({navigation}) => {
   const settingsCtx = useContext(SettingsContext);
+  const [workouts, setWorkouts] = useState(null);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    workoutDB.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM workouts ORDER BY date(date) DESC",
+        null,
+        (tx, result) => setWorkouts(result.rows._array),
+        (tx, error) => console.warn(error)
+      );
+    });
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.root}>
-        <Text style={styles.noWorkoutText}>Workout log empty</Text>
+        {!workouts && <Text style={styles.noWorkoutText}>Workout log empty</Text>}
+        {workouts && (
+          <FlatList 
+            data={workouts}
+            renderItem={({item}) =>  <WorkoutListItem workout={item} />}
+            keyExtractor={(item) => item.id}
+            style={styles.workoutsList}
+            ItemSeparatorComponent={() => <View style={styles.buffer}></View>}
+          />
+        )}
         <View style={styles.addWorkoutBtnContainer}>
           <CircleIconButton 
-            onPress={() => console.log("I add workout")} 
+            onPress={() => navigation.navigate('AddWorkoutStack')} 
             icon="plus" size={46} scale={0.8} 
             color={colors.lightorange} 
             bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
@@ -58,5 +83,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     left: 35
-  }
+  },
+
+  workoutsList: {
+    width: '100%',
+    marginTop: 15,
+  },
+
+  buffer: {
+    marginVertical: 10
+  },
 });

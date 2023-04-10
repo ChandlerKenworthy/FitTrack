@@ -5,6 +5,7 @@ import { muscleGroupIDtoString } from '../../constants/lookup';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useRef } from 'react';
 import { exerciseDB } from '../../database/localDB';
+import { increaseBorderRadius, shrinkBorderRadius } from '../../util/Animations';
 const deviceWidth = Dimensions.get('window').width;
 
 /* ShortExerciseInfo 
@@ -17,7 +18,7 @@ const deviceWidth = Dimensions.get('window').width;
  * Author: Chandler Kenworthy (02/04/2023)
 */
 
-const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
+const ShortExerciseInfo = ({item, onPress, showBorder, searchTerm, forceRefresh, toggleModal}) => {
   // Split name into array of single chars
   const nameArr = item.name.split("");
   // Find the index of the first occurence of the search term in the exercise's name
@@ -26,6 +27,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
   const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
   // Reference to swipeable component
   const swipeRef = useRef(null);
+  const borderRadiusAnim = useRef(new Animated.Value(20)).current;
 
   function toggleIsFavorite() {
     exerciseDB.transaction(tx => {
@@ -86,37 +88,22 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
     );
   }
 
-  const borderRadiusAnim = useRef(new Animated.Value(20)).current;
-
-  const shrinkBorderRadius = () => {
-    // Will change borderRadiusAnim value to 1 in 2 seconds
-    Animated.timing(borderRadiusAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const increaseBorderRadius = () => {
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(borderRadiusAnim, {
-      toValue: 20,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  };
-
   return (
     <Swipeable
       ref={swipeRef}
       renderRightActions={renderRightActionButtons}
       friction={2}
-      onSwipeableWillOpen={() => shrinkBorderRadius()}
-      onSwipeableWillClose={() => increaseBorderRadius()}
+      onSwipeableWillOpen={() => shrinkBorderRadius(borderRadiusAnim, 200)}
+      onSwipeableWillClose={() => increaseBorderRadius(borderRadiusAnim, 200)}
       rightThreshold={0.1 * deviceWidth}
       overshootRight={false}
     >
-      <Animated.View style={[styles.container, {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim, borderBottomLeftRadius: 20, borderTopLeftRadius: 20}]}>
+      <Animated.View 
+        style={[
+          styles.container, 
+          {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim, borderBottomLeftRadius: 20, borderTopLeftRadius: 20},
+          showBorder && {borderWidth: 1, borderColor: 'red'}
+        ]}>
         <View>
           <View style={styles.textArrayContainer}>
             {searchTermExists && searchIndex !== -1 ? nameArr.map((name, index) => {
@@ -136,9 +123,6 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
               <Text style={styles.pbText}>PB: 92 kg</Text>
           </View>
         </View>
-        <Pressable onPress={() => { console.log("TODO: Add this exercise to new/current workout"); }}>
-          <AntDesign name="pluscircleo" size={32} color={colors.charcoal} />
-        </Pressable>
       </Animated.View>
     </Swipeable>
   )

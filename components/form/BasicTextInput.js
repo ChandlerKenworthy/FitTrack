@@ -3,17 +3,23 @@ import { colors } from '../../constants/Globalstyles';
 import { useContext } from 'react';
 import { SettingsContext } from '../../store/settings-context';
 
-const BasicTextInput = ({value, onChangeText, placeholder}) => {
+const BasicTextInput = ({value, onChangeText, placeholder, showBorder, style}) => {
   const settingsCtx = useContext(SettingsContext);
 
   return (
-    <View style={styles.container}>
+    <View>
       <TextInput 
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
         autoCapitalize={"none"}
-        style={[styles.input, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}
+        style={
+          [
+            styles.input, 
+            {color: settingsCtx.darkMode ? colors.white : colors.charcoal},
+            showBorder == false && {borderBottomWidth: 0},
+            style && style
+          ]}
       />
     </View>
   )

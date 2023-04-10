@@ -4,8 +4,11 @@ import { UserAuthContextProvider } from './store/UserAuthContext';
 import { useEffect, useState } from 'react';
 import { auth } from "./firebase";
 import { onAuthStateChanged } from 'firebase/auth';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import { colors } from './constants/Globalstyles';
+import { EmptySettings } from './state/EmptyState';
+import { SettingsContextProvider } from './store/settings-context';
+import { createDatabse } from './database/localDB';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import CalendarScreen from './screens/CalendarScreen';
@@ -16,13 +19,9 @@ import ReportBugScreen from './screens/ReportBugScreen';
 import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
 import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
-import { colors } from './constants/Globalstyles';
 import CustomDrawer from './components/ui/CustomDrawer';
-import { SettingsContextProvider } from './store/settings-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { EmptySettings } from './state/EmptyState';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
-import { createDatabse } from './database/localDB';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -64,6 +63,22 @@ export default function App() {
     );
   }
 
+  function AddWorkoutStack() {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerTintColor: colors.lightorange,
+        }}
+      >
+        <Stack.Screen 
+          name="AddWorkout"
+          component={AddWorkoutItemScreen}
+          options={{ title: "Add WorkoutS", headerShown: false}}
+        />
+      </Stack.Navigator>
+    );
+  }
+
   function authenticatedStack() {
     return (
       <Drawer.Navigator 
@@ -85,8 +100,8 @@ export default function App() {
           }}
         />
         <Drawer.Screen 
-          name="AddWorkout" 
-          component={AddWorkoutItemScreen} 
+          name="AddWorkoutStack" 
+          component={AddWorkoutStack} 
           options={{
             title: "Add Workout",
             drawerIcon: ({color}) => <AntDesign name="pluscircleo" size={24} color={color} />

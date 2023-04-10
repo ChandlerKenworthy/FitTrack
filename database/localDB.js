@@ -5,14 +5,24 @@ import * as SQLite from 'expo-sqlite';
 */
 
 export const exerciseDB = SQLite.openDatabase("exercises.db");
+export const workoutDB = SQLite.openDatabase("workouts.db");
 
 export function createDatabse() {
     exerciseDB.transaction(tx => {
         tx.executeSql(
-            "CREATE TABLE IF NOT EXISTS exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, muscleGroup_id INTEGER, scoreType_id INTEGER, isFavorite INTEGER NOT NULL DEFAULT 0)",
+            "CREATE TABLE IF NOT EXISTS exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, muscleGroup_id INTEGER, scoreType_id INTEGER, isFavorite INTEGER NOT NULL DEFAULT 0, personalBest INTEGER)",
             null,
             (tx, resultSet) => {},
-            (tx, error) => { console.log(`[Error from localDB.js] ${error}`) }
+            (tx, error) => console.log(`[Error from localDB.js] ${error}`)
+        );
+    });
+
+    workoutDB.transaction(tx => {
+        tx.executeSql(
+            "CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date TEXT, totalVolume REAL, exercises TEXT, reps TEXT, weights TEXT)",
+            null,
+            (tx, resultSet) => { },
+            (tx, error) => console.log(`[Error from localDB.js] (workoutDB.transaction) ${error}`)
         );
     });
 }

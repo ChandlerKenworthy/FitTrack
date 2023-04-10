@@ -2,11 +2,11 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { colors } from '../../constants/Globalstyles'
 
-const PillFilter = ({id, name, isSelected, setIsSelected}) => {
+const PillFilter = ({id, name, isSelected, setIsSelected, style}) => {
   return (
     <Pressable 
       onPress={setIsSelected.bind(this, id)}
-      style={[styles.container, isSelected && styles.containerSelected]}
+      style={[styles.container, isSelected && styles.containerSelected, style && style]}
     >
       <Text style={[styles.text, isSelected && styles.textSelected]}>{name}</Text>
     </Pressable>
