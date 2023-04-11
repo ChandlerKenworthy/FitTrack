@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     },
 
     listContainer: {
+        height: '100%',
         marginHorizontal: 10
     }
 })

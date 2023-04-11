@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Dimensions, Animated } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Dimensions, Animated, LayoutAnimation } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
 import { AntDesign } from '@expo/vector-icons';
 import { muscleGroupIDtoString } from '../../constants/lookup';
@@ -27,6 +27,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
   const searchTermExists = searchTerm !== null && searchTerm !== undefined && searchTerm !== "";
   // Reference to swipeable component
   const swipeRef = useRef(null);
+  const animViewRef = useRef(null);
   const borderRadiusAnim = useRef(new Animated.Value(20)).current;
 
   function toggleIsFavorite() {
@@ -53,6 +54,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
         (tx, error) => { console.log(`[Error in ShortExerciseInfo.js] (deleteExercise) ${error}`) }
       );
     });
+    LayoutAnimation.easeInEaseOut();
     forceRefresh(prevRefresh => !prevRefresh);
   }
 
@@ -99,10 +101,12 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
       overshootRight={false}
     >
       <Animated.View 
+        ref={animViewRef}
         style={[
           styles.container, 
           {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim}
-        ]}>
+        ]}
+      >
         <View>
           <View style={styles.textArrayContainer}>
             {searchTermExists && searchIndex !== -1 ? nameArr.map((name, index) => {
