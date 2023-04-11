@@ -26,8 +26,8 @@ const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.root}>
-        {!workouts && <Text style={styles.noWorkoutText}>Workout log empty</Text>}
-        {workouts && (
+        {(!workouts || workouts.length === 0) && <Text style={styles.noWorkoutText}>Workout log empty</Text>}
+        {(workouts && workouts.length > 0) && (
           <FlatList 
             data={workouts}
             renderItem={({item}) =>  <WorkoutListItem workout={item} />}
