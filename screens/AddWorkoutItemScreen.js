@@ -1,15 +1,32 @@
 import { Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { EmptyWorkout } from '../state/EmptyState';
 import { colors } from '../constants/Globalstyles';
 import { MaterialIcons } from '@expo/vector-icons';
+import { SaveWorkout } from '../util/SaveWorkout';
+import { workoutDB } from '../database/localDB';
 import AddEmptyWorkoutForm from '../components/form/AddEmptyWorkoutForm';
 import BasicTextInput from '../components/form/BasicTextInput';
-import { SaveWorkout } from '../util/SaveWorkout';
 
 const AddWorkoutItemScreen = () => {
-  const [workout, setWorkout] = useState(EmptyWorkout);
+  const [workout, setWorkout] = useState(null);
   const [isFromTemplate, setIsFromTemplate] = useState(null);
+
+  useEffect(() => {
+    workoutDB.transaction(tx => {
+        tx.executeSql(
+            "SELECT COUNT(*) FROM workouts",
+            null,
+            (tx, result) => {
+                setWorkout({
+                  ...EmptyWorkout,
+                  name: `Workout ${Object.values(result.rows._array[0])[0]+1}`
+                })
+            },
+            (tx, error) => console.warn(`[Error in AddWorkoutItemScreen.js] ${error}`)
+        );
+    });
+  }, [isFromTemplate]);
 
   function submitWorkoutHandler() {
     // Check name is not empty, if it is use a filler name
@@ -30,8 +47,8 @@ const AddWorkoutItemScreen = () => {
     submitWorkout.exercises = newExercises;
     // Now delete all the reps/weights associated with un-labelled exercises
     SaveWorkout(submitWorkout);
-    // Cleanup state
-    setWorkout(EmptyWorkout);
+    // Trigger page to reset
+    setIsFromTemplate(null);
   }
 
   function updateNameHandler(text) {
