@@ -128,7 +128,15 @@ const ExerciseListScreen = () => {
                 />
                 <FlatList 
                     data={exercises}
-                    renderItem={({item}) => <ShortExerciseInfo onPress={() => console.log("I am ....")} item={item} searchTerm={searchTerm} forceRefresh={setForceRefresh} toggleModal={setEditModal} />}
+                    renderItem={({item, index}) => (
+                        <ShortExerciseInfo 
+                            item={item} 
+                            index={index}
+                            searchTerm={searchTerm} 
+                            forceRefresh={setForceRefresh}
+                            toggleModal={setEditModal} 
+                        />
+                    )}
                     keyExtractor={(item) => item.name}
                 />
             </View>

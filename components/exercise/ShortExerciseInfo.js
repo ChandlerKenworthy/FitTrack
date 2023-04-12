@@ -18,7 +18,7 @@ const deviceWidth = Dimensions.get('window').width;
  * Author: Chandler Kenworthy (02/04/2023)
 */
 
-const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
+const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, toggleModal}) => {
   // Split name into array of single chars
   const nameArr = item.name.split("");
   // Find the index of the first occurence of the search term in the exercise's name
@@ -123,7 +123,7 @@ const ShortExerciseInfo = ({item, searchTerm, forceRefresh, toggleModal}) => {
           </View>
           <View style={styles.extraInfo}>
               <Text style={styles.muscleGroupText}>{muscleGroupIDtoString[item.muscleGroup_id]}</Text>
-              <Text style={styles.pbText}>PB: 92 kg</Text>
+              <Text style={styles.pbText}>1RM: {item.personalBest ? item.personalBest : "N/A"} {item.personalBest ? "kg" : ""}</Text>
           </View>
         </View>
       </Animated.View>
