@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
 import { muscleGroupIDtoColor } from '../../constants/lookup';
 import { useEffect, useState } from 'react';
 import { exerciseDB } from '../../database/localDB';
 import uuid from 'react-native-uuid';
+import { useNavigation } from '@react-navigation/native';
 
 const WorkoutListItem = ({workout}) => { 
     const [muscleGroups, setMuscleGroups] = useState([]);
     const workoutDate = new Date(workout.date);
+    const navigation = useNavigation();
 
     useEffect(() => {
         let queryString = "SELECT muscleGroup_id FROM exercises WHERE id IN (";
@@ -34,7 +36,7 @@ const WorkoutListItem = ({workout}) => {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <Pressable onPress={() => navigation.navigate('ViewSingleWorkout', {workout: workout, muscleGroups: muscleGroups})} style={styles.container}>
             <View style={styles.row}>
                 <Text style={styles.titleText}>{workout.name}</Text>
                 <Text style={styles.dateText}>{workoutDate.toDateString()}</Text>
@@ -52,7 +54,7 @@ const WorkoutListItem = ({workout}) => {
                     })}
                 </View>
             </View>
-        </View>
+        </Pressable>
     )
 }
 
