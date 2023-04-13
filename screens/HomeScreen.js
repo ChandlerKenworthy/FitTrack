@@ -38,7 +38,7 @@ const HomeScreen = ({navigation}) => {
         )}
         <View style={styles.addWorkoutBtnContainer}>
           <CircleIconButton 
-            onPress={() => navigation.navigate('AddWorkoutStack')} 
+            onPress={() => navigation.navigate('AddWorkout')} 
             icon="plus" size={46} scale={0.8} 
             color={colors.lightorange} 
             bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}

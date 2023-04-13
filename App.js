@@ -19,6 +19,7 @@ import ReportBugScreen from './screens/ReportBugScreen';
 import AddWorkoutItemScreen from './screens/AddWorkoutItemScreen';
 import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
+import SingleWorkoutViewScreen from './screens/SingleWorkoutViewScreen';
 import CustomDrawer from './components/ui/CustomDrawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
@@ -63,17 +64,20 @@ export default function App() {
     );
   }
 
-  function AddWorkoutStack() {
+  function HomeStack() {
     return (
       <Stack.Navigator
-        screenOptions={{
-          headerTintColor: colors.lightorange,
-        }}
+      screenOptions={{
+        headerTintColor: colors.lightorange
+      }}
       >
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
         <Stack.Screen 
-          name="AddWorkout"
-          component={AddWorkoutItemScreen}
-          options={{ title: "Add WorkoutS", headerShown: false}}
+          name="ViewSingleWorkout" 
+          component={SingleWorkoutViewScreen} 
+          options={{
+            title: "View Workout" // TODO: Make title same name as workout
+          }} 
         />
       </Stack.Navigator>
     );
@@ -92,16 +96,16 @@ export default function App() {
         drawerContent={props => <CustomDrawer {...props} />}
       >
         <Drawer.Screen 
-          name="Home" 
-          component={HomeScreen} 
+          name="HomeStack" 
+          component={HomeStack} 
           options={{
             title: "Dashboard",
             drawerIcon: ({color}) => <AntDesign name="home" size={24} color={color} />
           }}
         />
         <Drawer.Screen 
-          name="AddWorkoutStack" 
-          component={AddWorkoutStack} 
+          name="AddWorkout" 
+          component={AddWorkoutItemScreen} 
           options={{
             title: "Add Workout",
             drawerIcon: ({color}) => <AntDesign name="pluscircleo" size={24} color={color} />
