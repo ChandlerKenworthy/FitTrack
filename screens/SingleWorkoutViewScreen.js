@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
 import { colors } from '../constants/Globalstyles';
 import WorkoutOverview from '../components/ui/ViewWorkout/WorkoutOverview';
 import WorkoutExerciseItem from '../components/ui/ViewWorkout/WorkoutExerciseItem';
@@ -7,29 +7,24 @@ const SingleWorkoutViewScreen = ({route, navigation}) => {
     const {workout, muscleGroups} = route.params;
 
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <ScrollView style={{flex: 1, marginBottom: 30}}>
             <WorkoutOverview workout={workout} muscleGroups={muscleGroups} />
             <View style={styles.exercisesContainer}>
                 <Text style={styles.exerciseHeaderText}>Exercises</Text>
                 <View style={styles.exerciseListContainer}>
-                    <FlatList 
-                        data={JSON.parse(workout.exercises)} // Convert string to array
-                        keyExtractor={({item, index}) => index}
-                        renderItem={({item, index}) => {
-                            return (
-                                <WorkoutExerciseItem 
-                                    key={index}
-                                    exerciseId={item}  
-                                    weights={JSON.parse(workout.weights)[index]}
-                                    reps={JSON.parse(workout.reps)[index]}
-                                />
-                            )
-                        }} // item is the exercise ID
-                        ItemSeparatorComponent={() => <View style={styles.separator}></View>}
-                    />
+                    {JSON.parse(workout.exercises).map((item, index) => {
+                        return (
+                            <WorkoutExerciseItem 
+                                key={index}
+                                exerciseId={item}  
+                                weights={JSON.parse(workout.weights)[index]}
+                                reps={JSON.parse(workout.reps)[index]}
+                            />
+                        );
+                    })}
                 </View>
             </View>
-        </SafeAreaView> 
+        </ScrollView> 
     )
 }
 

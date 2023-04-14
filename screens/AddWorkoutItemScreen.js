@@ -111,6 +111,10 @@ const AddWorkoutItemScreen = () => {
 export default AddWorkoutItemScreen
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 30
+  },
+
   root: {
     flex: 1,
     justifyContent: 'center',

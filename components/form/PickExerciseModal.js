@@ -7,12 +7,14 @@ import { AntDesign } from '@expo/vector-icons';
 import { muscleGroupIDtoString } from '../../constants/lookup';
 import PillFilter from './PillFilter';
 import ExerciseSnippet from '../exercise/ExerciseSnippet';
+import { useIsFocused } from '@react-navigation/native';
 
 const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
     const settingsCtx = useContext(SettingsContext);
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState([]);
     const [exercises, setExercises] = useState();
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         const searchTermExists = !(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2);
@@ -58,7 +60,7 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
                 );
             });
         }
-    }, [searchTerm, filter]);
+    }, [searchTerm, filter, isFocused]);
 
     function updateFilterHandler(filterId) {
         const filterCurrentlyActive = filter.includes(filterId);
