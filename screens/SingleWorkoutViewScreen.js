@@ -18,6 +18,7 @@ const SingleWorkoutViewScreen = ({route, navigation}) => {
                         renderItem={({item, index}) => {
                             return (
                                 <WorkoutExerciseItem 
+                                    key={index}
                                     exerciseId={item}  
                                     weights={JSON.parse(workout.weights)[index]}
                                     reps={JSON.parse(workout.reps)[index]}
