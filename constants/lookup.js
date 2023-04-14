@@ -14,12 +14,12 @@ export const muscleGroupIDtoString = {
 };
 
 export const muscleGroupIDtoColor = {
-    0: "#2e86ab",
-    1: "#99e1d9",
-    2: "#623b5a",
-    3: "#f0ec57",
-    4: "#ff0035",
-    5: "#c97d60"
+    0: "#14342b",
+    1: "#8c7051",
+    2: "#b9b8d3",
+    3: "#45b69c",
+    4: "#008bf8",
+    5: "#dc0073"
 };
 
 export const monthIndextoString = {
