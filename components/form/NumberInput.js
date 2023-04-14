@@ -8,7 +8,7 @@ const NumberInput = ({placeholder, value, onChangeText, style}) => {
         autoCapitalize='none'
         autoComplete='off'
         inputMode='numeric'
-        maxLength={3}
+        maxLength={5}
         style={[styles.inputText, style && style]}
         placeholder={placeholder}
         value={value}
