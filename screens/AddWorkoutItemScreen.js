@@ -7,6 +7,7 @@ import { SaveWorkout } from '../util/SaveWorkout';
 import { workoutDB } from '../database/localDB';
 import AddEmptyWorkoutForm from '../components/form/AddEmptyWorkoutForm';
 import BasicTextInput from '../components/form/BasicTextInput';
+import LoginButton from '../components/ui/Login/LoginButton';
 
 const AddWorkoutItemScreen = () => {
   const [workout, setWorkout] = useState(null);
@@ -102,7 +103,9 @@ const AddWorkoutItemScreen = () => {
          </View>
         </View>
         <AddEmptyWorkoutForm workout={workout} setWorkout={setWorkout} />
-        <Button onPress={submitWorkoutHandler} title="Submit as finished" />
+        <View style={styles.submitBtnWrapper}>
+          <LoginButton text={"Submit"} onPress={submitWorkoutHandler} iconName={"checkcircleo"} />
+        </View>
       </ScrollView>
     );
   }
@@ -166,5 +169,10 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '700',
     marginRight: 20
+  },
+
+  submitBtnWrapper: {
+    marginHorizontal: 15,
+    marginTop: 20,
   }
 })
