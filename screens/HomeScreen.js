@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
   },
 
   buffer: {
-    marginVertical: 10
+    marginVertical: 6
   },
 });

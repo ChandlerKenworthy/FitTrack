@@ -1,5 +1,5 @@
 export const colors = {
-    lightorange: "#fb8500",
+    lightorange: "#3478c6",
     darkorange: "#c76a02",
     black: "#000000",
     charcoal: "#000", // was previously 333333

@@ -19,6 +19,7 @@ const SingleWorkoutViewScreen = ({route, navigation}) => {
                                 exerciseId={item}  
                                 weights={JSON.parse(workout.weights)[index]}
                                 reps={JSON.parse(workout.reps)[index]}
+                                style={JSON.parse(workout.exercises).length !== index+1 ? {marginBottom: 10} : null}
                             />
                         );
                     })}

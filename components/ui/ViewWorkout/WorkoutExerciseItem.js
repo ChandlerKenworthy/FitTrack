@@ -5,7 +5,7 @@ import { colors } from '../../../constants/Globalstyles';
 import { AntDesign } from '@expo/vector-icons';
 import { SlideInDown, Layout, color } from 'react-native-reanimated';
 
-const WorkoutExerciseItem = ({exerciseId, weights, reps}) => {
+const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
     const [exInfo, setExInfo] = useState(null);
     const [showDetails, setShowDetails] = useState(true);
     const caretRotationAnim = useRef(new Animated.Value(0)).current;
@@ -50,7 +50,7 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps}) => {
     }
 
     return (
-        <View>
+        <View style={style && style}>
             <View style={styles.headerContainer}>
                 <View style={styles.headerLeftContainer}>
                     <View style={styles.repsContainer}>
