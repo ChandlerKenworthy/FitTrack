@@ -5,9 +5,10 @@ import { useContext, useEffect, useState } from 'react'
 import { SettingsContext } from '../../store/settings-context'
 import { AntDesign } from '@expo/vector-icons';
 import { muscleGroupIDtoString } from '../../constants/lookup';
+import { useIsFocused } from '@react-navigation/native';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import PillFilter from './PillFilter';
 import ExerciseSnippet from '../exercise/ExerciseSnippet';
-import { useIsFocused } from '@react-navigation/native';
 
 const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
     const settingsCtx = useContext(SettingsContext);
@@ -73,63 +74,74 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
         }
     }
 
-    return (
-        <Modal
-            visible={open}
-            onRequestClose={() => setOpen(false)}
-            animationType='slide'
-        >
-            <SafeAreaView style={[styles.container, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
-                <View style={[styles.row, {alignItems: 'flex-end',}]}>
-                    <TouchableOpacity onPress={() => setOpen(false)} style={styles.touchable}>
-                        <AntDesign name="closecircleo" size={46} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
-                    </TouchableOpacity>
+    function HeaderComponent() {
+        return (
+            <View style={[styles.row, {alignItems: 'center'}]}>
+                <View>
+                    <Text style={[styles.titleText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Select Exercise</Text>
                 </View>
-                <View style={[styles.row, {alignItems: 'center'}]}>
-                    <View>
-                        <Text style={[styles.titleText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>Select Exercise</Text>
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput 
-                            placeholder={"Search exercises..."}
-                            value={searchTerm}
-                            onChangeText={(txt) => setSearchTerm(txt)}
-                            autoCapitalize='none'
-                            style={styles.input}
-                        />
-                        <Pressable onPress={() => {
-                            if(searchTerm && searchTerm.length > 0) {
-                                setSearchTerm("");
-                            }
-                        }}>
-                            <AntDesign name={searchTerm && searchTerm.length > 0 ? "reload1" : "search1"} size={22} color={colors.lightgray} />
-                        </Pressable>
-                    </View>
-                    <View style={styles.filtersContainer}>
-                        {Object.entries(muscleGroupIDtoString).map(([id, name]) => {
-                            return (
-                                <PillFilter 
-                                    id={parseInt(id)} 
-                                    key={id}
-                                    name={name} 
-                                    isSelected={filter.includes(parseInt(id))} 
-                                    setIsSelected={updateFilterHandler}
-                                    style={{backgroundColor: filter.includes(parseInt(id)) ? colors.white : colors.extralightgray, borderRadius: 30}}
-                                />
-                            );
-                        })}
-                    </View>
-                </View>
-                <View style={{width: '100%'}}>
-                    <FlatList 
-                        data={exercises}
-                        renderItem={({item}) => <ExerciseSnippet data={item} onPress={selectExerciseHandler} />}
-                        keyExtractor={(item) => item.name}
-                        ItemSeparatorComponent={() => <View style={{marginVertical: 5}}></View>}
+                <View style={styles.inputContainer}>
+                    <TextInput 
+                        placeholder={"Search exercises..."}
+                        value={searchTerm}
+                        onChangeText={(txt) => setSearchTerm(txt)}
+                        autoCapitalize='none'
+                        style={styles.input}
                     />
+                    <Pressable onPress={() => {
+                        if(searchTerm && searchTerm.length > 0) {
+                            setSearchTerm("");
+                        }
+                    }}>
+                        <AntDesign name={searchTerm && searchTerm.length > 0 ? "reload1" : "search1"} size={22} color={colors.lightgray} />
+                    </Pressable>
                 </View>
-            </SafeAreaView>
-        </Modal>
+                <View style={styles.filtersContainer}>
+                    {Object.entries(muscleGroupIDtoString).map(([id, name]) => {
+                        return (
+                            <PillFilter 
+                                id={parseInt(id)} 
+                                key={id}
+                                name={name} 
+                                isSelected={filter.includes(parseInt(id))} 
+                                setIsSelected={updateFilterHandler}
+                                style={{backgroundColor: filter.includes(parseInt(id)) ? colors.white : colors.extralightgray, borderRadius: 30}}
+                            />
+                        );
+                    })}
+                </View>
+            </View>
+        );
+    }
+
+    return (
+        <GestureRecognizer style={{flex: 1}}
+            onSwipeDown={() => setOpen(false)}
+        >
+            <Modal
+                visible={open}
+                onRequestClose={() => setOpen(false)}
+                animationType='slide'
+            >
+                <SafeAreaView style={[styles.container, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
+                    <View style={[styles.row, {alignItems: 'flex-end',}]}>
+                        <TouchableOpacity onPress={() => setOpen(false)} style={styles.touchable}>
+                            <AntDesign name="closecircleo" size={46} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View style={{width: '100%'}}>
+                        <FlatList 
+                            data={exercises}
+                            renderItem={({item}) => <ExerciseSnippet data={item} onPress={selectExerciseHandler} />}
+                            keyExtractor={(item) => item.name}
+                            ItemSeparatorComponent={() => <View style={{marginVertical: 5}}></View>}
+                            ListHeaderComponent={HeaderComponent}
+                        />
+                    </View>
+                </SafeAreaView>
+            </Modal>
+        </GestureRecognizer>
     )
 }
 
@@ -141,7 +153,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: colors.offwhite
+        backgroundColor: colors.offwhite,
+        marginBottom: 120
     },
 
     row: {
