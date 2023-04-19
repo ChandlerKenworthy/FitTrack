@@ -1,15 +1,15 @@
-import { Button, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useEffect, useState } from 'react'
 import { EmptyWorkout } from '../state/EmptyState';
 import { colors } from '../constants/Globalstyles';
 import { MaterialIcons } from '@expo/vector-icons';
-import { SaveWorkout } from '../util/SaveWorkout';
+import { CleanWorkout, SaveWorkout } from '../util/SaveWorkout';
 import { workoutDB } from '../database/localDB';
 import AddEmptyWorkoutForm from '../components/form/AddEmptyWorkoutForm';
 import BasicTextInput from '../components/form/BasicTextInput';
 import LoginButton from '../components/ui/Login/LoginButton';
 
-const AddWorkoutItemScreen = () => {
+const AddWorkoutItemScreen = ({navigation}) => {
   const [workout, setWorkout] = useState(null);
   const [isFromTemplate, setIsFromTemplate] = useState(null);
 
@@ -30,26 +30,11 @@ const AddWorkoutItemScreen = () => {
   }, [isFromTemplate]);
 
   function submitWorkoutHandler() {
-    // Check name is not empty, if it is use a filler name
-    let submitWorkout = workout;
-    if(submitWorkout.name.replaceAll(' ','').length < 1) { // Name is empty or just full of spaces
-      submitWorkout.name = "Unnamed Workout 1"; // TODO: Make dynamic
-    }
-    // Check all the exercise IDs not null (remove exercise if null)
-    let popIdxs = [];
-    const newExercises = submitWorkout.exercises.filter((item, index) => {
-      if(item == null) {
-        popIdxs.push(index)
-        return false;
-      } else {
-        return true;
-      }
-    });
-    submitWorkout.exercises = newExercises;
-    // Now delete all the reps/weights associated with un-labelled exercises
-    SaveWorkout(submitWorkout);
-    // Trigger page to reset
-    setIsFromTemplate(null);
+    let workoutCopy = workout;
+    workoutCopy = CleanWorkout(workoutCopy);
+    SaveWorkout(workoutCopy);
+    setIsFromTemplate(null); // Trigger page to reset
+    navigation.navigate('Home'); // Navigate back to home screen
   }
 
   function updateNameHandler(text) {
