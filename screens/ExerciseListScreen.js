@@ -88,8 +88,9 @@ const ExerciseListScreen = () => {
         }
     }
 
-    return (
-        <SafeAreaView style={styles.root}>
+    function SearchOptions() {
+        return (
+            <>
             <View style={styles.searchContainer}>
                 <TextInput 
                     placeholder={"Search exercises..."}
@@ -119,6 +120,12 @@ const ExerciseListScreen = () => {
                     );
                 })}
             </View>
+            </>
+        );
+    }
+
+    return (
+        <SafeAreaView style={styles.root}>
             <View style={styles.listContainer}>
                 <EditExerciseModal 
                     visible={editModal.isOpen} 
@@ -127,6 +134,7 @@ const ExerciseListScreen = () => {
                     setForceRefresh={setForceRefresh}
                 />
                 <FlatList 
+                    ListHeaderComponent={SearchOptions}
                     data={exercises}
                     renderItem={({item, index}) => (
                         <ShortExerciseInfo 
