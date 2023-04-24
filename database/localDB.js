@@ -19,7 +19,7 @@ export function createDatabse() {
 
     workoutDB.transaction(tx => {
         tx.executeSql(
-            "CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date TEXT, totalVolume REAL, exercises TEXT, reps TEXT, weights TEXT)",
+            "CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, year INTEGER, month INTEGER, day INTEGER, totalVolume REAL, exercises TEXT, reps TEXT, weights TEXT)",
             null,
             (tx, resultSet) => { },
             (tx, error) => console.log(`[Error from localDB.js] (workoutDB.transaction) ${error}`)

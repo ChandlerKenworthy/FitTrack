@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 
 const WorkoutListItem = ({workout}) => { 
     const [muscleGroups, setMuscleGroups] = useState([]);
-    const workoutDate = new Date(workout.date);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -39,7 +38,7 @@ const WorkoutListItem = ({workout}) => {
         <Pressable onPress={() => navigation.navigate('ViewSingleWorkout', {workout: workout, muscleGroups: muscleGroups})} style={styles.container}>
             <View style={styles.row}>
                 <Text style={styles.titleText}>{workout.name}</Text>
-                <Text style={styles.dateText}>{workoutDate.toDateString()}</Text>
+                <Text style={styles.dateText}>{workout.day}/{workout.month}/{workout.year}</Text>
             </View>
             <View style={[styles.row, {marginTop: 10, justifyContent: 'space-between'}]}>
                 <Text style={styles.volumeText}>{workout.totalVolume} kg</Text>

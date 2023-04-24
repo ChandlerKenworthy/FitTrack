@@ -87,7 +87,9 @@ export function SaveWorkout(workout) {
         return;
     }
 
-    const date = workout.date.toISOString().split('T')[0];
+    const year = new Date(workout.date).getFullYear();
+    const month = new Date(workout.date).getMonth() + 1;
+    const day = new Date(workout.date).getDate();
     const exercises = JSON.stringify(workout.exercises);
     const reps = JSON.stringify(workout.reps);
     const weights = JSON.stringify(workout.weights);
@@ -113,8 +115,8 @@ export function SaveWorkout(workout) {
 
     workoutDB.transaction(tx => {
         tx.executeSql(
-            "INSERT INTO workouts (name, date, totalVolume, exercises, reps, weights) VALUES (?, ?, ?, ?, ?, ?)",
-            [workout.name, date, totalVolume, exercises, reps, weights],
+            "INSERT INTO workouts (name, year, month, day, totalVolume, exercises, reps, weights) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            [workout.name, year, month, day, totalVolume, exercises, reps, weights],
             (tx, resultSet) => console.log("Saved success!"),
             (tx, error) => console.warn(`[Error in SaveWorkout.js] ${error}`)
         );

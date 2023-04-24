@@ -15,7 +15,7 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     workoutDB.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM workouts ORDER BY date(date) DESC",
+        "SELECT * FROM workouts", // TODO: order by date descending
         null,
         (tx, result) => setWorkouts(result.rows._array),
         (tx, error) => console.warn(error)

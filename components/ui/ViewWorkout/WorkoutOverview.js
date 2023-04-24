@@ -25,8 +25,8 @@ const WorkoutOverview = ({workout, muscleGroups}) => {
                     <Text style={styles.muscleGroupText}>{getMuscleGroupsString()}</Text>
                 </View>
                 <View style={styles.dateContainer}>
-                    <Text style={styles.dateDayText}>{new Date(workout.date).getDate()}</Text>
-                    <Text style={styles.dateMonthText}>{monthIndextoString[new Date(workout.date).getMonth()].slice(0,3)}</Text>
+                    <Text style={styles.dateDayText}>{workout.day}</Text>
+                    <Text style={styles.dateMonthText}>{monthIndextoString[workout.month-1].slice(0,3)}</Text>
                 </View>
             </View>
             <View style={styles.overviewContainer}>

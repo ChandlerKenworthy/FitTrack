@@ -5,6 +5,7 @@ import DayItem from '../components/calendar/DayItem';
 import DayPadItem from '../components/calendar/DayPadItem';
 import { colors } from '../constants/Globalstyles';
 import { SettingsContext } from '../store/settings-context';
+import GestureRecognizer from 'react-native-swipe-gestures';
 
 const CalendarScreen = ({navigation}) => {
   const today = new Date();
@@ -50,8 +51,12 @@ const CalendarScreen = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <ScrollView>
+    <GestureRecognizer
+      style={{flex: 1}}
+      onSwipeLeft={() => changeDate(true)}
+      onSwipeRight={() => changeDate(false)}
+    >
+      <SafeAreaView style={{flex: 1}}>
         <View style={styles.titleContainer}>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(false)}>
             <AntDesign name="caretleft" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
@@ -77,16 +82,17 @@ const CalendarScreen = ({navigation}) => {
             return (
               <DayPadItem 
                 key={dayNumber} 
+                date={date}
                 dayNumber={new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber)} 
                 isToday={getIsToday(dayNumber, true)} 
               />
           )})}
           {Array.from({length: date.getDate()}, (_, i) => i + 1).map((dayNumber) => {
-            return <DayItem key={dayNumber} dayNumber={dayNumber} isToday={getIsToday(dayNumber, false)} nworkouts={2} />
+            return <DayItem key={dayNumber} date={date} dayNumber={dayNumber} isToday={getIsToday(dayNumber, false)} />
           })}
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </GestureRecognizer>
   )
 }
 
