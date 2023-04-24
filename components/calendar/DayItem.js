@@ -1,13 +1,26 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
-import { color } from 'react-native-reanimated';
 import { colors } from '../../constants/Globalstyles';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../store/settings-context';
+import { workoutDB } from '../../database/localDB';
+import uuid from 'react-native-uuid';
 
-const DayItem = ({dayNumber, nworkouts, isToday}) => {
+const DayItem = ({date, dayNumber, isToday}) => {
   const deviceWidth = Dimensions.get('window').width;
   const adjustedWidth = ((deviceWidth - 20) / 7);
   const settingsCtx = useContext(SettingsContext);
+  const [nWorkouts, setNWorkouts] = useState(null);
+
+  useEffect(() => {
+    workoutDB.transaction(tx => {
+      tx.executeSql(
+        "SELECT COUNT(*) FROM workouts WHERE year == (?) AND month == (?) AND day == (?)",
+        [date.getFullYear(), date.getMonth()+1, dayNumber],
+        (tx, result) => setNWorkouts(parseInt(Object.values(result.rows._array[0])[0])),
+        (tx, error) => console.warn(`[Error in DayItem.js] ${error}`)
+      );
+    });
+  }, [date]);
   
   // Calculate the width of the day boxes so 7 fit per row on any device
   const containerStyles = {
@@ -17,15 +30,20 @@ const DayItem = ({dayNumber, nworkouts, isToday}) => {
     backgroundColor: isToday ? colors.lightorange : 'transparent'
   };
 
+  const dotBkg = {
+    backgroundColor: isToday ? colors.white : colors.lightorange,
+  };
+
   return (
     <View style={[styles.container, containerStyles]}>
       <Text style={[styles.text, isToday && {color: colors.white}, settingsCtx.darkMode && {color: colors.white}]}>{dayNumber}</Text>
-      {/*<View style={styles.exerciseDotWrapper}>
-        {
-        Array.apply(null, Array(nworkouts)).map(function (x, i) { return i; }).map((i) => {
-          return <View style={styles.dot}></View>;
+      {!isNaN(parseInt(nWorkouts)) && (
+        <View style={styles.exerciseDotWrapper}>
+        {Array.apply(null, Array(nWorkouts)).map(function (x, i) { return i; }).map((i) => {
+          return <View key={uuid.v4()} style={[styles.dot, dotBkg]}></View>;
         })}
-      </View>*/}
+        </View>
+      )}
     </View>
   )
 }
@@ -52,7 +70,6 @@ const styles = StyleSheet.create({
     },
 
     dot: {
-      backgroundColor: colors.lightorange,
       height: 6,
       width: 6,
       borderRadius: 3,

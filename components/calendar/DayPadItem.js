@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
-import { color } from 'react-native-reanimated';
 import { colors } from '../../constants/Globalstyles';
 
 const DayPadItem = ({dayNumber, isToday}) => {
