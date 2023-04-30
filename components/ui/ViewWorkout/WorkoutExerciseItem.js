@@ -54,8 +54,8 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
     }
 
     return (
-        <View style={style && style}>
-            <View style={styles.headerContainer}>
+        <View style={[style && style]}>
+            <View style={[styles.headerContainer, showDetails && {marginBottom: 15}]}>
                 <View style={styles.headerLeftContainer}>
                     <View style={styles.repsContainer}>
                         <Text style={styles.repsText}>{weights.length}</Text>
@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 15,
     },
 
     headerLeftContainer: {

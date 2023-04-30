@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 
 const NumberInput = ({placeholder, value, onChangeText, style}) => {
   return (

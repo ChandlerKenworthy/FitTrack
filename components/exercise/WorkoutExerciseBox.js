@@ -14,6 +14,8 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
     const [name, setName] = useState();
     const settingsCtx = useContext(SettingsContext);
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
+    const textColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
+    const textHighColor = settingsCtx.darkMode ? colors.lightorange : colors.gray
 
     useEffect(() => {
         async function setExerciseName() {
@@ -63,10 +65,10 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
             rightThreshold={0.1 * deviceWidth}
             overshootRight={false}
         >
-            <Animated.View style={[styles.container, animatedStyles]}>
+            <Animated.View style={[styles.container, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}, animatedStyles]}>
                 <View style={styles.row}>
                     <TouchableOpacity onPress={setExerciseid.bind(this, index)}>
-                        <Text style={styles.nameText}>{name}</Text>
+                        <Text style={[styles.nameText, {color: textColor}]}>{name}</Text>
                     </TouchableOpacity>
                 </View>
                 <HorizontalRule style={{marginVertical: 12, backgroundColor: colors.lightgray}} />
@@ -78,25 +80,25 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
                                     placeholder={"reps"}
                                     value={nReps}
                                     onChangeText={(text) => updateReps(index, i, text)}
-                                    style={{fontWeight: '700'}}
+                                    style={{fontWeight: '700', color: textColor}}
                                 />
-                                <Text style={styles.infoText}> x </Text>
+                                <Text style={[styles.infoText, {color: textColor}]}> x </Text>
                                 <NumberInput 
                                     placeholder={"weight"}
                                     value={weights[i]}
                                     onChangeText={(text) => updateWeights(index, i, text)}
-                                    style={{fontWeight: '700'}}
+                                    style={{fontWeight: '700', color: textColor}}
                                 />
-                                <Text style={styles.infoText}> {settingsCtx.metricUnits ? "kg" : "lbs"}</Text>
+                                <Text style={[styles.infoText, {color: textColor}]}> {settingsCtx.metricUnits ? "kg" : "lbs"}</Text>
                             </View>
                             <Pressable onPress={() => onDeleteSet(index, i)}>
-                                <AntDesign name="minuscircleo" size={18} color={colors.charcoal} />
+                                <AntDesign name="minuscircleo" size={18} color={textHighColor} />
                             </Pressable>
                         </View>
                     );
                 })}
                 <Pressable style={styles.addSetBtn} onPress={addSet.bind(this, index)}>
-                    <AntDesign name="pluscircleo" size={30} color={colors.charcoal} />
+                    <AntDesign name="pluscircleo" size={30} color={textHighColor} />
                 </Pressable>
             </Animated.View>
         </Swipeable>
@@ -107,7 +109,6 @@ export default WorkoutExerciseBox
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
         paddingTop: 20,
         paddingBottom: 15,
         paddingHorizontal: 20,
