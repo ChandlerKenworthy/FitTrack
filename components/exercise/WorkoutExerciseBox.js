@@ -76,14 +76,16 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
                     return (
                         <View key={i} style={styles.infoContainerWrapper}>
                             <View style={styles.infoContainer}>
-                                <NumberInput 
+                                <NumberInput
+                                    placeholderTextColor={colors.white}
                                     placeholder={"reps"}
                                     value={nReps}
                                     onChangeText={(text) => updateReps(index, i, text)}
                                     style={{fontWeight: '700', color: textColor}}
                                 />
                                 <Text style={[styles.infoText, {color: textColor}]}> x </Text>
-                                <NumberInput 
+                                <NumberInput
+                                    placeholderTextColor={colors.white}
                                     placeholder={"weight"}
                                     value={weights[i]}
                                     onChangeText={(text) => updateWeights(index, i, text)}

@@ -31,6 +31,8 @@ const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, 
   const animViewRef = useRef(null);
   const borderRadiusAnim = useRef(new Animated.Value(20)).current;
   const settingsCtx = useContext(SettingsContext);
+  const bkgColor = settingsCtx.darkMode ? colors.extralightblack : colors.white;
+  const txtColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
 
   function toggleIsFavorite() {
     exerciseDB.transaction(tx => {
@@ -106,6 +108,7 @@ const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, 
         ref={animViewRef}
         style={[
           styles.container, 
+          {backgroundColor: bkgColor},
           {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim}
         ]}
       >
@@ -116,12 +119,12 @@ const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, 
               return (
                 <Text 
                   key={index} 
-                  style={[styles.nameText, highlight && styles.highlightText]}
+                  style={[styles.nameText, {color: txtColor}, highlight && styles.highlightText]}
                 >
                   {name}
                 </Text>
               );
-            }) : <Text style={styles.nameText}>{item.name}</Text>}
+            }) : <Text style={[styles.nameText, {color: txtColor}]}>{item.name}</Text>}
           </View>
           <View style={styles.extraInfo}>
               <Text style={styles.muscleGroupText}>{muscleGroupIDtoString[item.muscleGroup_id]}</Text>
@@ -137,7 +140,6 @@ export default ShortExerciseInfo
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
         paddingHorizontal: 20,
         paddingVertical: 15,
         marginVertical: 5,
