@@ -1,16 +1,18 @@
 import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { EmptyWorkout } from '../state/EmptyState';
 import { colors } from '../constants/Globalstyles';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CleanWorkout, SaveWorkout } from '../util/SaveWorkout';
 import { workoutDB } from '../database/localDB';
+import { SettingsContext } from '../store/settings-context';
 import AddEmptyWorkoutForm from '../components/form/AddEmptyWorkoutForm';
 import BasicTextInput from '../components/form/BasicTextInput';
 import LoginButton from '../components/ui/Login/LoginButton';
 
 const AddWorkoutItemScreen = ({navigation}) => {
   const [workout, setWorkout] = useState(null);
+  const settingsCtx = useContext(SettingsContext);
   const [isFromTemplate, setIsFromTemplate] = useState(null);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const AddWorkoutItemScreen = ({navigation}) => {
 
   function submitWorkoutHandler() {
     let workoutCopy = workout;
-    workoutCopy = CleanWorkout(workoutCopy);
+    workoutCopy = CleanWorkout(workoutCopy, settingsCtx.metricUnits);
     SaveWorkout(workoutCopy);
     setIsFromTemplate(null); // Trigger page to reset
     navigation.navigate('Home'); // Navigate back to home screen

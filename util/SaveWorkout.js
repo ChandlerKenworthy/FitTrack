@@ -1,7 +1,8 @@
 import { Alert } from "react-native";
 import { exerciseDB, workoutDB } from "../database/localDB";
+import { GetKiloFromPounds } from "../constants/lookup";
 
-export function CleanWorkout(workout) {
+export function CleanWorkout(workout, isMetricMode) {
     // Cleanup the workout ready for database submission
     // Date validation (can't be in the future)
     const today = new Date();
@@ -73,6 +74,14 @@ export function CleanWorkout(workout) {
     workout.exercises = newExercises;
     workout.reps = newRepsAdj;
     workout.weights = newWeightsAdj;
+
+    // Do a final pass through, making sure all weight valus converted to [kg]
+    if(!isMetricMode) { // imperial units mode active
+        const adjustedWeights = workout.weights.map((arr) => {
+            return arr.map((el) => GetKiloFromPounds(el));
+        });
+        workout.weights = adjustedWeights;
+    }
 
     // First check it wasn't a misclick/not all empty and all lengths are zero
     if(workout.exercises.length === 0 && workout.reps.length === 0 && workout.weights.length === 0) {

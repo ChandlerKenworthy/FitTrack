@@ -1,16 +1,18 @@
 import { Pressable, StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity } from 'react-native'
 import { exerciseDB } from '../../database/localDB'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { colors } from '../../constants/Globalstyles';
 import HorizontalRule from '../ui/HorizontalRule';
 import { AntDesign } from '@expo/vector-icons';
 import NumberInput from '../form/NumberInput';
 import { Swipeable } from 'react-native-gesture-handler';
 import { shrinkBorderRadius, increaseBorderRadius } from '../../util/Animations';
+import { SettingsContext } from '../../store/settings-context';
 const deviceWidth = Dimensions.get('window').width;
 
 const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise, onDeleteSet}) => {
     const [name, setName] = useState();
+    const settingsCtx = useContext(SettingsContext);
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
 
     useEffect(() => {
@@ -37,7 +39,6 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
             <Pressable 
                 style={[styles.swipedButtonContainer, {backgroundColor: colors.failure, borderTopRightRadius: 20, borderBottomRightRadius: 20}]}
                 onPress={() => {
-                    // shrinkExerciseAway()
                     onDeleteExercise(index);
                 }}
             >
@@ -86,7 +87,7 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
                                     onChangeText={(text) => updateWeights(index, i, text)}
                                     style={{fontWeight: '700'}}
                                 />
-                                <Text style={styles.infoText}> kg</Text>
+                                <Text style={styles.infoText}> {settingsCtx.metricUnits ? "kg" : "lbs"}</Text>
                             </View>
                             <Pressable onPress={() => onDeleteSet(index, i)}>
                                 <AntDesign name="minuscircleo" size={18} color={colors.charcoal} />

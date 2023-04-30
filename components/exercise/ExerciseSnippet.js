@@ -1,14 +1,26 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
-import { muscleGroupIDtoString } from '../../constants/lookup'
+import { GetPoundsFromKilo, muscleGroupIDtoString } from '../../constants/lookup'
+import { useContext } from 'react'
+import { SettingsContext } from '../../store/settings-context'
 
 const ExerciseSnippet = ({data, onPress}) => {
+  const settingsCtx = useContext(SettingsContext);
+
+  function GetPersonalBest() {
+    if(data.personalBest) {
+      return settingsCtx.metricUnits ? data.personalBest : Math.round(GetPoundsFromKilo(data.personalBest));
+    } else {
+      return "N/A";
+    }
+  }
+
   return (
     <Pressable style={styles.container} onPress={onPress.bind(this, data.id)}>
       <Text style={styles.titleText}>{data.name}</Text>
       <View style={styles.additionalInfoContainer}>
         <Text style={styles.muscleGroupText}>{muscleGroupIDtoString[data.muscleGroup_id]}</Text>
-        <Text>PB: 88 kg</Text>
+        <Text>1RM: {GetPersonalBest()} {data.personalBest ? (settingsCtx.metricUnits ? "kg" : "lbs") : ""}</Text>
       </View>
     </Pressable>
   )
