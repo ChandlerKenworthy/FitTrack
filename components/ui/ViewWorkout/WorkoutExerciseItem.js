@@ -80,13 +80,13 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
                                     <View style={styles.setInfoContainer}>
                                         <Text style={styles.textHighlight}>{reps[index]}</Text>
                                         <Text style={[styles.textLowlight, {marginHorizontal: 1}]}>x</Text>
-                                        <Text style={styles.textHighlight}>{settingsCtx.metricUnits ? weight : Math.round(GetPoundsFromKilo(weight))}</Text>
+                                        <Text style={styles.textHighlight}>{Math.round(settingsCtx.metricUnits ? weight : GetPoundsFromKilo(weight))}</Text>
                                         <Text style={[styles.textLowlight, {marginLeft: 3}]}>{settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                                     </View>
                                 </View>
                                 <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
                                     <Text style={[styles.textLowlight, {marginRight: 3}]}>1RM</Text>
-                                    <Text style={styles.textHighlight}>{exInfo.personalBest ? (settingsCtx.metricUnits ? exInfo.personalBest : Math.round(GetPoundsFromKilo(exInfo.personalBest))) : "N/A"}</Text>
+                                    <Text style={styles.textHighlight}>{exInfo.personalBest ? (Math.round(settingsCtx.metricUnits ? exInfo.personalBest : GetPoundsFromKilo(exInfo.personalBest))) : "N/A"}</Text>
                                     <Text style={[styles.textLowlight, {marginLeft: 3}]}>{settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                                 </View>
                             </View>

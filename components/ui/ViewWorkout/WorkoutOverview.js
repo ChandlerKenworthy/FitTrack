@@ -46,7 +46,7 @@ const WorkoutOverview = ({workout, muscleGroups}) => {
                     <Text 
                         style={styles.overviewHighlightText}
                     >
-                        {settingsCtx.metricUnits ? workout.totalVolume : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}
+                        {Math.round(settingsCtx.metricUnits ? workout.totalVolume : GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}
                     </Text>
                     <Text>Volume</Text>
                 </View>

@@ -43,7 +43,7 @@ const WorkoutListItem = ({workout}) => {
                 <Text style={styles.dateText}>{workout.day}/{workout.month}/{workout.year}</Text>
             </View>
             <View style={[styles.row, {marginTop: 10, justifyContent: 'space-between'}]}>
-                <Text style={styles.volumeText}>{settingsCtx.metricUnits ? workout.totalVolume : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}</Text>
+                <Text style={styles.volumeText}>{settingsCtx.metricUnits ? Math.round(workout.totalVolume) : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                 <View style={styles.muscleGroupsWrapper}>
                     {muscleGroups.map((muscleGroupId, index) => {
                         return (
