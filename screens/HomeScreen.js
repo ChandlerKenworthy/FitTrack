@@ -15,8 +15,8 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     workoutDB.transaction(tx => {
       tx.executeSql(
-        "SELECT * FROM workouts", // TODO: order by date descending
-        null,
+        "SELECT * FROM workouts WHERE year = (?) ORDER BY month DESC, day DESC",
+        [new Date().getFullYear()], // TODO: have filters to search through
         (tx, result) => setWorkouts(result.rows._array),
         (tx, error) => console.warn(error)
       );
