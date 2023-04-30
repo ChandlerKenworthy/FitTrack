@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SettingsContext } from '../../store/settings-context';
 import { workoutDB } from '../../database/localDB';
 import { useDrawerStatus } from '@react-navigation/drawer';
+import { GetPoundsFromKilo } from '../../constants/lookup';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
@@ -52,8 +53,8 @@ const CustomDrawer = (props) => {
                             <MaterialCommunityIcons name="weight-lifter" size={26} color={colors.lightorange} />
                         </View>
                         <View style={[styles.profileInfoContainer, {marginLeft: 15}]}>
-                            <Text style={styles.nWorkoutText}>{totalVolume ? totalVolume : "0"}</Text>
-                            <MaterialCommunityIcons name="weight-kilogram" size={26} color={colors.lightorange} />
+                            <Text style={styles.nWorkoutText}>{totalVolume ? (settingsCtx.metricUnits ? Math.round(totalVolume) : Math.round(GetPoundsFromKilo(totalVolume))) : "0"}</Text>
+                            <MaterialCommunityIcons name={settingsCtx.metricUnits ? "weight-kilogram" : "weight-pound"} size={26} color={colors.lightorange} />
                         </View>
                     </View>
                 </View>

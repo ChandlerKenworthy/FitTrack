@@ -1,12 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../constants/Globalstyles'
-import { muscleGroupIDtoColor } from '../../constants/lookup';
-import { useEffect, useState } from 'react';
+import { GetPoundsFromKilo, muscleGroupIDtoColor } from '../../constants/lookup';
+import { useContext, useEffect, useState } from 'react';
 import { exerciseDB } from '../../database/localDB';
 import uuid from 'react-native-uuid';
 import { useNavigation } from '@react-navigation/native';
+import { SettingsContext } from '../../store/settings-context';
 
 const WorkoutListItem = ({workout}) => { 
+    const settingsCtx = useContext(SettingsContext);
     const [muscleGroups, setMuscleGroups] = useState([]);
     const navigation = useNavigation();
 
@@ -41,7 +43,7 @@ const WorkoutListItem = ({workout}) => {
                 <Text style={styles.dateText}>{workout.day}/{workout.month}/{workout.year}</Text>
             </View>
             <View style={[styles.row, {marginTop: 10, justifyContent: 'space-between'}]}>
-                <Text style={styles.volumeText}>{workout.totalVolume} kg</Text>
+                <Text style={styles.volumeText}>{settingsCtx.metricUnits ? workout.totalVolume : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                 <View style={styles.muscleGroupsWrapper}>
                     {muscleGroups.map((muscleGroupId, index) => {
                         return (

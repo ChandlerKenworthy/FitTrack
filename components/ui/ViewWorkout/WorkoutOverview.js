@@ -1,9 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../../constants/Globalstyles';
-import { muscleGroupIDtoString } from '../../../constants/lookup';
+import { GetPoundsFromKilo, muscleGroupIDtoString } from '../../../constants/lookup';
 import { monthIndextoString } from '../../../constants/lookup';
+import { useContext } from 'react';
+import { SettingsContext } from '../../../store/settings-context';
 
 const WorkoutOverview = ({workout, muscleGroups}) => {
+    const settingsCtx = useContext(SettingsContext);
+
     function getMuscleGroupsString() {
         let str = "";
         muscleGroups.map((el, i) => {
@@ -39,7 +43,11 @@ const WorkoutOverview = ({workout, muscleGroups}) => {
                     <Text>Duration</Text>
                 </View>
                 <View style={styles.overview}>
-                    <Text style={styles.overviewHighlightText}>{workout.totalVolume} kg</Text>
+                    <Text 
+                        style={styles.overviewHighlightText}
+                    >
+                        {settingsCtx.metricUnits ? workout.totalVolume : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}
+                    </Text>
                     <Text>Volume</Text>
                 </View>
             </View>

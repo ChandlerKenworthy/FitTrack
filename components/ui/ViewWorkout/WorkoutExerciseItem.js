@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Animated, Pressable, StyleSheet, Text, View, Easing } from 'react-native'
 import { exerciseDB } from '../../../database/localDB'
 import { colors } from '../../../constants/Globalstyles';
 import { AntDesign } from '@expo/vector-icons';
-import { SlideInDown, Layout, color } from 'react-native-reanimated';
+import { SlideInDown, Layout } from 'react-native-reanimated';
+import { SettingsContext } from '../../../store/settings-context';
+import { GetPoundsFromKilo } from '../../../constants/lookup';
 
 const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
+    const settingsCtx = useContext(SettingsContext);
     const [exInfo, setExInfo] = useState(null);
     const [showDetails, setShowDetails] = useState(true);
     const caretRotationAnim = useRef(new Animated.Value(0)).current;
@@ -77,14 +80,14 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
                                     <View style={styles.setInfoContainer}>
                                         <Text style={styles.textHighlight}>{reps[index]}</Text>
                                         <Text style={[styles.textLowlight, {marginHorizontal: 1}]}>x</Text>
-                                        <Text style={styles.textHighlight}>{weight}</Text>
-                                        <Text style={[styles.textLowlight, {marginLeft: 3}]}>kg</Text>
+                                        <Text style={styles.textHighlight}>{settingsCtx.metricUnits ? weight : Math.round(GetPoundsFromKilo(weight))}</Text>
+                                        <Text style={[styles.textLowlight, {marginLeft: 3}]}>{settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                                     </View>
                                 </View>
                                 <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
                                     <Text style={[styles.textLowlight, {marginRight: 3}]}>1RM</Text>
-                                    <Text style={styles.textHighlight}>{exInfo.personalBest ? exInfo.personalBest : "N/A"}</Text>
-                                    <Text style={[styles.textLowlight, {marginLeft: 3}]}>kg</Text>
+                                    <Text style={styles.textHighlight}>{exInfo.personalBest ? (settingsCtx.metricUnits ? exInfo.personalBest : Math.round(GetPoundsFromKilo(exInfo.personalBest))) : "N/A"}</Text>
+                                    <Text style={[styles.textLowlight, {marginLeft: 3}]}>{settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                                 </View>
                             </View>
                         );

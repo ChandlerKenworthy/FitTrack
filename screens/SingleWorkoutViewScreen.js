@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { colors } from '../constants/Globalstyles';
 import WorkoutOverview from '../components/ui/ViewWorkout/WorkoutOverview';
 import WorkoutExerciseItem from '../components/ui/ViewWorkout/WorkoutExerciseItem';
