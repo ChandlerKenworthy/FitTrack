@@ -29,19 +29,16 @@ const ExerciseListScreen = () => {
     }, [isFocused]);
 
     useEffect(() => {
-        const searchTermExists = !(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2);
+        const searchTermExists = !(searchTerm === "" || searchTerm === null || searchTerm === undefined || searchTerm.length < 2);        
         if(!searchTermExists && filter.length === 0) { // No search, no filters - get everything
-            //console.log("Something weird here");
             exerciseDB.transaction(tx => {
                 tx.executeSql(
                     "SELECT * FROM exercises ORDER BY name ASC",
                     null,
                     (txObj, resultSet) => {
-                        //console.log("Okay it fetched something");
                         setExercises(resultSet.rows._array);
                     },
                     (txObj, error) => { 
-                        //console.log("something went wrong");
                         console.log(error); 
                     }
                 );
@@ -96,6 +93,7 @@ const ExerciseListScreen = () => {
                     placeholder={"Search exercises..."}
                     value={searchTerm}
                     onChangeText={(txt) => setSearchTerm(txt)}
+                    blurOnSubmit={false}
                     autoCapitalize={false}
                     style={styles.input}
                 />
@@ -157,7 +155,7 @@ export default ExerciseListScreen
 const styles = StyleSheet.create({
     searchContainer: {
         marginTop: 20,
-        marginHorizontal: 15,
+        marginHorizontal: 5,
         marginBottom: 15,
         borderBottomWidth: 1,
         borderBottomColor: colors.lightgray,
@@ -167,7 +165,7 @@ const styles = StyleSheet.create({
     },
 
     filtersContainer: {
-        marginHorizontal: 15,
+        marginHorizontal: 5,
         marginBottom: 10,
         flexDirection: 'row',
         flexWrap: 'wrap',

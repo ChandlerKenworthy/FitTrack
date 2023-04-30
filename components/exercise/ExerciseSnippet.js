@@ -9,7 +9,7 @@ const ExerciseSnippet = ({data, onPress}) => {
 
   function GetPersonalBest() {
     if(data.personalBest) {
-      return settingsCtx.metricUnits ? data.personalBest : Math.round(GetPoundsFromKilo(data.personalBest));
+      return (settingsCtx.metricUnits ? data.personalBest : GetPoundsFromKilo(data.personalBest)).toFixed(1);
     } else {
       return "N/A";
     }
