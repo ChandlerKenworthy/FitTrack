@@ -11,6 +11,9 @@ const WorkoutListItem = ({workout}) => {
     const settingsCtx = useContext(SettingsContext);
     const [muscleGroups, setMuscleGroups] = useState([]);
     const navigation = useNavigation();
+    const containerBkgColor = settingsCtx.darkMode ? colors.extralightblack : colors.white;
+    const textColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
+    const dateTextColor = settingsCtx.darkMode ? colors.white : colors.gray;
 
     useEffect(() => {
         let queryString = "SELECT muscleGroup_id FROM exercises WHERE id IN (";
@@ -37,13 +40,13 @@ const WorkoutListItem = ({workout}) => {
     }, []);
 
     return (
-        <Pressable onPress={() => navigation.navigate('ViewSingleWorkout', {workout: workout, muscleGroups: muscleGroups})} style={styles.container}>
+        <Pressable onPress={() => navigation.navigate('ViewSingleWorkout', {workout: workout, muscleGroups: muscleGroups})} style={[styles.container, {backgroundColor: containerBkgColor}]}>
             <View style={styles.row}>
-                <Text style={styles.titleText}>{workout.name}</Text>
-                <Text style={styles.dateText}>{workout.day}/{workout.month}/{workout.year}</Text>
+                <Text style={[styles.titleText, {color: textColor}]}>{workout.name}</Text>
+                <Text style={[styles.dateText, {color: dateTextColor}]}>{workout.day}/{workout.month}/{workout.year}</Text>
             </View>
             <View style={[styles.row, {marginTop: 10, justifyContent: 'space-between'}]}>
-                <Text style={styles.volumeText}>{settingsCtx.metricUnits ? Math.round(workout.totalVolume) : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}</Text>
+                <Text style={[styles.volumeText, {color: textColor}]}>{settingsCtx.metricUnits ? Math.round(workout.totalVolume) : Math.round(GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                 <View style={styles.muscleGroupsWrapper}>
                     {muscleGroups.map((muscleGroupId, index) => {
                         return (
@@ -63,7 +66,6 @@ export default WorkoutListItem
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
         marginHorizontal: 10,
         paddingVertical: 15,
         paddingHorizontal: 30,
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 18,
         fontWeight: '700',
-        color: colors.charcoal
     },
 
     dateText: {

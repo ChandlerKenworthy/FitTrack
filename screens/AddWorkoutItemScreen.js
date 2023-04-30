@@ -14,6 +14,8 @@ const AddWorkoutItemScreen = ({navigation}) => {
   const [workout, setWorkout] = useState(null);
   const settingsCtx = useContext(SettingsContext);
   const [isFromTemplate, setIsFromTemplate] = useState(null);
+  const btnBgColor = settingsCtx.darkMode ? colors.lightorange : colors.white;
+  const btnTxtColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
 
   useEffect(() => {
     workoutDB.transaction(tx => {
@@ -50,17 +52,17 @@ const AddWorkoutItemScreen = ({navigation}) => {
     return (
       <View style={styles.root}>
         <TouchableOpacity 
-          style={styles.optionBtn} 
+          style={[styles.optionBtn, {backgroundColor: btnBgColor}]} 
           onPress={() => console.log('go to select template...')}
         >
-          <Text style={styles.btnText}>New workout from template</Text>
+          <Text style={[styles.btnText, {color: btnTxtColor}]}>New workout from template</Text>
         </TouchableOpacity>
         <Text style={styles.spacerText}>or</Text>
         <TouchableOpacity 
-          style={styles.optionBtn} 
+          style={[styles.optionBtn, {backgroundColor: btnBgColor}]} 
           onPress={() => setIsFromTemplate(false)}
         >
-          <Text style={styles.btnText}>New empty workout</Text>
+          <Text style={[styles.btnText, {color: btnTxtColor}]}>New empty workout</Text>
         </TouchableOpacity>
       </View>
     );
@@ -112,7 +114,6 @@ const styles = StyleSheet.create({
   },
 
   optionBtn: {
-    backgroundColor: colors.white,
     paddingVertical: 20,
     paddingHorizontal: 25,
     borderRadius: 35
@@ -128,7 +129,6 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     fontWeight: '300',
-    color: colors.charcoal
   },
 
   headerContainer: {

@@ -40,6 +40,7 @@ const CustomDrawer = (props) => {
         <View style={[styles.root, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
             <DrawerContentScrollView 
                 {...props}
+                drawerInactiveTintColor={colors.failure}
                 contentContainerStyle={{backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}}   
             >
                 <View style={[styles.imageBackground, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>

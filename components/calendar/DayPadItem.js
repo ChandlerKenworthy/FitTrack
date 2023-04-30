@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { useState, useEffect } from 'react';
 import { workoutDB } from '../../database/localDB';
 import { colors } from '../../constants/Globalstyles';
+import uuid from 'react-native-uuid';
 
 const DayPadItem = ({dayNumber, date, isToday}) => {
   const deviceWidth = Dimensions.get('window').width;
@@ -25,6 +26,10 @@ const DayPadItem = ({dayNumber, date, isToday}) => {
     height: adjustedWidth,
     borderRadius: adjustedWidth / 2,
     backgroundColor: isToday ? colors.lightorange : 'transparent'
+  };
+
+  const dotBkg = {
+    backgroundColor: isToday ? colors.white : colors.lightorange,
   };
 
   return (
