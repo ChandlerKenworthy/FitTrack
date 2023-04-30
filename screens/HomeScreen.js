@@ -40,7 +40,7 @@ const HomeScreen = ({navigation}) => {
           <CircleIconButton 
             onPress={() => navigation.navigate('AddWorkout')} 
             icon="plus" size={46} scale={0.8} 
-            color={colors.lightorange} 
+            color={settingsCtx.darkMode ? colors.white : colors.lightorange} 
             bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
           />
         </View>
@@ -49,7 +49,7 @@ const HomeScreen = ({navigation}) => {
             onPress={() => navigation.navigate('Calendar')} 
             icon="calendar" size={46} 
             scale={0.8} 
-            color={colors.lightorange} 
+            color={settingsCtx.darkMode ? colors.white : colors.lightorange} 
             bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
           />
         </View>

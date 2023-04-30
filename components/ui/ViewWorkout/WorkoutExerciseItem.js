@@ -9,6 +9,7 @@ import { GetPoundsFromKilo } from '../../../constants/lookup';
 
 const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
     const settingsCtx = useContext(SettingsContext);
+    const textColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
     const [exInfo, setExInfo] = useState(null);
     const [showDetails, setShowDetails] = useState(true);
     const caretRotationAnim = useRef(new Animated.Value(0)).current;
@@ -60,7 +61,7 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
                         <Text style={styles.repsText}>{weights.length}</Text>
                         <Text style={styles.repsSmallText}>Sets</Text>
                     </View>
-                    <Text style={styles.exerciseNameText}>{exInfo.name}</Text>
+                    <Text style={[styles.exerciseNameText, {color: textColor}]}>{exInfo.name}</Text>
                 </View>
                 <Animated.View style={[styles.showDetailsBtn, animatedStyles]}>
                     <Pressable style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} onPress={handleToggleDetails}>
@@ -74,8 +75,8 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
                         return (
                             <View key={index} style={[styles.headerContainer, {marginBottom: 7}]}>
                                 <View style={styles.headerLeftContainer}>
-                                    <View style={styles.setCircle}>
-                                        <Text style={styles.setText}>{index + 1}</Text>
+                                    <View style={[styles.setCircle, settingsCtx.darkMode && {backgroundColor: 'rgba(0,0,0,0.25)',}]}>
+                                        <Text style={[styles.setText, {color: textColor}]}>{index + 1}</Text>
                                     </View>
                                     <View style={styles.setInfoContainer}>
                                         <Text style={styles.textHighlight}>{reps[index]}</Text>
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
 
     exerciseNameText: {
         fontSize: 18,
-        color: colors.charcoal,
         fontWeight: '500'
     },
 
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     },
 
     setText: {
-        color: colors.charcoal,
         fontSize: 14
     },
 

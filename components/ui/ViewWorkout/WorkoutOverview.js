@@ -7,6 +7,8 @@ import { SettingsContext } from '../../../store/settings-context';
 
 const WorkoutOverview = ({workout, muscleGroups}) => {
     const settingsCtx = useContext(SettingsContext);
+    const bgColor = settingsCtx.darkMode ? colors.extralightblack : colors.white;
+    const textColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
 
     function getMuscleGroupsString() {
         let str = "";
@@ -21,26 +23,26 @@ const WorkoutOverview = ({workout, muscleGroups}) => {
     }
 
     return (
-        <View style={styles.headerInfoContainer}>
+        <View style={[styles.headerInfoContainer, {backgroundColor: bgColor}]}>
             <View style={styles.titleWrapper}>
                 <View>
-                    <Text style={styles.titleText}>{workout.name}</Text>
+                    <Text style={[styles.titleText, {color: textColor}]}>{workout.name}</Text>
                     <Text style={styles.muscleGroupTitleText}>Muscle Groups</Text>
-                    <Text style={styles.muscleGroupText}>{getMuscleGroupsString()}</Text>
+                    <Text style={[styles.muscleGroupText, {color: textColor}]}>{getMuscleGroupsString()}</Text>
                 </View>
                 <View style={styles.dateContainer}>
                     <Text style={styles.dateDayText}>{workout.day}</Text>
                     <Text style={styles.dateMonthText}>{monthIndextoString[workout.month-1].slice(0,3)}</Text>
                 </View>
             </View>
-            <View style={styles.overviewContainer}>
+            <View style={[styles.overviewContainer, {backgroundColor: settingsCtx.darkMode ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.05)'}]}>
                 <View style={styles.overview}>
                     <Text style={styles.overviewHighlightText}>{JSON.parse(workout.exercises).length}</Text>
-                    <Text>Exercises</Text>
+                    <Text style={{color: textColor}}>Exercises</Text>
                 </View>
                 <View style={styles.overview}>
                     <Text style={styles.overviewHighlightText}>1h 15m</Text>
-                    <Text>Duration</Text>
+                    <Text style={{color: textColor}}>Duration</Text>
                 </View>
                 <View style={styles.overview}>
                     <Text 
@@ -48,7 +50,7 @@ const WorkoutOverview = ({workout, muscleGroups}) => {
                     >
                         {Math.round(settingsCtx.metricUnits ? workout.totalVolume : GetPoundsFromKilo(workout.totalVolume))} {settingsCtx.metricUnits ? "kg" : "lb"}
                     </Text>
-                    <Text>Volume</Text>
+                    <Text style={{color: textColor}}>Volume</Text>
                 </View>
             </View>
         </View>
@@ -59,7 +61,6 @@ export default WorkoutOverview
 
 const styles = StyleSheet.create({
     headerInfoContainer: {
-        backgroundColor: colors.white,
         marginHorizontal: 15,
         marginVertical: 15,
         paddingVertical: 15,
@@ -107,7 +108,6 @@ const styles = StyleSheet.create({
     },
 
     muscleGroupText: {
-        color: colors.charcoal,
         fontSize: 18,
         marginTop: 5
     },
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingVertical: 20,
         paddingHorizontal: 0,
-        backgroundColor: 'rgba(0,0,0,0.05)'
     },
 
     overview: {
