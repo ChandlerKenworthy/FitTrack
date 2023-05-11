@@ -10,10 +10,11 @@ import WorkoutListItem from '../components/workout/WorkoutListItem';
 const HomeScreen = ({navigation}) => {
   const settingsCtx = useContext(SettingsContext);
   const [workouts, setWorkouts] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    workoutDB.transaction(tx => {
+  async function fetchWorkouts() {
+    await workoutDB.transaction(tx => {
       tx.executeSql(
         "SELECT * FROM workouts WHERE year = (?) ORDER BY month DESC, day DESC",
         [new Date().getFullYear()], // TODO: have filters to search through
@@ -21,7 +22,17 @@ const HomeScreen = ({navigation}) => {
         (tx, error) => console.warn(error)
       );
     });
+  }
+
+  useEffect(() => {
+    fetchWorkouts()
   }, [isFocused]);
+
+  function onRefreshHandler() {
+    setIsFetching(true);
+    fetchWorkouts();
+    setIsFetching(false);
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -34,6 +45,8 @@ const HomeScreen = ({navigation}) => {
             keyExtractor={(item) => item.id}
             style={styles.workoutsList}
             ItemSeparatorComponent={() => <View style={styles.buffer}></View>}
+            refreshing={isFetching}
+            onRefresh={onRefreshHandler}
           />
         )}
         <View style={styles.addWorkoutBtnContainer}>
