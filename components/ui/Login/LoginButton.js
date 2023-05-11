@@ -1,6 +1,7 @@
 import { Text, Pressable, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '../../../constants/Globalstyles';
 
 const LoginButton = ({text, onPress, iconName}) => {
     return (
@@ -8,7 +9,7 @@ const LoginButton = ({text, onPress, iconName}) => {
             style={styles.gradientContainer} 
             start={{x: 0, y: 0}} 
             end={{x: 1, y: 0}}
-            colors={["#FB8500", "#FFB703"]}
+            colors={[colors.lightorange, "#709be0"]}
         >
             <Pressable onPress={onPress} style={styles.container}>
                 <Text style={styles.text}>{text ? text : "Login"}</Text>
