@@ -1,5 +1,5 @@
 import { FlatList, SafeAreaView, StyleSheet, View, TextInput, Pressable } from 'react-native'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { colors } from '../constants/Globalstyles';
 import { muscleGroupIDtoString } from '../constants/lookup';
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import ShortExerciseInfo from '../components/exercise/ShortExerciseInfo';
 import EditExerciseModal from '../components/form/EditExerciseModal';
 import PillFilter from '../components/form/PillFilter';
+import { SettingsContext } from '../store/settings-context';
 
 /* ExerciseListScreen
  * Render exercises from exercises table in exercises database according to user's search term and any active
@@ -22,6 +23,7 @@ const ExerciseListScreen = () => {
     const [forceRefresh, setForceRefresh] = useState(true);
     const [editModal, setEditModal] = useState({isOpen: false, data: null});
     const isFocused = useIsFocused();
+    const settingsCtx = useContext(SettingsContext);
 
     useEffect(() => {
         setSearchTerm("");
@@ -91,6 +93,7 @@ const ExerciseListScreen = () => {
             <View style={styles.searchContainer}>
                 <TextInput 
                     placeholder={"Search exercises..."}
+                    placeholderTextColor={settingsCtx.darkMode ? colors.white : colors.charcoal}
                     value={searchTerm}
                     onChangeText={(txt) => setSearchTerm(txt)}
                     blurOnSubmit={false}
