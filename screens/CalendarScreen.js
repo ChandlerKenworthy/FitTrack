@@ -134,12 +134,16 @@ const CalendarScreen = () => {
           </Pressable>
         </View>
         {RenderCalendar()}
-        <View style={styles.workoutDisplayBox}>
+        <View style={styles.horizontalRule}></View>
+        <View style={styles.workoutsContainer}>
           {workouts && workouts.map((wrkt, i) => {
             return (
               <WorkoutListItem key={i} workout={wrkt} />
             );
           })}
+          {(!workouts || workouts.length === 0) && (
+            <Text style={styles.noWorkoutText}>No Workouts</Text>
+          )}
         </View>
       </ScrollView>
     </GestureRecognizer>
@@ -191,11 +195,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
 
-  workoutDisplayBox: {
+  horizontalRule: {
+    height: 1,
     marginHorizontal: 15,
-    marginTop: 15,
-    paddingTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: colors.lightgray
+    marginTop: 20,
+    backgroundColor: colors.lightgray
+  },
+
+  workoutsContainer: {
+    marginTop: 20
+  },
+
+  noWorkoutText: {
+    textAlign: 'center',
+    fontSize: 32,
+    fontWeight: '300',
+    color: colors.lightgray
   }
 })
