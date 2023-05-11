@@ -1,17 +1,20 @@
-import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { colors } from '../constants/Globalstyles';
 import WorkoutOverview from '../components/ui/ViewWorkout/WorkoutOverview';
 import WorkoutExerciseItem from '../components/ui/ViewWorkout/WorkoutExerciseItem';
+import { useContext } from 'react';
+import { SettingsContext } from '../store/settings-context';
 
 const SingleWorkoutViewScreen = ({route, navigation}) => {
     const {workout, muscleGroups} = route.params;
+    const settingsCtx = useContext(SettingsContext);
 
     return (
         <ScrollView style={{flex: 1, marginBottom: 30}}>
             <WorkoutOverview workout={workout} muscleGroups={muscleGroups} />
             <View style={styles.exercisesContainer}>
                 <Text style={styles.exerciseHeaderText}>Exercises</Text>
-                <View style={styles.exerciseListContainer}>
+                <View style={[styles.exerciseListContainer, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
                     {JSON.parse(workout.exercises).map((item, index) => {
                         return (
                             <WorkoutExerciseItem 
@@ -47,7 +50,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: colors.white
     },
 
     separator: {

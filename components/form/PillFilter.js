@@ -1,14 +1,19 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { colors } from '../../constants/Globalstyles'
+import { SettingsContext } from '../../store/settings-context'
 
 const PillFilter = ({id, name, isSelected, setIsSelected, style}) => {
+  const settingsCtx = useContext(SettingsContext);
+  const bkgColor = settingsCtx.darkMode ? colors.extralightblack : colors.white;
+  const txtColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
+
   return (
     <Pressable 
       onPress={setIsSelected.bind(this, id)}
-      style={[styles.container, isSelected && styles.containerSelected, style && style]}
+      style={[styles.container, {backgroundColor: bkgColor}, isSelected && styles.containerSelected, style && style]}
     >
-      <Text style={[styles.text, isSelected && styles.textSelected]}>{name}</Text>
+      <Text style={[styles.text, {color: txtColor}, isSelected && styles.textSelected]}>{name}</Text>
     </Pressable>
   )
 }
@@ -17,7 +22,6 @@ export default PillFilter
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -33,7 +37,6 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: colors.charcoal,
     fontWeight: '300',
     fontSize: 16
   },

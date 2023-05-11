@@ -1,3 +1,11 @@
+export function GetPoundsFromKilo(kilograms) {
+    return kilograms * 2.20462;
+}
+
+export function GetKiloFromPounds(pounds) {
+    return pounds / 2.20462;
+}
+
 export const scoreTypeIDtoString = {
     0: "Weights & Reps",
     1: "Time",

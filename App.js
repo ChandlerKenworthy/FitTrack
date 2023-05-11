@@ -6,7 +6,6 @@ import { auth } from "./firebase";
 import { onAuthStateChanged } from 'firebase/auth';
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { colors } from './constants/Globalstyles';
-import { EmptySettings } from './state/EmptyState';
 import { SettingsContextProvider } from './store/settings-context';
 import { createDatabse } from './database/localDB';
 import LoginScreen from './screens/LoginScreen';
@@ -23,6 +22,7 @@ import SingleWorkoutViewScreen from './screens/SingleWorkoutViewScreen';
 import CustomDrawer from './components/ui/CustomDrawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
+import { getSettingsFromStorage } from './util/LocalSettings';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,18 +43,6 @@ export default function App() {
       }
     });
   }, [auth]);
-
-  async function getSettingsFromStorage() {
-    try {
-        let prefs = await AsyncStorage.getItem('settings');
-        prefs = prefs != null ? JSON.parse(prefs) : EmptySettings;
-        return prefs;
-    }
-    catch(e) {
-        console.log(e);
-        return EmptySettings;
-    }
-  }
 
   function authStack() {
     return (

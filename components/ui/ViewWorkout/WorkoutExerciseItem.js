@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Animated, Pressable, StyleSheet, Text, View, Easing } from 'react-native'
 import { exerciseDB } from '../../../database/localDB'
 import { colors } from '../../../constants/Globalstyles';
 import { AntDesign } from '@expo/vector-icons';
-import { SlideInDown, Layout, color } from 'react-native-reanimated';
+import { SlideInDown, Layout } from 'react-native-reanimated';
+import { SettingsContext } from '../../../store/settings-context';
+import { GetPoundsFromKilo } from '../../../constants/lookup';
 
 const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
+    const settingsCtx = useContext(SettingsContext);
+    const textColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
     const [exInfo, setExInfo] = useState(null);
     const [showDetails, setShowDetails] = useState(true);
     const caretRotationAnim = useRef(new Animated.Value(0)).current;
@@ -50,14 +54,14 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
     }
 
     return (
-        <View style={style && style}>
-            <View style={styles.headerContainer}>
+        <View style={[style && style]}>
+            <View style={[styles.headerContainer, showDetails && {marginBottom: 15}]}>
                 <View style={styles.headerLeftContainer}>
                     <View style={styles.repsContainer}>
                         <Text style={styles.repsText}>{weights.length}</Text>
                         <Text style={styles.repsSmallText}>Sets</Text>
                     </View>
-                    <Text style={styles.exerciseNameText}>{exInfo.name}</Text>
+                    <Text style={[styles.exerciseNameText, {color: textColor}]}>{exInfo.name}</Text>
                 </View>
                 <Animated.View style={[styles.showDetailsBtn, animatedStyles]}>
                     <Pressable style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} onPress={handleToggleDetails}>
@@ -71,20 +75,20 @@ const WorkoutExerciseItem = ({exerciseId, weights, reps, style}) => {
                         return (
                             <View key={index} style={[styles.headerContainer, {marginBottom: 7}]}>
                                 <View style={styles.headerLeftContainer}>
-                                    <View style={styles.setCircle}>
-                                        <Text style={styles.setText}>{index + 1}</Text>
+                                    <View style={[styles.setCircle, settingsCtx.darkMode && {backgroundColor: 'rgba(0,0,0,0.25)',}]}>
+                                        <Text style={[styles.setText, {color: textColor}]}>{index + 1}</Text>
                                     </View>
                                     <View style={styles.setInfoContainer}>
                                         <Text style={styles.textHighlight}>{reps[index]}</Text>
                                         <Text style={[styles.textLowlight, {marginHorizontal: 1}]}>x</Text>
-                                        <Text style={styles.textHighlight}>{weight}</Text>
-                                        <Text style={[styles.textLowlight, {marginLeft: 3}]}>kg</Text>
+                                        <Text style={styles.textHighlight}>{Math.round(settingsCtx.metricUnits ? weight : GetPoundsFromKilo(weight))}</Text>
+                                        <Text style={[styles.textLowlight, {marginLeft: 3}]}>{settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                                     </View>
                                 </View>
                                 <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
                                     <Text style={[styles.textLowlight, {marginRight: 3}]}>1RM</Text>
-                                    <Text style={styles.textHighlight}>{exInfo.personalBest ? exInfo.personalBest : "N/A"}</Text>
-                                    <Text style={[styles.textLowlight, {marginLeft: 3}]}>kg</Text>
+                                    <Text style={styles.textHighlight}>{exInfo.personalBest ? (Math.round(settingsCtx.metricUnits ? exInfo.personalBest : GetPoundsFromKilo(exInfo.personalBest))) : "N/A"}</Text>
+                                    <Text style={[styles.textLowlight, {marginLeft: 3}]}>{settingsCtx.metricUnits ? "kg" : "lb"}</Text>
                                 </View>
                             </View>
                         );
@@ -102,7 +106,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 15,
     },
 
     headerLeftContainer: {
@@ -136,7 +139,6 @@ const styles = StyleSheet.create({
 
     exerciseNameText: {
         fontSize: 18,
-        color: colors.charcoal,
         fontWeight: '500'
     },
 
@@ -160,7 +162,6 @@ const styles = StyleSheet.create({
     },
 
     setText: {
-        color: colors.charcoal,
         fontSize: 14
     },
 

@@ -1,17 +1,32 @@
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { useContext, useState } from 'react'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { useContext, useEffect, useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import DayItem from '../components/calendar/DayItem';
 import DayPadItem from '../components/calendar/DayPadItem';
 import { colors } from '../constants/Globalstyles';
 import { SettingsContext } from '../store/settings-context';
 import GestureRecognizer from 'react-native-swipe-gestures';
+import { workoutDB } from '../database/localDB';
+import WorkoutListItem from '../components/workout/WorkoutListItem';
 
-const CalendarScreen = ({navigation}) => {
+const CalendarScreen = () => {
   const today = new Date();
   const [date, setDate] = useState(new Date(today.getFullYear(), today.getMonth()+1, 0)); // Get today's date 
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [workouts, setWorkouts] = useState(null); // Workout(s) data from selected day
   const padDays = new Date(date.getFullYear(), date.getMonth()).getDay() - 1; // Number of days to pad by to make days line up
   const settingsCtx = useContext(SettingsContext);
+
+  useEffect(() => {
+    workoutDB.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM workouts WHERE year == (?) AND month == (?) AND day == (?)",
+        [selectedDate.getFullYear(), selectedDate.getMonth()+1, selectedDate.getDate()],
+        (tx, result) => setWorkouts(result.rows._array),
+        (tx, error) => console.warn(`[Error in CalendarScreen.js] ${error}`)
+      )
+    });
+  }, [selectedDate]);
 
   function changeDate(forward) {
     setDate(prevDate => {
@@ -50,13 +65,63 @@ const CalendarScreen = ({navigation}) => {
     return daysMatch && monthsMatch && yearsMatch;
   }
 
+  function GetIsSelectedDate(date, dayNumber) {
+    const yearMatch = date.getFullYear() == selectedDate.getFullYear();
+    const monthMatch = date.getMonth() == selectedDate.getMonth();
+    const dayMatch = dayNumber == selectedDate.getDate();
+    return yearMatch && monthMatch && dayMatch;
+  }
+
+  function RenderCalendar() {
+    return (
+      <>
+      <View style={styles.monthKey}>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>M</Text>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>W</Text>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>F</Text>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
+        <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
+      </View>
+      <View style={styles.monthContainer}>
+      {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
+          const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber);
+          const thisDate = new Date(date.getFullYear(), getPrevMonth(), refinedDayNumber+1);
+          return (
+            <DayPadItem 
+              key={refinedDayNumber} 
+              date={thisDate}
+              isSelected={GetIsSelectedDate(thisDate, refinedDayNumber)}
+              onPress={() => setSelectedDate(new Date(thisDate.getFullYear(), thisDate.getMonth(), refinedDayNumber))}
+              dayNumber={refinedDayNumber} 
+              isToday={getIsToday(dayNumber, true)} 
+            />
+        )})}
+        {Array.from({length: date.getDate()}, (_, i) => i + 1).map((dayNumber) => {
+          return (
+            <DayItem 
+              key={dayNumber} 
+              onPress={() => setSelectedDate(new Date(date.getFullYear(), date.getMonth(), dayNumber))} 
+              isSelected={GetIsSelectedDate(date, dayNumber)} 
+              date={date} 
+              dayNumber={dayNumber} 
+              isToday={getIsToday(dayNumber, false)} 
+            />
+          );
+        })}
+      </View>
+      </>
+    );
+  }
+
   return (
     <GestureRecognizer
       style={{flex: 1}}
       onSwipeLeft={() => changeDate(true)}
       onSwipeRight={() => changeDate(false)}
     >
-      <SafeAreaView style={{flex: 1}}>
+      <ScrollView style={{flex: 1}}>
         <View style={styles.titleContainer}>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(false)}>
             <AntDesign name="caretleft" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
@@ -68,30 +133,19 @@ const CalendarScreen = ({navigation}) => {
             <AntDesign name="caretright" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
           </Pressable>
         </View>
-        <View style={styles.monthKey}>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>M</Text>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>W</Text>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>F</Text>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
-          <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
-        </View>
-        <View style={styles.monthContainer}>
-        {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
+        {RenderCalendar()}
+        <View style={styles.horizontalRule}></View>
+        <View style={styles.workoutsContainer}>
+          {workouts && workouts.map((wrkt, i) => {
             return (
-              <DayPadItem 
-                key={dayNumber} 
-                date={date}
-                dayNumber={new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber)} 
-                isToday={getIsToday(dayNumber, true)} 
-              />
-          )})}
-          {Array.from({length: date.getDate()}, (_, i) => i + 1).map((dayNumber) => {
-            return <DayItem key={dayNumber} date={date} dayNumber={dayNumber} isToday={getIsToday(dayNumber, false)} />
+              <WorkoutListItem key={i} workout={wrkt} />
+            );
           })}
+          {(!workouts || workouts.length === 0) && (
+            <Text style={styles.noWorkoutText}>No Workouts</Text>
+          )}
         </View>
-      </SafeAreaView>
+      </ScrollView>
     </GestureRecognizer>
   )
 }
@@ -139,5 +193,23 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginHorizontal: 10,
+  },
+
+  horizontalRule: {
+    height: 1,
+    marginHorizontal: 15,
+    marginTop: 20,
+    backgroundColor: colors.lightgray
+  },
+
+  workoutsContainer: {
+    marginTop: 20
+  },
+
+  noWorkoutText: {
+    textAlign: 'center',
+    fontSize: 32,
+    fontWeight: '300',
+    color: colors.lightgray
   }
 })

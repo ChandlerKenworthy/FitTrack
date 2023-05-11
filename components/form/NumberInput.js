@@ -1,10 +1,11 @@
 import { StyleSheet, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 
-const NumberInput = ({placeholder, value, onChangeText, style}) => {
+const NumberInput = ({placeholder, placeholderTextColor, value, onChangeText, style}) => {
   return (
     <View>
-      <TextInput 
+      <TextInput
+        placeholderTextColor={placeholderTextColor}
         autoCapitalize='none'
         autoComplete='off'
         inputMode='numeric'

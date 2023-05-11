@@ -3,9 +3,10 @@ import { colors } from '../../constants/Globalstyles'
 import { AntDesign } from '@expo/vector-icons';
 import { muscleGroupIDtoString } from '../../constants/lookup';
 import { Swipeable } from 'react-native-gesture-handler';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { exerciseDB } from '../../database/localDB';
 import { increaseBorderRadius, shrinkBorderRadius } from '../../util/Animations';
+import { SettingsContext } from '../../store/settings-context';
 const deviceWidth = Dimensions.get('window').width;
 
 /* ShortExerciseInfo 
@@ -29,6 +30,9 @@ const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, 
   const swipeRef = useRef(null);
   const animViewRef = useRef(null);
   const borderRadiusAnim = useRef(new Animated.Value(20)).current;
+  const settingsCtx = useContext(SettingsContext);
+  const bkgColor = settingsCtx.darkMode ? colors.extralightblack : colors.white;
+  const txtColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
 
   function toggleIsFavorite() {
     exerciseDB.transaction(tx => {
@@ -104,6 +108,7 @@ const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, 
         ref={animViewRef}
         style={[
           styles.container, 
+          {backgroundColor: bkgColor},
           {borderTopRightRadius: borderRadiusAnim, borderBottomRightRadius: borderRadiusAnim}
         ]}
       >
@@ -114,16 +119,16 @@ const ShortExerciseInfo = ({item, index, onSwipeOpen, searchTerm, forceRefresh, 
               return (
                 <Text 
                   key={index} 
-                  style={[styles.nameText, highlight && styles.highlightText]}
+                  style={[styles.nameText, {color: txtColor}, highlight && styles.highlightText]}
                 >
                   {name}
                 </Text>
               );
-            }) : <Text style={styles.nameText}>{item.name}</Text>}
+            }) : <Text style={[styles.nameText, {color: txtColor}]}>{item.name}</Text>}
           </View>
           <View style={styles.extraInfo}>
               <Text style={styles.muscleGroupText}>{muscleGroupIDtoString[item.muscleGroup_id]}</Text>
-              <Text style={styles.pbText}>1RM: {item.personalBest ? item.personalBest : "N/A"} {item.personalBest ? "kg" : ""}</Text>
+              <Text style={styles.pbText}>1RM: {item.personalBest ? item.personalBest.toFixed(1) : "N/A"} {item.personalBest ? (settingsCtx.metricUnits ? "kg" : "lbs") : ""}</Text>
           </View>
         </View>
       </Animated.View>
@@ -135,7 +140,6 @@ export default ShortExerciseInfo
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
         paddingHorizontal: 20,
         paddingVertical: 15,
         marginVertical: 5,
@@ -164,7 +168,6 @@ const styles = StyleSheet.create({
 
     pbText: {
         fontSize: 14,
-        textTransform: 'uppercase',
         marginTop: 5,
         marginLeft: 10,
         color: colors.gray
