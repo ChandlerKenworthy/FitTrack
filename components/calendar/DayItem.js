@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native'
 import { colors } from '../../constants/Globalstyles';
 import { useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../store/settings-context';
 import { workoutDB } from '../../database/localDB';
 import uuid from 'react-native-uuid';
 
-const DayItem = ({date, dayNumber, isToday}) => {
+const DayItem = ({date, dayNumber, isToday, isSelected, onPress}) => {
   const deviceWidth = Dimensions.get('window').width;
   const adjustedWidth = ((deviceWidth - 20) / 7);
   const settingsCtx = useContext(SettingsContext);
@@ -27,7 +27,9 @@ const DayItem = ({date, dayNumber, isToday}) => {
     width: adjustedWidth,
     height: adjustedWidth,
     borderRadius: adjustedWidth / 2,
-    backgroundColor: isToday ? colors.lightorange : 'transparent'
+    backgroundColor: isToday ? colors.lightorange : 'transparent',
+    borderWidth: isSelected ? 2 : 0,
+    borderColor: isSelected ? colors.lightorange : 'transparent'
   };
 
   const dotBkg = {
@@ -35,7 +37,10 @@ const DayItem = ({date, dayNumber, isToday}) => {
   };
 
   return (
-    <View style={[styles.container, containerStyles]}>
+    <Pressable
+      style={[styles.container, containerStyles]}
+      onPress={onPress}
+    >
       <Text style={[styles.text, isToday && {color: colors.white}, settingsCtx.darkMode && {color: colors.white}]}>{dayNumber}</Text>
       {!isNaN(parseInt(nWorkouts)) && (
         <View style={styles.exerciseDotWrapper}>
@@ -44,7 +49,7 @@ const DayItem = ({date, dayNumber, isToday}) => {
         })}
         </View>
       )}
-    </View>
+    </Pressable>
   )
 }
 

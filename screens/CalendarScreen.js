@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { useContext, useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import DayItem from '../components/calendar/DayItem';
@@ -10,6 +10,7 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 const CalendarScreen = ({navigation}) => {
   const today = new Date();
   const [date, setDate] = useState(new Date(today.getFullYear(), today.getMonth()+1, 0)); // Get today's date 
+  const [selectedDate, setSelectedDate] = useState(today);
   const padDays = new Date(date.getFullYear(), date.getMonth()).getDay() - 1; // Number of days to pad by to make days line up
   const settingsCtx = useContext(SettingsContext);
 
@@ -50,6 +51,13 @@ const CalendarScreen = ({navigation}) => {
     return daysMatch && monthsMatch && yearsMatch;
   }
 
+  function GetIsSelectedDate(date, dayNumber) {
+    const yearMatch = date.getFullYear() == selectedDate.getFullYear();
+    const monthMatch = date.getMonth() == selectedDate.getMonth();
+    const dayMatch = dayNumber == selectedDate.getDate();
+    return yearMatch && monthMatch && dayMatch;
+  }
+
   return (
     <GestureRecognizer
       style={{flex: 1}}
@@ -79,16 +87,29 @@ const CalendarScreen = ({navigation}) => {
         </View>
         <View style={styles.monthContainer}>
         {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
+            const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber);
+            const thisDate = new Date(date.getFullYear(), getPrevMonth(), refinedDayNumber+1);
             return (
               <DayPadItem 
-                key={dayNumber} 
-                date={date}
-                dayNumber={new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber)} 
+                key={refinedDayNumber} 
+                date={thisDate}
+                isSelected={GetIsSelectedDate(thisDate, refinedDayNumber)}
+                onPress={() => setSelectedDate(new Date(thisDate.getFullYear(), thisDate.getMonth(), refinedDayNumber))}
+                dayNumber={refinedDayNumber} 
                 isToday={getIsToday(dayNumber, true)} 
               />
           )})}
           {Array.from({length: date.getDate()}, (_, i) => i + 1).map((dayNumber) => {
-            return <DayItem key={dayNumber} date={date} dayNumber={dayNumber} isToday={getIsToday(dayNumber, false)} />
+            return (
+              <DayItem 
+                key={dayNumber} 
+                onPress={() => setSelectedDate(new Date(date.getFullYear(), date.getMonth(), dayNumber))} 
+                isSelected={GetIsSelectedDate(date, dayNumber)} 
+                date={date} 
+                dayNumber={dayNumber} 
+                isToday={getIsToday(dayNumber, false)} 
+              />
+            );
           })}
         </View>
       </SafeAreaView>

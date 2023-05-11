@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Pressable } from 'react-native'
 import { useState, useEffect } from 'react';
 import { workoutDB } from '../../database/localDB';
 import { colors } from '../../constants/Globalstyles';
 import uuid from 'react-native-uuid';
 
-const DayPadItem = ({dayNumber, date, isToday}) => {
+const DayPadItem = ({dayNumber, date, isToday, isSelected, onPress}) => {
   const deviceWidth = Dimensions.get('window').width;
   const adjustedWidth = ((deviceWidth - 20) / 7);
   const [nWorkouts, setNWorkouts] = useState(null);
@@ -25,7 +25,9 @@ const DayPadItem = ({dayNumber, date, isToday}) => {
     width: adjustedWidth,
     height: adjustedWidth,
     borderRadius: adjustedWidth / 2,
-    backgroundColor: isToday ? colors.lightorange : 'transparent'
+    backgroundColor: isToday ? colors.lightorange : 'transparent',
+    borderWidth: isSelected ? 2 : 0,
+    borderColor: isSelected ? colors.lightorange : 'transparent'
   };
 
   const dotBkg = {
@@ -33,7 +35,7 @@ const DayPadItem = ({dayNumber, date, isToday}) => {
   };
 
   return (
-    <View style={[styles.container, containerStyles]}>
+    <Pressable onPress={onPress} style={[styles.container, containerStyles]}>
       <Text style={styles.text}>{dayNumber}</Text>
       {!isNaN(parseInt(nWorkouts)) && (
         <View style={styles.exerciseDotWrapper}>
@@ -42,7 +44,7 @@ const DayPadItem = ({dayNumber, date, isToday}) => {
         })}
         </View>
       )}
-    </View>
+    </Pressable>
   )
 }
 
