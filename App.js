@@ -20,9 +20,8 @@ import AddExerciseScreen from './screens/AddExerciseScreen';
 import ExerciseListScreen from './screens/ExerciseListScreen';
 import SingleWorkoutViewScreen from './screens/SingleWorkoutViewScreen';
 import CustomDrawer from './components/ui/CustomDrawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
-import { getSettingsFromStorage } from './util/LocalSettings';
+import { EmptySettings } from './state/EmptyState';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -157,7 +156,7 @@ export default function App() {
   }
 
   return (
-    <SettingsContextProvider value={getSettingsFromStorage()}>
+    <SettingsContextProvider value={EmptySettings}>
       <UserAuthContextProvider value={user}>
         <CustomNavigationContainer authStack={authStack} authenticatedStack={authenticatedStack} />
       </UserAuthContextProvider>
