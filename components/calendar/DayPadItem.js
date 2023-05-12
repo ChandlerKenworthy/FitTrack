@@ -36,7 +36,7 @@ const DayPadItem = ({dayNumber, date, isToday, isSelected, onPress}) => {
 
   return (
     <Pressable onPress={onPress} style={[styles.container, containerStyles]}>
-      <Text style={styles.text}>{dayNumber}</Text>
+      <Text style={[styles.text, {color: isToday ? colors.white : colors.gray}]}>{dayNumber}</Text>
       {!isNaN(parseInt(nWorkouts)) && (
         <View style={styles.exerciseDotWrapper}>
         {Array.apply(null, Array(nWorkouts)).map(function (x, i) { return i; }).map((i) => {
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 20,
       fontWeight: '300',
-      color: colors.gray
     },
 
     exerciseDotWrapper: {

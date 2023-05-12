@@ -56,11 +56,8 @@ const CalendarScreen = () => {
 
   function getIsToday(day, prevMonth) {
     let month = date.getMonth();
-    if(prevMonth) {
-      month = getPrevMonth();
-    }
     const daysMatch = day == today.getDate(); 
-    const monthsMatch = today.getMonth() == month;
+    const monthsMatch = prevMonth ? Math.abs(getPrevMonth() - month) === 1 : today.getMonth() === month;
     const yearsMatch = today.getFullYear() == date.getFullYear();
     return daysMatch && monthsMatch && yearsMatch;
   }
@@ -101,7 +98,7 @@ const CalendarScreen = () => {
               isSelected={GetIsSelectedDate(thisDate, refinedDayNumber)}
               onPress={() => setSelectedDate(thisDate)}
               dayNumber={refinedDayNumber} 
-              isToday={getIsToday(dayNumber, true)} 
+              isToday={getIsToday(refinedDayNumber, true)} 
             />
         )})}
         {Array.from({length: date.getDate()}, (_, i) => i + 1).map((dayNumber) => {
