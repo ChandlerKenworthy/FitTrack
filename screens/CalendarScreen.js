@@ -11,7 +11,7 @@ import WorkoutListItem from '../components/workout/WorkoutListItem';
 
 const CalendarScreen = () => {
   const today = new Date();
-  const [date, setDate] = useState(new Date(today.getFullYear(), today.getMonth()+1, 0)); // Get today's date 
+  const [date, setDate] = useState(new Date(today.getFullYear(), today.getMonth()+1, 0)); // Get last day of current month
   const [selectedDate, setSelectedDate] = useState(today);
   const [workouts, setWorkouts] = useState(null); // Workout(s) data from selected day
   const padDays = new Date(date.getFullYear(), date.getMonth()).getDay() - 1; // Number of days to pad by to make days line up
@@ -65,16 +65,15 @@ const CalendarScreen = () => {
     return daysMatch && monthsMatch && yearsMatch;
   }
 
-  function GetIsSelectedDate(date, dayNumber) {
-    const yearMatch = date.getFullYear() == selectedDate.getFullYear();
-    const monthMatch = date.getMonth() == selectedDate.getMonth();
+  function GetIsSelectedDate(thisDate, dayNumber) {
+    const yearMatch = thisDate.getFullYear() == selectedDate.getFullYear();
+    const monthMatch = thisDate.getMonth() == selectedDate.getMonth();
     const dayMatch = dayNumber == selectedDate.getDate();
     return yearMatch && monthMatch && dayMatch;
   }
 
-  function RenderCalendar() {
+  function RenderDayMarkers() {
     return (
-      <>
       <View style={styles.monthKey}>
         <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>M</Text>
         <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>T</Text>
@@ -84,16 +83,23 @@ const CalendarScreen = () => {
         <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
         <Text style={[styles.monthKeyText, {color: settingsCtx.darkMode ? colors.white : colors.gray}]}>S</Text>
       </View>
+    );
+  }
+
+  function RenderCalendar() {
+    return (
+      <>
+      {RenderDayMarkers()}
       <View style={styles.monthContainer}>
       {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
           const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber);
-          const thisDate = new Date(date.getFullYear(), getPrevMonth(), refinedDayNumber+1);
+          const thisDate = new Date(date.getFullYear(), getPrevMonth(), refinedDayNumber);
           return (
             <DayPadItem 
               key={refinedDayNumber} 
               date={thisDate}
               isSelected={GetIsSelectedDate(thisDate, refinedDayNumber)}
-              onPress={() => setSelectedDate(new Date(thisDate.getFullYear(), thisDate.getMonth(), refinedDayNumber))}
+              onPress={() => setSelectedDate(thisDate)}
               dayNumber={refinedDayNumber} 
               isToday={getIsToday(dayNumber, true)} 
             />
