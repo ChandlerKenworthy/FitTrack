@@ -12,7 +12,7 @@ export function CleanWorkout(workout, isMetricMode) {
     }
 
     // Name validation (no empty names)
-    if(workout.name.replaceAll(' ','').length < 1) {
+    if(workout.name.replace(/ /g, '').length < 1) {
         workout.name = "Unnamed Workout"; // TODO: Make this dynamic?
     }
     
