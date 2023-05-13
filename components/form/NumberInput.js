@@ -9,6 +9,7 @@ const NumberInput = ({placeholder, placeholderTextColor, value, onChangeText, st
         autoCapitalize='none'
         autoComplete='off'
         inputMode='numeric'
+        keyboardType='numeric'
         maxLength={5}
         style={[styles.inputText, style && style]}
         placeholder={placeholder}
