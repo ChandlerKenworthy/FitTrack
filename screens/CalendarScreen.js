@@ -7,6 +7,7 @@ import { colors } from '../constants/Globalstyles';
 import { SettingsContext } from '../store/settings-context';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { workoutDB } from '../database/localDB';
+import { getPrevMonth } from '../util/Dates';
 import WorkoutListItem from '../components/workout/WorkoutListItem';
 
 const CalendarScreen = () => {
@@ -46,18 +47,10 @@ const CalendarScreen = () => {
     });
   }
 
-  function getPrevMonth() {
-    let month = date.getMonth() - 1;
-    if(month < 0) {
-      month += 12;
-    }
-    return month;
-  }
-
   function getIsToday(day, prevMonth) {
     let month = date.getMonth();
     const daysMatch = day == today.getDate(); 
-    const monthsMatch = prevMonth ? Math.abs(getPrevMonth() - month) === 1 : today.getMonth() === month;
+    const monthsMatch = prevMonth ? Math.abs(getPrevMonth(date) - month) === 1 : today.getMonth() === month;
     const yearsMatch = today.getFullYear() == date.getFullYear();
     return daysMatch && monthsMatch && yearsMatch;
   }
@@ -89,8 +82,8 @@ const CalendarScreen = () => {
       {RenderDayMarkers()}
       <View style={styles.monthContainer}>
       {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
-          const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber);
-          const thisDate = new Date(date.getFullYear(), getPrevMonth(), refinedDayNumber);
+          const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth(date)+1, 0).getDate() - (padDays - dayNumber);
+          const thisDate = new Date(date.getFullYear(), getPrevMonth(date), refinedDayNumber);
           return (
             <DayPadItem 
               key={refinedDayNumber} 
