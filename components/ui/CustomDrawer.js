@@ -11,6 +11,7 @@ import { SettingsContext } from '../../store/settings-context';
 import { workoutDB } from '../../database/localDB';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { GetPoundsFromKilo } from '../../constants/lookup';
+import { Keyboard } from 'react-native';
 
 const CustomDrawer = (props) => {
     const navigation = useNavigation();
@@ -20,6 +21,7 @@ const CustomDrawer = (props) => {
     const drawerStatus = useDrawerStatus();
 
     useEffect(() => {
+        Keyboard.dismiss();
         workoutDB.transaction(tx => {
             tx.executeSql(
                 "SELECT COUNT(*) FROM workouts",
