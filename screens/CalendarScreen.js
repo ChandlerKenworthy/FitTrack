@@ -7,7 +7,9 @@ import { colors } from '../constants/Globalstyles';
 import { SettingsContext } from '../store/settings-context';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import { workoutDB } from '../database/localDB';
+import { getPrevMonth } from '../util/Dates';
 import WorkoutListItem from '../components/workout/WorkoutListItem';
+import { monthIndextoString } from '../constants/lookup';
 
 const CalendarScreen = () => {
   const today = new Date();
@@ -46,18 +48,10 @@ const CalendarScreen = () => {
     });
   }
 
-  function getPrevMonth() {
-    let month = date.getMonth() - 1;
-    if(month < 0) {
-      month += 12;
-    }
-    return month;
-  }
-
   function getIsToday(day, prevMonth) {
     let month = date.getMonth();
     const daysMatch = day == today.getDate(); 
-    const monthsMatch = prevMonth ? Math.abs(getPrevMonth() - month) === 1 : today.getMonth() === month;
+    const monthsMatch = prevMonth ? Math.abs(getPrevMonth(date) - month) === 1 : today.getMonth() === month;
     const yearsMatch = today.getFullYear() == date.getFullYear();
     return daysMatch && monthsMatch && yearsMatch;
   }
@@ -89,8 +83,8 @@ const CalendarScreen = () => {
       {RenderDayMarkers()}
       <View style={styles.monthContainer}>
       {Array.from({length: padDays}, (_, i) => i + 1).map((dayNumber) => {
-          const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth()+1, 0).getDate() - (padDays - dayNumber);
-          const thisDate = new Date(date.getFullYear(), getPrevMonth(), refinedDayNumber);
+          const refinedDayNumber = new Date(date.getFullYear(), getPrevMonth(date)+1, 0).getDate() - (padDays - dayNumber);
+          const thisDate = new Date(date.getFullYear(), getPrevMonth(date), refinedDayNumber);
           return (
             <DayPadItem 
               key={refinedDayNumber} 
@@ -130,7 +124,7 @@ const CalendarScreen = () => {
             <AntDesign name="caretleft" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
           </Pressable>
           <Pressable onPress={() => setDate(new Date(today.getFullYear(), today.getMonth()+1, 0))}>
-            <Text style={[styles.titleText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>{date.toLocaleString('default', { month: 'long' })} {date.getFullYear()}</Text>
+            <Text style={[styles.titleText, {color: settingsCtx.darkMode ? colors.white : colors.charcoal}]}>{monthIndextoString[date.getMonth()]} {date.getFullYear()}</Text>
           </Pressable>
           <Pressable style={styles.dateCaret} onPress={() => changeDate(true)}>
             <AntDesign name="caretright" size={16} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
@@ -141,7 +135,9 @@ const CalendarScreen = () => {
         <View style={styles.workoutsContainer}>
           {workouts && workouts.map((wrkt, i) => {
             return (
-              <WorkoutListItem key={i} workout={wrkt} />
+              <View key={i} style={{marginBottom: 10}}>
+                <WorkoutListItem workout={wrkt} />
+              </View>
             );
           })}
           {(!workouts || workouts.length === 0) && (

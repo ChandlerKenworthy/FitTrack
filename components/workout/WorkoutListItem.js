@@ -40,7 +40,7 @@ const WorkoutListItem = ({workout}) => {
     }, []);
 
     return (
-        <Pressable onPress={() => navigation.navigate('ViewSingleWorkout', {workout: workout, muscleGroups: muscleGroups})} style={[styles.container, {backgroundColor: containerBkgColor}]}>
+        <Pressable onPress={() => navigation.navigate('HomeStack', {screen: 'ViewSingleWorkout', params: {workout: workout, muscleGroups: muscleGroups}})} style={[styles.container, {backgroundColor: containerBkgColor}]}>
             <View style={styles.row}>
                 <Text style={[styles.titleText, {color: textColor}]}>{workout.name}</Text>
                 <Text style={[styles.dateText, {color: dateTextColor}]}>{workout.day}/{workout.month}/{workout.year}</Text>
