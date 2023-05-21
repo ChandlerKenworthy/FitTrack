@@ -6,6 +6,13 @@ export function GetKiloFromPounds(pounds) {
     return pounds / 2.20462;
 }
 
+export const StandardTimeStamps = [
+    "Month",
+    "3 Months",
+    "6 Months",
+    "Year"
+];
+
 export const scoreTypeIDtoString = {
     0: "Weights & Reps",
     1: "Time",
