@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native'
 import { SettingsContext } from '../store/settings-context';
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import BasicTextInput from '../components/form/BasicTextInput';
 import { EmptyWorkout } from '../state/EmptyState';
 import { colors } from '../constants/Globalstyles';
@@ -17,6 +17,7 @@ const AddWorkoutScreen = ({navigation}) => {
     const settingsCtx = useContext(SettingsContext);
     const [workout, setWorkout] = useState(EmptyWorkout);
     const isFocused = useIsFocused();
+    const ScrollRef = useRef(null);
 
     function submitWorkoutHandler() {
         let workoutCopy = workout;
@@ -64,7 +65,11 @@ const AddWorkoutScreen = ({navigation}) => {
     }, [isFocused]);
 
     return ( // TODO: Fix this make it a flatlist or something just fix it
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+        <ScrollView 
+            ref={ScrollRef} 
+            contentContainerStyle={{flexGrow: 1}}
+            onContentSizeChange={() => ScrollRef.current.scrollToEnd()}    
+        >
             <View>
                 <View style={styles.headerContainer}>
                     <View style={styles.titleContainer}>

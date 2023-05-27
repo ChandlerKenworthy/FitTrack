@@ -111,7 +111,7 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
     }
 
     return (
-        <View>
+        <View style={{marginBottom: 130}}>
             <PickExerciseModal open={modalOpen} setOpen={setModalOpen} selectExerciseHandler={selectExerciseHandler} />
             {[...Array(workout.exercises.length).keys()].map(idx => {
                 return (
