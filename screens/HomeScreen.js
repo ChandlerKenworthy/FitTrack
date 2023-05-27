@@ -1,14 +1,13 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import CircleIconButton from '../components/ui/CircleIconButton';
 import { colors } from '../constants/Globalstyles';
-import { useContext, useEffect, useState } from 'react';
-import { SettingsContext } from '../store/settings-context';
+import { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { workoutDB } from '../database/localDB';
 import WorkoutListItem from '../components/workout/WorkoutListItem';
+import RippleButton from '../components/ui/Buttons/RippleButton';
+import { AntDesign } from '@expo/vector-icons';
 
 const HomeScreen = ({navigation}) => {
-  const settingsCtx = useContext(SettingsContext);
   const [workouts, setWorkouts] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const isFocused = useIsFocused();
@@ -49,22 +48,19 @@ const HomeScreen = ({navigation}) => {
             onRefresh={onRefreshHandler}
           />
         )}
-        <View style={styles.addWorkoutBtnContainer}>
-          <CircleIconButton 
-            onPress={() => navigation.navigate('AddWorkoutStack')} 
-            icon="plus" size={46} scale={0.8} 
-            color={settingsCtx.darkMode ? colors.white : colors.lightorange} 
-            bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
-          />
-        </View>
-        <View style={styles.switchViewBtnContainer}>
-          <CircleIconButton 
-            onPress={() => navigation.navigate('Calendar')} 
-            icon="calendar" size={46} 
-            scale={0.8} 
-            color={settingsCtx.darkMode ? colors.white : colors.lightorange} 
-            bgColor={settingsCtx.darkMode ? colors.extralightblack : colors.white}
-          />
+        <View style={styles.ctaBtnContainer}>
+          <RippleButton
+            style={styles.rippleBtn}
+            onTap={() => navigation.navigate("Calendar")}
+          >
+            <AntDesign name={"calendar"} style={styles.icon} size={55} color={colors.lightorange} />
+          </RippleButton>
+          <RippleButton
+            style={styles.rippleBtn}
+            onTap={() => navigation.navigate("AddWorkoutStack")}
+          >
+            <AntDesign name={"plus"} style={styles.icon} size={55} color={colors.lightorange} />
+          </RippleButton>
         </View>
       </View>
     </SafeAreaView>
@@ -86,18 +82,6 @@ const styles = StyleSheet.create({
     color: colors.lightgray
   },
 
-  addWorkoutBtnContainer: {
-    position: "absolute",
-    bottom: 20,
-    right: 35
-  },
-
-  switchViewBtnContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 35
-  },
-
   workoutsList: {
     width: '100%',
     marginTop: 15,
@@ -106,4 +90,28 @@ const styles = StyleSheet.create({
   buffer: {
     marginVertical: 6
   },
+
+  ctaBtnContainer: {
+    width: '100%',
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(0,0,0,0.0)'
+  },
+
+  rippleBtn: {
+    borderRadius: '50%',
+    backgroundColor: colors.white,
+    elevation: 5,
+    shadowRadius: 5,
+    shadowOffset: {x: 0, y: 0},
+    shadowColor: colors.black,
+    shadowOpacity: 0.15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  icon: {
+    padding: 15,
+  }
 });
