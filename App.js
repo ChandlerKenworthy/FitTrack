@@ -22,6 +22,7 @@ import SingleWorkoutViewScreen from './screens/SingleWorkoutViewScreen';
 import CustomDrawer from './components/ui/CustomDrawer';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
 import { EmptySettings } from './state/EmptyState';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -156,10 +157,12 @@ export default function App() {
   }
 
   return (
-    <SettingsContextProvider value={EmptySettings}>
-      <UserAuthContextProvider value={user}>
-        <CustomNavigationContainer authStack={authStack} authenticatedStack={authenticatedStack} />
-      </UserAuthContextProvider>
-    </SettingsContextProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SettingsContextProvider value={EmptySettings}>
+        <UserAuthContextProvider value={user}>
+          <CustomNavigationContainer authStack={authStack} authenticatedStack={authenticatedStack} />
+        </UserAuthContextProvider>
+      </SettingsContextProvider>
+    </GestureHandlerRootView>
   );
 }
