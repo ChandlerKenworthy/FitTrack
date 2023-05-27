@@ -57,7 +57,7 @@ const HomeScreen = ({navigation}) => {
           </RippleButton>
           <RippleButton
             style={styles.rippleBtn}
-            onTap={() => navigation.navigate("AddWorkoutStack")}
+            onTap={() => navigation.navigate("AddWorkoutItem")}
           >
             <AntDesign name={"plus"} style={styles.icon} size={55} color={colors.lightorange} />
           </RippleButton>
