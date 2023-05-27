@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, { measure, runOnJS, useAnimatedRef, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
-const RippleButton = ({style, onTap, children}) => {
+const RippleButton = ({style, onTap, children, rippleColor}) => {
     const centreX = useSharedValue(0);
     const centreY = useSharedValue(0);
     const scale = useSharedValue(0);
@@ -42,7 +42,7 @@ const RippleButton = ({style, onTap, children}) => {
             height: circleRadius * 2,
             borderRadius: circleRadius,
             opacity: rippleOpacity.value,
-            backgroundColor: 'rgba(52,120,198,0.2)',
+            backgroundColor: rippleColor ? rippleColor : 'rgba(52,120,198,0.2)',
             position: 'absolute',
             top: 0,
             left: 0,

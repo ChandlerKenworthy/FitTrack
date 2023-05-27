@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, TextInput } from 'react-native'
 import { colors } from '../../constants/Globalstyles';
 import { useContext } from 'react';
 import { SettingsContext } from '../../store/settings-context';
@@ -7,21 +7,19 @@ const BasicTextInput = ({value, onChangeText, placeholder, showBorder, style}) =
   const settingsCtx = useContext(SettingsContext);
 
   return (
-    <View>
-      <TextInput 
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        autoCapitalize={"none"}
-        style={
-          [
-            styles.input, 
-            {color: settingsCtx.darkMode ? colors.white : colors.charcoal},
-            showBorder == false && {borderBottomWidth: 0},
-            style && style
-          ]}
-      />
-    </View>
+    <TextInput 
+      placeholder={placeholder}
+      value={value}
+      onChangeText={onChangeText}
+      autoCapitalize={"none"}
+      style={
+        [
+          styles.input, 
+          {color: settingsCtx.darkMode ? colors.white : colors.charcoal},
+          showBorder == false && {borderBottomWidth: 0, paddingBottom: 0,},
+          style && style
+        ]}
+    />
   )
 }
 

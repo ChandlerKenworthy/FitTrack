@@ -1,7 +1,6 @@
 import { View } from 'react-native'
 import React, { useState } from 'react'
 import WorkoutExerciseBox from '../exercise/WorkoutExerciseBox'
-import LoginButton from '../ui/Login/LoginButton'
 import PickExerciseModal from './PickExerciseModal'
 
 const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
@@ -42,16 +41,6 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
                 }
             })
         });
-    }
-
-    function addExercise() {
-        const newWorkout = {
-            ...workout,
-            exercises: [...workout.exercises, null], // unknown exercise 
-            reps: [...workout.reps, [null]], // don't know how many reps are in the sets yet
-            weights: [...workout.weights, [null]], // defautl to previous value from history?
-        };
-        setWorkout(newWorkout);
     }
 
     function addSetHandler(index) {
@@ -122,7 +111,7 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
     }
 
     return (
-        <View style={{marginHorizontal: 15}}>
+        <View>
             <PickExerciseModal open={modalOpen} setOpen={setModalOpen} selectExerciseHandler={selectExerciseHandler} />
             {[...Array(workout.exercises.length).keys()].map(idx => {
                 return (
@@ -141,7 +130,6 @@ const AddEmptyWorkoutForm = ({workout, setWorkout}) => {
                     />
                 );
             })}
-            <LoginButton text={"Add Exercise"} onPress={addExercise} iconName={"pluscircleo"} />
         </View>
     )
 }

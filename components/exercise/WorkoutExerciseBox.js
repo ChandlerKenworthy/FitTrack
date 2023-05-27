@@ -16,6 +16,7 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
     const borderRadiusAnim = useRef(new Animated.Value(20)).current;
     const textColor = settingsCtx.darkMode ? colors.white : colors.charcoal;
     const textHighColor = settingsCtx.darkMode ? colors.lightorange : colors.gray
+    const swipeRef = useRef(null);
 
     useEffect(() => {
         async function setExerciseName() {
@@ -39,8 +40,9 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
     function renderRightActionButtons() {
         return (
             <Pressable 
-                style={[styles.swipedButtonContainer, {backgroundColor: colors.failure, borderTopRightRadius: 20, borderBottomRightRadius: 20}]}
+                style={[styles.swipedButtonContainer, {backgroundColor: colors.failure, borderTopRightRadius: 20, borderBottomRightRadius: 20, marginLeft: -15, marginRight: 15}]}
                 onPress={() => {
+                    swipeRef.current.close();
                     onDeleteExercise(index);
                 }}
             >
@@ -58,6 +60,7 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
 
     return (
         <Swipeable
+            ref={swipeRef}
             renderRightActions={renderRightActionButtons}
             friction={2}
             onSwipeableWillOpen={() => shrinkBorderRadius(borderRadiusAnim, 200)}
@@ -65,7 +68,7 @@ const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, up
             rightThreshold={0.1 * deviceWidth}
             overshootRight={false}
         >
-            <Animated.View style={[styles.container, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}, animatedStyles]}>
+            <Animated.View style={[styles.container, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white, marginHorizontal: 15}, animatedStyles]}>
                 <View style={styles.row}>
                     <TouchableOpacity onPress={setExerciseid.bind(this, index)}>
                         <Text style={[styles.nameText, {color: textColor}]}>{name}</Text>
@@ -116,6 +119,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 30,
         marginVertical: 10,
+        shadowColor: colors.black,
+        shadowRadius: 5,
+        shadowOpacity: 0.15,
+        shadowOffset: {x: 0, y: 0},
+        elevation: 5
     },
 
     swipedButtonContainer: {
