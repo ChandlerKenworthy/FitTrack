@@ -23,6 +23,8 @@ import CustomDrawer from './components/ui/CustomDrawer';
 import CustomNavigationContainer from './components/navigation/CustomNavigationContainer';
 import { EmptySettings } from './state/EmptyState';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import AddWorkoutScreen from './screens/AddWorkoutScreen';
+import AddWorkoutTemplateScreen from './screens/AddWorkoutTemplateScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -71,6 +73,34 @@ export default function App() {
     );
   }
 
+  function AddWorkoutItemStack() {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerTintColor: colors.lightorange
+        }}
+      >
+        <Stack.Screen name="AddWorkoutItem" component={AddWorkoutItemScreen} options={{headerShown: false}} />
+        <Stack.Screen 
+          name="AddWorkout" 
+          component={AddWorkoutScreen} 
+          options={{
+            title: "Add Workout",
+            headerShown: false
+          }} 
+        />
+        <Stack.Screen 
+          name="AddWorkoutTemplate" 
+          component={AddWorkoutTemplateScreen} 
+          options={{
+            title: "Add Template",
+            headerShown: false
+          }} 
+        />
+      </Stack.Navigator>
+    );
+  }
+
   function authenticatedStack() {
     return (
       <Drawer.Navigator 
@@ -92,8 +122,8 @@ export default function App() {
           }}
         />
         <Drawer.Screen 
-          name="AddWorkout" 
-          component={AddWorkoutItemScreen} 
+          name="AddWorkoutStack" 
+          component={AddWorkoutItemStack} 
           options={{
             title: "Add Workout",
             drawerIcon: ({color}) => <AntDesign name="pluscircleo" size={24} color={color} />
