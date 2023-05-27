@@ -25,6 +25,8 @@ import { EmptySettings } from './state/EmptyState';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AddWorkoutScreen from './screens/AddWorkoutScreen';
 import AddWorkoutTemplateScreen from './screens/AddWorkoutTemplateScreen';
+import AddTemplateScreen from './screens/AddTemplateScreen';
+import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -127,6 +129,14 @@ export default function App() {
           options={{
             title: "Add Workout",
             drawerIcon: ({color}) => <AntDesign name="pluscircleo" size={24} color={color} />
+          }}
+        />
+        <Drawer.Screen
+          name="AddTemplate"
+          component={AddTemplateScreen}
+          options={{
+            title: "Add Template",
+            drawerIcon: ({color}) => <Ionicons name="ios-newspaper-outline" size={24} color={color} />
           }}
         />
         <Drawer.Screen 
