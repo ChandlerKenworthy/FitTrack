@@ -37,7 +37,11 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
             if(filter.length !== 0) {
                 sqlString += "("
                 for(let i = 0; i < filter.length; i++) {
-                    sqlString += "muscleGroup_id = " + filter[i];
+                    if(filter[i] === 99) { // Favorites not muscle group
+                        sqlString += "isFavorite = 1";
+                    } else {
+                        sqlString += "muscleGroup_id = " + filter[i];
+                    }
                     if(i !== filter.length - 1) {
                         sqlString += " OR ";
                     }
@@ -97,7 +101,7 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
                     </Pressable>
                 </View>
                 <View style={styles.filtersContainer}>
-                    {Object.entries(muscleGroupIDtoString).map(([id, name]) => {
+                    {[...Object.entries(muscleGroupIDtoString)].map(([id, name]) => {
                         return (
                             <PillFilter 
                                 id={parseInt(id)} 
@@ -129,7 +133,6 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
                             <AntDesign name="closecircleo" size={46} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
                         </TouchableOpacity>
                     </View>
-                    
                     <View style={{width: '100%'}}>
                         <FlatList 
                             data={exercises}

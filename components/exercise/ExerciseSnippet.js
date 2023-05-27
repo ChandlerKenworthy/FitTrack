@@ -3,6 +3,7 @@ import { colors } from '../../constants/Globalstyles'
 import { GetPoundsFromKilo, muscleGroupIDtoString } from '../../constants/lookup'
 import { useContext } from 'react'
 import { SettingsContext } from '../../store/settings-context'
+import { AntDesign } from '@expo/vector-icons';
 
 const ExerciseSnippet = ({data, onPress}) => {
   const settingsCtx = useContext(SettingsContext);
@@ -21,6 +22,7 @@ const ExerciseSnippet = ({data, onPress}) => {
       <View style={styles.additionalInfoContainer}>
         <Text style={styles.muscleGroupText}>{muscleGroupIDtoString[data.muscleGroup_id]}</Text>
         <Text>1RM: {GetPersonalBest()} {data.personalBest ? (settingsCtx.metricUnits ? "kg" : "lbs") : ""}</Text>
+        {data.isFavorite === 1 && <AntDesign name="star" size={18} color="black" style={{marginLeft: 10}} />}
       </View>
     </Pressable>
   )

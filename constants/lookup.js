@@ -25,7 +25,8 @@ export const muscleGroupIDtoString = {
     2: "Chest",
     3: "Biceps",
     4: "Triceps",
-    5: "Shoulders"
+    5: "Shoulders",
+    99: "Favorites"
 };
 
 export const muscleGroupIDtoColor = {

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { SettingsContext } from '../store/settings-context';
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import BasicTextInput from '../components/form/BasicTextInput';
