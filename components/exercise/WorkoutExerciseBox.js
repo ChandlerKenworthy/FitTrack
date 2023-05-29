@@ -8,7 +8,6 @@ import NumberInput from '../form/NumberInput';
 import { Swipeable } from 'react-native-gesture-handler';
 import { shrinkBorderRadius, increaseBorderRadius } from '../../util/Animations';
 import { SettingsContext } from '../../store/settings-context';
-import { useIsFocused } from '@react-navigation/native';
 const deviceWidth = Dimensions.get('window').width;
 
 const WorkoutExerciseBox = ({index, setExerciseid, exerciseid, reps, weights, updateReps, updateWeights, addSet, onDeleteExercise, onDeleteSet}) => {

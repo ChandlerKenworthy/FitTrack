@@ -14,8 +14,8 @@ export const EmptyWorkout = {
 };
 
 export const EmptyWorkoutTemplate = {
+    name: "Template 1",
     exercises: [], // Array of exercises by exercise_id
-    sets: [], // how many sets each exercise should be peformed for
     reps: [], // how many reps to perform in each set (arr of arr)
 };
 

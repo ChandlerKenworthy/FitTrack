@@ -21,7 +21,7 @@ export function createDatabse() {
         });
     }
 
-    async function MakeWorkoutsDB() {
+    async function MakeWorkoutsTable() {
         return new Promise((resolve, reject) => {
             workoutDB.transaction(tx => {
                 tx.executeSql(
@@ -34,7 +34,21 @@ export function createDatabse() {
         })
     }
 
+    async function MakeTemplateTable() {
+        return new Promise((resolve, reject) => {
+            workoutDB.transaction(tx => {
+                tx.executeSql(
+                    "CREATE TABLE IF NOT EXISTS templates (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, exercises TEXT, reps TEXT, occurences INTEGER NOT NULL DEFAULT 0, lastDate TEXT)",
+                    null,
+                    (tx, resultSet) =>  resolve(1),
+                    (tx, error) => console.log(`[Error from localDB.js] (TemplateTable.transaction) ${error}`)
+                );
+            });
+        })
+    }
+
     MakeExercisesDB();
-    MakeWorkoutsDB();
+    MakeWorkoutsTable();
+    MakeTemplateTable();
 
 }

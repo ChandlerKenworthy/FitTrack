@@ -119,7 +119,7 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
     }
 
     return (
-        <GestureRecognizer style={{flex: 1}}
+        <GestureRecognizer
             onSwipeDown={() => setOpen(false)}
         >
             <Modal
@@ -128,7 +128,7 @@ const PickExerciseModal = ({open, setOpen, selectExerciseHandler}) => {
                 animationType='slide'
             >
                 <SafeAreaView style={[styles.container, {backgroundColor: settingsCtx.darkMode ? colors.extralightblack : colors.white}]}>
-                    <View style={[styles.row, {alignItems: 'flex-end',}]}>
+                    <View style={[styles.row, {alignItems: 'flex-end'}]}>
                         <TouchableOpacity onPress={() => setOpen(false)} style={styles.touchable}>
                             <AntDesign name="closecircleo" size={46} color={settingsCtx.darkMode ? colors.white : colors.charcoal} />
                         </TouchableOpacity>
