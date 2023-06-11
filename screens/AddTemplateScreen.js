@@ -1,5 +1,5 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { EmptyWorkoutTemplate } from '../state/EmptyState'
 import RippleButton from '../components/ui/Buttons/RippleButton'
 import { AntDesign } from '@expo/vector-icons'
@@ -21,6 +21,21 @@ const AddTemplateScreen = () => {
             };
         });
         setModalOpen(false);
+    }
+
+    const DeleteSetHandler = (exerciseIndex, setIndex) => {
+        setTemplate(currTemplate => {
+            return {
+                ...currTemplate,
+                reps: currTemplate.reps.map((repsArr, exIdx) => {
+                    if(exIdx !== exerciseIndex) {
+                        return repsArr;
+                    } else {
+                        return repsArr.filter((el, setIdx) => setIdx !== setIndex);
+                    }
+                })
+            };
+        });
     }
 
     const AddSetHandler = (exerciseIndex) => {
@@ -49,6 +64,7 @@ const AddTemplateScreen = () => {
     }
 
     const UpdateRepsHandler = (exerciseIndex, repIndex, newReps) => {
+        console.log("Called with payload = ", exerciseIndex, repIndex, newReps);
         setTemplate(currTemplate => {
             return {
                 ...currTemplate,
@@ -80,17 +96,22 @@ const AddTemplateScreen = () => {
                 <View style={styles.noTemplateContainer}><Text style={styles.noTemplateText}>Template Empty</Text></View>
             )}
             {template.exercises.length !== 0 &&
-                template.exercises.map((exId, index) => (
-                    <TemplateExerciseItem 
-                        key={uuid.v4()}
-                        exerciseID={exId}
-                        index={index}
-                        reps={template.reps[index]}
-                        addSet={() => AddSetHandler(index)}
-                        onDeleteExercise={DeleteExerciseHandler}
-                        updateRepsHandler={UpdateRepsHandler}
-                    />
-                ))
+                <FlatList 
+                    ref={exerciseListRef}
+                    data={template.exercises}
+                    keyExtractor={() => uuid.v4()}
+                    renderItem={({item, index}) => (
+                        <TemplateExerciseItem 
+                            exerciseID={item}
+                            index={index}
+                            reps={template.reps[index]}
+                            addSet={() => AddSetHandler(index)}
+                            deleteSet={DeleteSetHandler}
+                            onDeleteExercise={DeleteExerciseHandler}
+                            updateRepsHandler={UpdateRepsHandler}
+                        />
+                    )}
+                />
             }
             <View style={styles.addExerciseBtnContainer}>
                 <RippleButton

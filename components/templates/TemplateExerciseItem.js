@@ -4,19 +4,23 @@ import { Swipeable } from 'react-native-gesture-handler'
 import { exerciseDB } from '../../database/localDB';
 import { colors } from '../../constants/Globalstyles';
 import HorizontalRule from '../ui/HorizontalRule';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { shrinkBorderRadius, increaseBorderRadius } from '../../util/Animations';
 import uuid from 'react-native-uuid';
 import { SettingsContext } from '../../store/settings-context';
 import { GetPoundsFromKilo } from '../../constants/lookup';
 import NumberInput from '../form/NumberInput';
 
-// TODO: Swipe to delete exercise
 // TODO: toggle to mark as a superset? 
+// TODO: max reps marker
+// TODO: Fix weird glitching and refreshing weirdness
+// TODO: Make the pressable's a bit more stylish
+// if number of reps = -1 this indicates a "max reps" set, 
+// TODO: Add a "drop set" function
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 
-const TemplateExerciseItem = ({index, exerciseID, reps, addSet, onDeleteExercise, updateRepsHandler}) => {
+const TemplateExerciseItem = ({index, exerciseID, reps, addSet, deleteSet, onDeleteExercise, updateRepsHandler}) => {
     const [exercise, setExercise] = useState(null);
     const settingsCtx = useContext(SettingsContext);
     const swipeRef = useRef(null);
@@ -88,15 +92,22 @@ const TemplateExerciseItem = ({index, exerciseID, reps, addSet, onDeleteExercise
                         <NumberInput 
                             placeholder={"12"}
                             placeholderTextColor={colors.gray}
-                            value={nReps}
+                            value={nReps ? (nReps === -1 ? "MAX" : JSON.stringify(nReps)) : nReps}
                             onChangeText={(text) => updateRepsHandler(index, idx, text)}
                         />
                         <Text style={styles.cross}>reps</Text>
                     </View>
                     <View style={styles.repInfoRow}>
-                        <Text>MaxReps</Text>
-                        <Text>DropSet</Text>
-                        <Text>DeleteSet</Text>
+                        <Pressable onPress={() => {
+                            const repUpdateValue = nReps !== -1 ? -1 : null;
+                            updateRepsHandler(index, idx, repUpdateValue)
+                        }} style={styles.toggleBtnWrapper}>
+                            <Text style={{marginRight: 3}}>MR</Text>
+                            <FontAwesome name={!isNaN(nReps) && nReps === -1 ? "check-square-o" : "square-o"} size={24} color="black" />
+                        </Pressable>
+                        <Pressable onPress={() => deleteSet(index, idx)}>
+                            <AntDesign name="minuscircleo" size={18} color={colors.charcoal} />
+                        </Pressable>
                     </View>
                     </View>
                 ))}
@@ -173,5 +184,11 @@ const styles = StyleSheet.create({
         color: colors.gray,
         fontSize: 14,
         marginBottom: 5,
+    },
+
+    toggleBtnWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 15
     }
 })
